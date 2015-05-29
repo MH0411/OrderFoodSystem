@@ -23,8 +23,11 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
+
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
@@ -57,6 +60,11 @@ public class TransactionGUI extends JFrame {
 			}
 		});
 	}
+	
+	public void close(){
+		 WindowEvent winClosingEvent = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+		 Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(winClosingEvent);
+	}
 
 	/**
 	 * Create the frame.
@@ -65,14 +73,15 @@ public class TransactionGUI extends JFrame {
 		setResizable(false);
 		setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.BLACK);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JPanel panelShopingCart = new JPanel();
-		panelShopingCart.setBounds(340, 158, 340, 581);
+		panelShopingCart.setBounds(341, 158, 338, 581);
 		contentPane.add(panelShopingCart);
 		panelShopingCart.setLayout(null);
 		
@@ -128,22 +137,29 @@ public class TransactionGUI extends JFrame {
 		panelComfirm.add(btnConfirm);
 		
 		JPanel panelTitle = new JPanel();
-		panelTitle.setBounds(0, 0, 680, 157);
+		panelTitle.setBounds(0, 0, 679, 158);
 		contentPane.add(panelTitle);
 		panelTitle.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Shoppinng Cart");
+		JLabel lblNewLabel = new JLabel("Shopping Cart");
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 48));
-		lblNewLabel.setBounds(161, 43, 357, 71);
+		lblNewLabel.setBounds(185, 43, 310, 71);
 		panelTitle.add(lblNewLabel);
 		
-		JButton btnNewButton = new JButton("Back");
-		btnNewButton.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-		btnNewButton.setBounds(0, 0, 61, 23);
-		panelTitle.add(btnNewButton);
+		JButton btnLogout = new JButton("Logout");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				close();
+				LoginGUI loginFrame = new LoginGUI();
+				loginFrame.setVisible(true);
+			}
+		});
+		btnLogout.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+		btnLogout.setBounds(0, 0, 73, 17);
+		panelTitle.add(btnLogout);
 		
 		JPanel panelReceipt = new JPanel();
-		panelReceipt.setBounds(680, 0, 680, 739);
+		panelReceipt.setBounds(682, 0, 678, 739);
 		contentPane.add(panelReceipt);
 		panelReceipt.setLayout(null);
 		
@@ -222,13 +238,18 @@ public class TransactionGUI extends JFrame {
 		btnNewButton_1.setBounds(511, 678, 132, 33);
 		panelReceipt.add(btnNewButton_1);
 		
+		JLabel lblDateTime = new JLabel("??/??/???? ??:??:??");
+		lblDateTime.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		lblDateTime.setBounds(511, 171, 132, 14);
+		panelReceipt.add(lblDateTime);
+		
 		JPanel panelSelectItem = new JPanel();
-		panelSelectItem.setBounds(0, 158, 340, 581);
+		panelSelectItem.setBounds(0, 158, 338, 581);
 		contentPane.add(panelSelectItem);
 		panelSelectItem.setLayout(null);
 		
 		JPanel panelAddItem = new JPanel();
-		panelAddItem.setBounds(37, 175, 266, 231);
+		panelAddItem.setBounds(37, 193, 266, 231);
 		panelSelectItem.add(panelAddItem);
 		panelAddItem.setLayout(null);
 		
@@ -286,6 +307,9 @@ public class TransactionGUI extends JFrame {
 		btnShow.setFont(new Font("Times New Roman", Font.BOLD, 12));
 		btnShow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				close();
+				SaleGUI saleFrame = new SaleGUI();
+				saleFrame.setVisible(true);
 			}
 		});
 		btnShow.setBounds(10, 541, 103, 29);
