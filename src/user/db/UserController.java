@@ -49,7 +49,8 @@ public class UserController {
 		return true;
 	}
 	
-	public Vector<User> selectAllUsers() throws SQLException, ClassNotFoundException {
+	public Vector<User> selectAllUsers() throws SQLException, 
+			ClassNotFoundException {
 		
 			conn = dbController.getConnection();
 			

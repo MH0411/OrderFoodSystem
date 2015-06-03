@@ -50,20 +50,23 @@ public class TransactionGUI extends JFrame implements ActionListener {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TransactionGUI frame = new TransactionGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	
-	public void close(){
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					TransactionGUI frame = new TransactionGUI();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
+//	
+	/**
+	 * close the current frame and display next frame
+	 */
+	public void close() {
 		 WindowEvent winClosingEvent = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
 		 Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(winClosingEvent);
 	}
@@ -310,20 +313,19 @@ public class TransactionGUI extends JFrame implements ActionListener {
 		});
 		btnShow.setBounds(10, 541, 103, 29);
 		panelSelectItem.add(btnShow);
-
-
-
 	}
 
+	/**
+	 * This method will perform all action on button
+	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		// TODO Auto-generated method stub
 		
-		if (action.getSource() == btnLogout){
+		if (action.getSource() == btnLogout) {
 			close();
 			LoginGUI loginFrame = new LoginGUI();
 			loginFrame.setVisible(true);
 		}
-		
 	}
 }

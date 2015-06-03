@@ -17,5 +17,4 @@ public class databaseDemo {
 			e.printStackTrace();
 		}
 	}
-
 }
