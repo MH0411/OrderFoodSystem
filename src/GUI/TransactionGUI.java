@@ -51,6 +51,7 @@ public class TransactionGUI extends JFrame
 	private JButton receiptButton;
 	JComboBox<ComboItem> itemsComboBox;
 	
+	
 	private ItemController itemCtrl = new ItemController();
 	private String fontStyle = "Times New Roman";
 	
@@ -144,6 +145,7 @@ public class TransactionGUI extends JFrame
 		itemsComboBox.setEditable(true);
 		itemsComboBox.setFont(new Font(fontStyle, Font.BOLD, 16));
 		itemsComboBox.setBounds(151, 9, 105, 20);
+		itemsComboBox.setSelectedItem(" ");
 		itemsComboBox.addActionListener(this);
 		addItemPanel.add(itemsComboBox);
 		
@@ -343,10 +345,11 @@ public class TransactionGUI extends JFrame
 		}else if (action.getSource() == receiptButton) {
 			//Print receipt in PDF/TXT file
 		}else if (action.getSource() == itemsComboBox) {
-			itemsComboBox.getSelectedItem();
-			
+			ComboItem price = (ComboItem)itemsComboBox.getSelectedItem();
+			unitPriceTextField.setText(price.getPrice());
 		} 
 	}
+	
 
 	/**
 	 * Override method in DocumentListener

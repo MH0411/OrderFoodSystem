@@ -58,27 +58,4 @@ public class ItemController {
 		//Return String to combo box.
 		return itemsComboBox;
 	}
-
-	public JTextField actionPerformed(ActionEvent arg0,
-			JComboBox<String> itemsComboBox, JTextField unitPriceTextField) 
-			throws ClassNotFoundException, SQLException {
-		
-		//Open database connection
-		conn = dbController.getConnection();
-		//Create sql statement;
-		sql = "select * from tb_item WHERE name = ?";	
-		//Create statement object
-		stmt = conn.prepareStatement(sql);
-		((PreparedStatement) stmt).setString(1,(String)itemsComboBox.getSelectedItem());
-		//Create result set object
-		rsItem = stmt.executeQuery(sql);
-		//Get all item name in database.
-		while(rsItem.next()){
-			unitPriceTextField.setText(rsItem.getString("unitPrice"));
-		}
-		//Close database connection
-		conn.close();
-		//Return String to combo box.
-		return unitPriceTextField;
-	}
 }
