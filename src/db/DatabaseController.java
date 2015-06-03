@@ -12,7 +12,7 @@ public class DatabaseController {
 			ClassNotFoundException {
 		final String URL = "jdbc:mysql://localhost:3306/order_food_system_db";
 	    final String USERNAME = "root";
-	    final String PASSWORD = "";
+	    final String PASSWORD = "gameover";
 		
 		return DriverManager.
 					getConnection(URL, USERNAME, PASSWORD);

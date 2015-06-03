@@ -1,5 +1,7 @@
 package GUI;
 
+import item.db.ItemController;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -27,6 +29,11 @@ import javax.swing.JSpinner;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
 
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -35,6 +42,8 @@ import javax.swing.JTable;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+
+import db.DatabaseController;
 
 @SuppressWarnings("serial")
 public class TransactionGUI extends JFrame implements ActionListener {
@@ -48,23 +57,26 @@ public class TransactionGUI extends JFrame implements ActionListener {
 	private JTextField changeTextField;
 	private JTable itemListTable;
 	private JTextField quantityTextField;
-
+	
+	private ItemController itemCtrl = new ItemController();
+	private DatabaseController dbController = new DatabaseController();
+	private Connection conn;
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					TransactionGUI frame = new TransactionGUI();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-//	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TransactionGUI frame = new TransactionGUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
 	/**
 	 * close the current frame and display next frame
 	 */
@@ -91,7 +103,7 @@ public class TransactionGUI extends JFrame implements ActionListener {
 		contentPane.add(CartPanel);
 		CartPanel.setLayout(null);
 		
-		JList itemsList = new JList();
+		JList<?> itemsList = new JList<Object>();
 		itemsList.setBorder(new LineBorder(new Color(0, 0, 0)));
 		itemsList.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		itemsList.setBounds(41, 29, 258, 388);
@@ -257,10 +269,23 @@ public class TransactionGUI extends JFrame implements ActionListener {
 		subTotalPriceLabel.setBounds(10, 137, 129, 14);
 		addItemPanel.add(subTotalPriceLabel);
 		
-		JComboBox itemsComboBox = new JComboBox();
+		JComboBox<String> itemsComboBox = new JComboBox<String>();
 		itemsComboBox.setEditable(true);
 		itemsComboBox.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		itemsComboBox.setBounds(151, 9, 105, 20);
+		try{
+			conn = dbController.getConnection();
+			String sql = "select * from tb_item";
+			Statement stmt = conn.createStatement();
+			ResultSet rsItem = stmt.executeQuery(sql);
+			rsItem= stmt.executeQuery("select * from tb_item");
+		    while(rsItem.next()){                            
+		        itemsComboBox.addItem(rsItem.getString("name"));
+		    }
+		    conn.close();
+	    }catch(Exception e){
+	        System.out.println("Error"+e);
+	    }
 		addItemPanel.add(itemsComboBox);
 		
 		quantityTextField = new JTextField();
@@ -311,5 +336,7 @@ public class TransactionGUI extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
+//		if(action.getSource() == )
 	}
+	
 }
