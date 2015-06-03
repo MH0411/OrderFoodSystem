@@ -21,8 +21,15 @@ public class UserController {
 	public User getUserInfo() {
 		return user;
 	}
-	
+
+	/**
+	 * validate username and password which user input to login
+	 * @param userName
+	 * @param password
+	 * @return true if userName and password is correct
+	 */
 	public boolean validateLogin(String userName, String password) {
+		int count = 0;
 		try {
 			conn = dbController.getConnection();
 			
@@ -41,12 +48,20 @@ public class UserController {
 						+ " " + rsUser.getString("userName")
 						+ " " + rsUser.getString("password"));
 				System.out.println("Login Sucessfully");
+				count++;
 			}
 		}
 		catch (Exception exp) {
 			exp.printStackTrace();
+			return false;
 		}
-		return true;
+		
+		if (count == 1) {
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 	
 	public Vector<User> selectAllUsers() throws SQLException, 
@@ -65,7 +80,7 @@ public class UserController {
 			
 			//display result set
 			Vector<User> users = new Vector<User>();
-			while(rsUser.next()){
+			while(rsUser.next()) {
 				
 				User tempUser = new User();
 				tempUser.setUserID(rsUser.getString("userID"));

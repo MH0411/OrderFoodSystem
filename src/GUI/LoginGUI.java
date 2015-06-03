@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -29,19 +30,20 @@ import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 import javax.swing.border.LineBorder;
 import javax.swing.UIManager;
 
 import user.db.UserController;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.TitledBorder;
 
 @SuppressWarnings("serial")
-public class LoginGUI extends JFrame {
+public class LoginGUI extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JPasswordField passwordField;
@@ -52,6 +54,7 @@ public class LoginGUI extends JFrame {
 	private JTextField telNoTextField;
 	private JTextField emailTextField;
 	private JPasswordField registerPasswordField;
+	private JButton loginButton;
 
 	/**
 	 * Launch the application.
@@ -138,34 +141,12 @@ public class LoginGUI extends JFrame {
 		passwordLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		passwordLabel.setFont(new Font("Times New Roman", Font.BOLD, 24));
 		
-		JButton loginButton = new JButton("Login");
+		loginButton = new JButton("Login");
 		loginButton.setBounds(311, 204, 107, 33);
 		loginInputpanel.add(loginButton);
-		loginButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				close();
-				TransactionGUI transactionFrame = new TransactionGUI();
-				transactionFrame.setVisible(true);
-			}
-		});
 		loginButton.setFont(new Font("Times New Roman", Font.BOLD, 18));
-		
-		// perform login function
-		
-		loginButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				final String userName = userNameField.getText();
-				final String password = String.valueOf(
-						passwordField.getPassword());
-				
-				UserController userCtrl = new UserController();
-				userCtrl.validateLogin(userName, password);
-//				System.out.println(userName + " A " + password);	
-			}
-		});
+		// call addActionListener when loginButton is clicked
+		loginButton.addActionListener(this);
 		
 		JPanel registerPanel = new JPanel();
 		registerPanel.setBounds(680, 169, 680, 570);
@@ -278,6 +259,31 @@ public class LoginGUI extends JFrame {
 		foodOrderSystemLabel.setVerticalAlignment(SwingConstants.TOP);
 		foodOrderSystemLabel.setAlignmentY(CENTER_ALIGNMENT);
 		titlePanel.add(foodOrderSystemLabel);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent action) {	
+		// if login button is clicked
+		if (action.getSource() == loginButton) {
+			final String userName = userNameField.getText().trim();
+			final String password = String.valueOf(
+					passwordField.getPassword()).trim();
+			
+			UserController userCtrl = new UserController();
+			if (userCtrl.validateLogin(userName, password)) {
+				close();
+				TransactionGUI transactionFrame = new TransactionGUI();
+				transactionFrame.setVisible(true);
+			} else {
+				JOptionPane.showMessageDialog(null, 
+						"Incorrect username or password.");
+			}
+			
+//			close();
+//			TransactionGUI transactionFrame = new TransactionGUI();
+//			transactionFrame.setVisible(true);
+//			System.out.println(userName + " A " + password);
+		}
 	}
 
 }
