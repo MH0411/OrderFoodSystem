@@ -34,7 +34,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.JTable;
 
 @SuppressWarnings("serial")
-public class TransactionGUI extends JFrame {
+public class TransactionGUI extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private ImageIcon cart;
@@ -44,6 +44,8 @@ public class TransactionGUI extends JFrame {
 	private JTextField tFPayPrice;
 	private JTextField tFChange;
 	private JTable ItemSoldTable;
+	
+	private JButton btnLogout;
 
 	/**
 	 * Launch the application.
@@ -146,14 +148,8 @@ public class TransactionGUI extends JFrame {
 		lblNewLabel.setBounds(185, 43, 310, 71);
 		panelTitle.add(lblNewLabel);
 		
-		JButton btnLogout = new JButton("Logout");
-		btnLogout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				close();
-				LoginGUI loginFrame = new LoginGUI();
-				loginFrame.setVisible(true);
-			}
-		});
+		btnLogout = new JButton("Logout");
+		btnLogout.addActionListener(this);
 		btnLogout.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		btnLogout.setBounds(0, 0, 73, 17);
 		panelTitle.add(btnLogout);
@@ -314,6 +310,18 @@ public class TransactionGUI extends JFrame {
 		});
 		btnShow.setBounds(10, 541, 103, 29);
 		panelSelectItem.add(btnShow);
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent action) {
+		// TODO Auto-generated method stub
+		
+		if (action.getSource() == btnLogout){
+			close();
+			LoginGUI loginFrame = new LoginGUI();
+			loginFrame.setVisible(true);
+		}
 		
 	}
 }
