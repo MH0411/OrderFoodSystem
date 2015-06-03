@@ -1,6 +1,7 @@
 /GUI/
-/user/
+/databaseDemo.class
 /db/
 /item/
-/transaction/
 /main/
+/transaction/
+/user/
