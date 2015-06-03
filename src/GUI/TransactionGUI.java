@@ -42,11 +42,12 @@ public class TransactionGUI extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private ImageIcon cart;
 	private JTextField unitPriceTextField;
+	private JTextField subTotalPriceTextField;
+	private JTextField cashTextField;
 	private JTextField totalPriceTextField;
-	private JTextField tFCash;
-	private JTextField tFPayPrice;
-	private JTextField tFChange;
-	private JTable ItemSoldTable;
+	private JTextField changeTextField;
+	private JTable itemListTable;
+	private JTextField quantityTextField;
 
 	/**
 	 * Launch the application.
@@ -97,134 +98,134 @@ public class TransactionGUI extends JFrame implements ActionListener {
 		CartPanel.add(itemsList);
 		
 		JPanel confirmPanel = new JPanel();
-		confirmPanel.setBounds(41, 448, 258, 218);
+		confirmPanel.setBounds(40, 452, 258, 218);
 		CartPanel.add(confirmPanel);
 		confirmPanel.setLayout(null);
 		
-		JLabel lblNewLabel_2 = new JLabel("Cash Tendered : ");
-		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblNewLabel_2.setBounds(10, 7, 114, 14);
-		confirmPanel.add(lblNewLabel_2);
+		JLabel cashLabel = new JLabel("Cash Tendered : ");
+		cashLabel.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		cashLabel.setBounds(10, 7, 114, 14);
+		confirmPanel.add(cashLabel);
 		
-		JLabel lblTotalPricerm = new JLabel("Total Price (RM) :");
-		lblTotalPricerm.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblTotalPricerm.setBounds(10, 47, 123, 14);
-		confirmPanel.add(lblTotalPricerm);
+		JLabel totalPriceLabel = new JLabel("Total Price (RM) :");
+		totalPriceLabel.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		totalPriceLabel.setBounds(10, 47, 123, 14);
+		confirmPanel.add(totalPriceLabel);
 		
-		JLabel lblChange = new JLabel("Change : ");
-		lblChange.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblChange.setBounds(10, 87, 63, 14);
-		confirmPanel.add(lblChange);
+		JLabel changeLabel = new JLabel("Change : ");
+		changeLabel.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		changeLabel.setBounds(10, 87, 63, 14);
+		confirmPanel.add(changeLabel);
 		
-		tFCash = new JTextField();
-		tFCash.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		tFCash.setColumns(10);
-		tFCash.setBounds(144, 7, 105, 20);
-		confirmPanel.add(tFCash);
+		cashTextField = new JTextField();
+		cashTextField.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		cashTextField.setColumns(10);
+		cashTextField.setBounds(144, 7, 105, 20);
+		confirmPanel.add(cashTextField);
 		
-		tFPayPrice = new JTextField();
-		tFPayPrice.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		tFPayPrice.setEditable(false);
-		tFPayPrice.setColumns(10);
-		tFPayPrice.setBounds(144, 47, 105, 20);
-		confirmPanel.add(tFPayPrice);
+		totalPriceTextField = new JTextField();
+		totalPriceTextField.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		totalPriceTextField.setEditable(false);
+		totalPriceTextField.setColumns(10);
+		totalPriceTextField.setBounds(144, 47, 105, 20);
+		confirmPanel.add(totalPriceTextField);
 		
-		tFChange = new JTextField();
-		tFChange.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		tFChange.setEditable(false);
-		tFChange.setColumns(10);
-		tFChange.setBounds(144, 87, 105, 20);
-		confirmPanel.add(tFChange);
+		changeTextField = new JTextField();
+		changeTextField.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		changeTextField.setEditable(false);
+		changeTextField.setColumns(10);
+		changeTextField.setBounds(144, 87, 105, 20);
+		confirmPanel.add(changeTextField);
 		
-		JButton btnConfirm = new JButton("Confirm");
-		btnConfirm.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		btnConfirm.setBounds(72, 160, 114, 33);
-		confirmPanel.add(btnConfirm);
+		JButton confirmButton = new JButton("Confirm");
+		confirmButton.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		confirmButton.setBounds(72, 160, 114, 33);
+		confirmPanel.add(confirmButton);
 		
 		JPanel receiptPanel = new JPanel();
 		receiptPanel.setBounds(682, 31, 678, 708);
 		contentPane.add(receiptPanel);
 		receiptPanel.setLayout(null);
 		
-		JLabel lblReceipt = new JLabel("Receipt");
-		lblReceipt.setFont(new Font("Times New Roman", Font.BOLD, 48));
-		lblReceipt.setBounds(259, 21, 162, 75);
-		receiptPanel.add(lblReceipt);
+		JLabel receiptLabel = new JLabel("Receipt");
+		receiptLabel.setFont(new Font("Times New Roman", Font.BOLD, 48));
+		receiptLabel.setBounds(259, 21, 162, 75);
+		receiptPanel.add(receiptLabel);
 		
-		JLabel lblNewLabel_3 = new JLabel("BKB Sdn Bhd");
-		lblNewLabel_3.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		lblNewLabel_3.setBounds(299, 107, 82, 14);
-		receiptPanel.add(lblNewLabel_3);
+		JLabel companyLabel = new JLabel("BKB Sdn Bhd");
+		companyLabel.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		companyLabel.setBounds(299, 107, 82, 14);
+		receiptPanel.add(companyLabel);
 		
-		JLabel lblLestari = new JLabel("No.999, Jalan Ah Cheh, Ayeh Keroh, Melaka");
-		lblLestari.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		lblLestari.setBounds(210, 131, 259, 14);
-		receiptPanel.add(lblLestari);
+		JLabel addressLabel = new JLabel("No.999, Jalan Ah Cheh, Ayeh Keroh, Melaka");
+		addressLabel.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		addressLabel.setBounds(210, 131, 259, 14);
+		receiptPanel.add(addressLabel);
 		
-		JLabel lblinvoice = new JLabel("Invoice#");
-		lblinvoice.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		lblinvoice.setBounds(36, 170, 56, 14);
-		receiptPanel.add(lblinvoice);
+		JLabel invoiceLabel = new JLabel("Invoice#");
+		invoiceLabel.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		invoiceLabel.setBounds(36, 170, 56, 14);
+		receiptPanel.add(invoiceLabel);
 		
-		JLabel invoiceNo = new JLabel("Invoice No");
-		invoiceNo.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		invoiceNo.setBounds(105, 170, 69, 14);
-		receiptPanel.add(invoiceNo);
+		JLabel invoiceNoLabel = new JLabel("Invoice No");
+		invoiceNoLabel.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		invoiceNoLabel.setBounds(105, 170, 69, 14);
+		receiptPanel.add(invoiceNoLabel);
 		
-		ItemSoldTable = new JTable();
-		ItemSoldTable.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-		ItemSoldTable.setBounds(36, 201, 607, 259);
-		receiptPanel.add(ItemSoldTable);
+		JLabel dataTimeLabel = new JLabel("??/??/???? ??:??:??");
+		dataTimeLabel.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		dataTimeLabel.setBounds(511, 171, 132, 14);
+		receiptPanel.add(dataTimeLabel);
 		
-		JLabel lblNewLabel_5 = new JLabel("Total Price (RM) : (Incl GST)");
-		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_5.setBounds(36, 508, 202, 14);
-		receiptPanel.add(lblNewLabel_5);
+		itemListTable = new JTable();
+		itemListTable.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+		itemListTable.setBounds(36, 201, 607, 259);
+		receiptPanel.add(itemListTable);
 		
-		JLabel lblTotalGST = new JLabel("Total Includ 6% GST");
-		lblTotalGST.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblTotalGST.setBounds(36, 547, 152, 14);
-		receiptPanel.add(lblTotalGST);
+		JLabel receiptTotalPriceLabel = new JLabel("Total Price (RM) : (Incl GST)");
+		receiptTotalPriceLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		receiptTotalPriceLabel.setBounds(36, 508, 202, 14);
+		receiptPanel.add(receiptTotalPriceLabel);
 		
-		JLabel lblCashTendered = new JLabel("Cash Tendered  ");
-		lblCashTendered.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblCashTendered.setBounds(36, 586, 117, 14);
-		receiptPanel.add(lblCashTendered);
+		JLabel totalGSTLabel = new JLabel("Total Includ 6% GST");
+		totalGSTLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		totalGSTLabel.setBounds(36, 547, 152, 14);
+		receiptPanel.add(totalGSTLabel);
 		
-		JLabel lblChange_1 = new JLabel("Change");
-		lblChange_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblChange_1.setBounds(36, 628, 202, 14);
-		receiptPanel.add(lblChange_1);
+		JLabel receiptCashLabel = new JLabel("Cash Tendered  ");
+		receiptCashLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		receiptCashLabel.setBounds(36, 586, 117, 14);
+		receiptPanel.add(receiptCashLabel);
 		
-		JLabel lblTotalPrice = new JLabel("price");
-		lblTotalPrice.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblTotalPrice.setBounds(574, 508, 69, 16);
-		receiptPanel.add(lblTotalPrice);
+		JLabel receiptChangeLabel = new JLabel("Change");
+		receiptChangeLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		receiptChangeLabel.setBounds(36, 628, 202, 14);
+		receiptPanel.add(receiptChangeLabel);
 		
-		JLabel lblTotalGSTPrice = new JLabel("gst");
-		lblTotalGSTPrice.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblTotalGSTPrice.setBounds(574, 549, 69, 16);
-		receiptPanel.add(lblTotalGSTPrice);
+		JLabel totalPriceValueLabel = new JLabel("price");
+		totalPriceValueLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		totalPriceValueLabel.setBounds(574, 508, 69, 16);
+		receiptPanel.add(totalPriceValueLabel);
 		
-		JLabel lblCash = new JLabel("cash");
-		lblCash.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblCash.setBounds(574, 588, 69, 16);
-		receiptPanel.add(lblCash);
+		JLabel totalGSTValueLabel = new JLabel("gst");
+		totalGSTValueLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		totalGSTValueLabel.setBounds(574, 549, 69, 16);
+		receiptPanel.add(totalGSTValueLabel);
 		
-		JLabel lblReceiptChange = new JLabel("change");
-		lblReceiptChange.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblReceiptChange.setBounds(574, 630, 69, 16);
-		receiptPanel.add(lblReceiptChange);
+		JLabel cashValueLabel = new JLabel("cash");
+		cashValueLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		cashValueLabel.setBounds(574, 588, 69, 16);
+		receiptPanel.add(cashValueLabel);
 		
-		JButton btnNewButton_1 = new JButton("Receipt");
-		btnNewButton_1.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		btnNewButton_1.setBounds(511, 678, 132, 33);
-		receiptPanel.add(btnNewButton_1);
+		JLabel changeValueLabel = new JLabel("change");
+		changeValueLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		changeValueLabel.setBounds(574, 630, 69, 16);
+		receiptPanel.add(changeValueLabel);
 		
-		JLabel lblDateTime = new JLabel("??/??/???? ??:??:??");
-		lblDateTime.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		lblDateTime.setBounds(511, 171, 132, 14);
-		receiptPanel.add(lblDateTime);
+		JButton receiptButton = new JButton("Receipt");
+		receiptButton.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		receiptButton.setBounds(511, 678, 132, 33);
+		receiptPanel.add(receiptButton);
 		
 		JPanel itemPanel = new JPanel();
 		itemPanel.setBounds(0, 31, 338, 708);
@@ -232,7 +233,7 @@ public class TransactionGUI extends JFrame implements ActionListener {
 		itemPanel.setLayout(null);
 		
 		JPanel addItemPanel = new JPanel();
-		addItemPanel.setBounds(37, 193, 266, 231);
+		addItemPanel.setBounds(36, 270, 266, 289);
 		itemPanel.add(addItemPanel);
 		addItemPanel.setLayout(null);
 		
@@ -251,10 +252,10 @@ public class TransactionGUI extends JFrame implements ActionListener {
 		unitPriceLabel.setBounds(10, 93, 119, 14);
 		addItemPanel.add(unitPriceLabel);
 		
-		JLabel totalPriceLabel = new JLabel("Total Price (RM) :  ");
-		totalPriceLabel.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		totalPriceLabel.setBounds(10, 137, 129, 14);
-		addItemPanel.add(totalPriceLabel);
+		JLabel subTotalPriceLabel = new JLabel("Total Price (RM) :  ");
+		subTotalPriceLabel.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		subTotalPriceLabel.setBounds(10, 137, 129, 14);
+		addItemPanel.add(subTotalPriceLabel);
 		
 		JComboBox itemsComboBox = new JComboBox();
 		itemsComboBox.setEditable(true);
@@ -262,10 +263,10 @@ public class TransactionGUI extends JFrame implements ActionListener {
 		itemsComboBox.setBounds(151, 9, 105, 20);
 		addItemPanel.add(itemsComboBox);
 		
-		JSpinner quantitySpinner = new JSpinner();
-		quantitySpinner.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		quantitySpinner.setBounds(151, 48, 105, 20);
-		addItemPanel.add(quantitySpinner);
+		quantityTextField = new JTextField();
+		quantityTextField.setBounds(151, 46, 105, 20);
+		addItemPanel.add(quantityTextField);
+		quantityTextField.setColumns(10);
 		
 		unitPriceTextField = new JTextField();
 		unitPriceTextField.setEditable(false);
@@ -274,29 +275,17 @@ public class TransactionGUI extends JFrame implements ActionListener {
 		addItemPanel.add(unitPriceTextField);
 		unitPriceTextField.setColumns(10);
 		
-		totalPriceTextField = new JTextField();
-		totalPriceTextField.setEditable(false);
-		totalPriceTextField.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		totalPriceTextField.setBounds(151, 137, 105, 20);
-		addItemPanel.add(totalPriceTextField);
-		totalPriceTextField.setColumns(10);
+		subTotalPriceTextField = new JTextField();
+		subTotalPriceTextField.setEditable(false);
+		subTotalPriceTextField.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		subTotalPriceTextField.setBounds(151, 137, 105, 20);
+		addItemPanel.add(subTotalPriceTextField);
+		subTotalPriceTextField.setColumns(10);
 		
-		JButton btnAddToCart = new JButton("Add To Cart");
-		btnAddToCart.setFont(new Font("Times New Roman", Font.BOLD, 18));
-		btnAddToCart.setBounds(117, 178, 139, 39);
-		addItemPanel.add(btnAddToCart);
-		
-		JButton showButton = new JButton("Show Sales");
-		showButton.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		showButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				close();
-				SaleGUI saleFrame = new SaleGUI();
-				saleFrame.setVisible(true);
-			}
-		});
-		showButton.setBounds(10, 541, 103, 29);
-		itemPanel.add(showButton);
+		JButton addItemButton = new JButton("Add To Cart");
+		addItemButton.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		addItemButton.setBounds(63, 239, 139, 39);
+		addItemPanel.add(addItemButton);
 		
 		JLabel shoppingCartLabel = new JLabel("Shopping Cart");
 		shoppingCartLabel.setBounds(10, 57, 310, 71);
@@ -307,14 +296,14 @@ public class TransactionGUI extends JFrame implements ActionListener {
 		menuBar.setBounds(0, 0, 1360, 21);
 		contentPane.add(menuBar);
 		
-		JMenu mnNewMenu = new JMenu("Menu");
-		menuBar.add(mnNewMenu);
+		JMenu menu = new JMenu("Menu");
+		menuBar.add(menu);
 		
-		JMenuItem mntmShowSales = new JMenuItem("Show Sales");
-		mnNewMenu.add(mntmShowSales);
+		JMenuItem showSaleMenuItem = new JMenuItem("Show Sales");
+		menu.add(showSaleMenuItem);
 		
-		JMenuItem mntmNewMenuItem = new JMenuItem("Logout");
-		mnNewMenu.add(mntmNewMenuItem);
+		JMenuItem LogoutMenuItem = new JMenuItem("Logout");
+		menu.add(LogoutMenuItem);
 	}
 
 	/**
