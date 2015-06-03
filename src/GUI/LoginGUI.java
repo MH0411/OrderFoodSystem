@@ -25,15 +25,20 @@ import javax.swing.JTextArea;
 import javax.swing.JSeparator;
 
 import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.border.LineBorder;
 import javax.swing.UIManager;
+
+import user.db.UserController;
 
 @SuppressWarnings("serial")
 public class LoginGUI extends JFrame {
 
 	private JPanel contentPane;
 	private JPasswordField passwordField;
-	private JTextField textField;
+	private JTextField userNameField;
 	private JTextField textField_9;
 	private JTextField textField_1;
 	private JTextField textField_2;
@@ -41,21 +46,19 @@ public class LoginGUI extends JFrame {
 	private JTextField textField_6;
 	private JTextField textField_7;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginGUI frame = new LoginGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					LoginGUI frame = new LoginGUI();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
+	
 
 	/**
 	 * Create the frame.
@@ -90,12 +93,13 @@ public class LoginGUI extends JFrame {
 		passwordField.setBounds(300, 287, 250, 40);
 		panelLeft.add(passwordField);
 		
-		textField = new JTextField();
-		textField.setHorizontalAlignment(SwingConstants.LEFT);
-		textField.setFont(new Font("Times New Roman", Font.PLAIN, 24));
-		textField.setBounds(300, 200, 250, 40);
-		panelLeft.add(textField);
-		textField.setColumns(10);
+		userNameField = new JTextField();
+		userNameField.setToolTipText("");
+		userNameField.setHorizontalAlignment(SwingConstants.LEFT);
+		userNameField.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		userNameField.setBounds(300, 200, 250, 40);
+		panelLeft.add(userNameField);
+		userNameField.setColumns(10);
 		
 		JLabel lblUsername = new JLabel("Username : ");
 		lblUsername.setHorizontalAlignment(SwingConstants.LEFT);
@@ -113,6 +117,23 @@ public class LoginGUI extends JFrame {
 		btnLogin.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		btnLogin.setBounds(443, 455, 107, 33);
 		panelLeft.add(btnLogin);
+		
+		// perform login function
+		
+		btnLogin.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				final String userName = userNameField.getText();
+				final String password = String.valueOf(
+						passwordField.getPassword());
+				
+				UserController userCtrl = new UserController();
+				userCtrl.validateLogin(userName, password);
+//				System.out.println(userName + " A " + password);	
+			}
+		});
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(679, 382, 1, 2);
@@ -225,4 +246,5 @@ public class LoginGUI extends JFrame {
 		lblFoodOrderSystem.setAlignmentY(CENTER_ALIGNMENT);
 		panelTitle.add(lblFoodOrderSystem);
 	}
+
 }

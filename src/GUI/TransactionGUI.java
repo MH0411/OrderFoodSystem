@@ -290,6 +290,8 @@ public class TransactionGUI extends JFrame {
 		});
 		btnShow.setBounds(10, 541, 103, 29);
 		panelSelectItem.add(btnShow);
-		
+
+
+
 	}
 }

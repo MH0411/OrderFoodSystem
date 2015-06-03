@@ -10,7 +10,7 @@ public class DatabaseController {
 	
 	public Connection getConnection() throws SQLException, 
 			ClassNotFoundException {
-		final String URL = "jdbc:mysql://localhost:3306/OrderFoodSystemDB";
+		final String URL = "jdbc:mysql://localhost:3306/order_food_system_db";
 	    final String USERNAME = "root";
 	    final String PASSWORD = "";
 		
