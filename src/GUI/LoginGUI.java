@@ -3,6 +3,7 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
+import java.awt.Window;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -25,36 +26,58 @@ import javax.swing.JTextArea;
 import javax.swing.JSeparator;
 
 import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
 import javax.swing.border.LineBorder;
 import javax.swing.UIManager;
+
+import user.db.UserController;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.TitledBorder;
 
 @SuppressWarnings("serial")
 public class LoginGUI extends JFrame {
 
 	private JPanel contentPane;
 	private JPasswordField passwordField;
-	private JTextField textField;
+	private JTextField userNameField;
 	private JTextField textField_9;
-	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_6;
 	private JTextField textField_7;
+	private JPasswordField passwordField_1;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginGUI frame = new LoginGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					LoginGUI frame = new LoginGUI();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
+	
+
+	/**
+	 * close the current frame and display next frame
+	 */
+	public void close(){
+		 WindowEvent winClosingEvent = 
+				 new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+		 Toolkit.getDefaultToolkit().getSystemEventQueue().
+		 		postEvent(winClosingEvent);
 	}
 
 	/**
@@ -64,15 +87,15 @@ public class LoginGUI extends JFrame {
 		setResizable(false);
 		setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		contentPane = new JPanel();
-		contentPane.setBackground(Color.YELLOW);
+		contentPane.setBackground(Color.BLACK);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JPanel panelLeft = new JPanel();
-		panelLeft.setBounds(0, 169, 680, 570);
+		panelLeft.setBounds(0, 169, 679, 570);
 		contentPane.add(panelLeft);
 		panelLeft.setLayout(null);
 		
@@ -90,12 +113,13 @@ public class LoginGUI extends JFrame {
 		passwordField.setBounds(300, 287, 250, 40);
 		panelLeft.add(passwordField);
 		
-		textField = new JTextField();
-		textField.setHorizontalAlignment(SwingConstants.LEFT);
-		textField.setFont(new Font("Times New Roman", Font.PLAIN, 24));
-		textField.setBounds(300, 200, 250, 40);
-		panelLeft.add(textField);
-		textField.setColumns(10);
+		userNameField = new JTextField();
+		userNameField.setToolTipText("");
+		userNameField.setHorizontalAlignment(SwingConstants.LEFT);
+		userNameField.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		userNameField.setBounds(300, 200, 250, 40);
+		panelLeft.add(userNameField);
+		userNameField.setColumns(10);
 		
 		JLabel lblUsername = new JLabel("Username : ");
 		lblUsername.setHorizontalAlignment(SwingConstants.LEFT);
@@ -110,28 +134,52 @@ public class LoginGUI extends JFrame {
 		panelLeft.add(lblPassword);
 		
 		JButton btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				close();
+				TransactionGUI transactionFrame = new TransactionGUI();
+				transactionFrame.setVisible(true);
+			}
+		});
 		btnLogin.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		btnLogin.setBounds(443, 455, 107, 33);
 		panelLeft.add(btnLogin);
+		
+		// perform login function
+		
+		btnLogin.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				final String userName = userNameField.getText();
+				final String password = String.valueOf(
+						passwordField.getPassword());
+				
+				UserController userCtrl = new UserController();
+				userCtrl.validateLogin(userName, password);
+//				System.out.println(userName + " A " + password);	
+			}
+		});
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(679, 382, 1, 2);
 		panelLeft.add(separator);
 		
 		JPanel panelRight = new JPanel();
-		panelRight.setBounds(680, 169, 680, 570);
+		panelRight.setBounds(681, 169, 679, 570);
 		contentPane.add(panelRight);
 		panelRight.setLayout(null);
 		
 		JLabel lblRegistration = new JLabel("Registration");
-		lblRegistration.setBounds(243, 30, 274, 70);
+		lblRegistration.setBounds(203, 30, 274, 70);
 		lblRegistration.setVerticalAlignment(SwingConstants.TOP);
 		lblRegistration.setFont(new Font("Times New Roman", Font.BOLD, 50));
 		lblRegistration.setAlignmentY(0.5f);
 		panelRight.add(lblRegistration);
 		
 		JPanel panelRegister = new JPanel();
-		panelRegister.setBounds(134, 126, 389, 381);
+		panelRegister.setBounds(145, 97, 389, 381);
 		panelRight.add(panelRegister);
 		
 		panelRegister.setLayout(null);
@@ -177,12 +225,6 @@ public class LoginGUI extends JFrame {
 		lblUsername_1.setBounds(10, 14, 114, 20);
 		panelRegister.add(lblUsername_1);
 		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Times New Roman", Font.PLAIN, 24));
-		textField_1.setColumns(10);
-		textField_1.setBounds(150, 52, 229, 34);
-		panelRegister.add(textField_1);
-		
 		textField_2 = new JTextField();
 		textField_2.setFont(new Font("Times New Roman", Font.PLAIN, 24));
 		textField_2.setColumns(10);
@@ -208,21 +250,33 @@ public class LoginGUI extends JFrame {
 		panelRegister.add(textField_7);
 		
 		JTextArea textArea = new JTextArea();
-		textArea.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		textArea.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		textArea.setBounds(150, 194, 229, 73);
 		panelRegister.add(textArea);
-		textArea.setBorder(new LineBorder(UIManager.getColor("TextField.shadow")));
+		textArea.setBorder(new LineBorder(new Color(160, 160, 160)));
+		
+		passwordField_1 = new JPasswordField();
+		passwordField_1.setFont(new Font("Times New Roman", Font.BOLD, 24));
+		passwordField_1.setBounds(150, 52, 229, 31);
+		panelRegister.add(passwordField_1);
+		
+		JButton btnRegister = new JButton("Register");
+		btnRegister.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		btnRegister.setBounds(288, 509, 104, 31);
+		panelRight.add(btnRegister);
 		
 		JPanel panelTitle = new JPanel();
-		panelTitle.setBounds(0, 0, 1360, 158);
+		panelTitle.setBounds(0, 0, 1360, 169);
 		contentPane.add(panelTitle);
 		panelTitle.setLayout(null);
 		
 		JLabel lblFoodOrderSystem = new JLabel("Food Order System");
-		lblFoodOrderSystem.setBounds(495, 51, 410, 51);
-		lblFoodOrderSystem.setFont(new Font("Minion Pro SmBd", lblFoodOrderSystem.getFont().getStyle() | Font.BOLD, 50));
+		lblFoodOrderSystem.setBounds(475, 59, 410, 51);
+		lblFoodOrderSystem.setFont(new Font("Minion Pro SmBd", 
+				lblFoodOrderSystem.getFont().getStyle() | Font.BOLD, 50));
 		lblFoodOrderSystem.setVerticalAlignment(SwingConstants.TOP);
 		lblFoodOrderSystem.setAlignmentY(CENTER_ALIGNMENT);
 		panelTitle.add(lblFoodOrderSystem);
 	}
+
 }
