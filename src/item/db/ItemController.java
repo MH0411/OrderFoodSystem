@@ -10,7 +10,6 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 import db.DatabaseController;
-import user.User;
 import item.Item;
 
 public class ItemController {
@@ -31,6 +30,13 @@ public class ItemController {
 		this.item = item;
 	}
 	
+	/**
+	 * Add items from database to combo box
+	 * @param itemsComboBox
+	 * @return
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
 	public JComboBox<ComboItem> fillComboBox(JComboBox<ComboItem> itemsComboBox) 
 			throws SQLException, ClassNotFoundException {
 	
