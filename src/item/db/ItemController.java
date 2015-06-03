@@ -1,12 +1,13 @@
 package item.db;
 
+import java.awt.event.ActionEvent;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Vector;
-
 import javax.swing.JComboBox;
+import javax.swing.JTextField;
 
 import db.DatabaseController;
 import user.User;
@@ -15,8 +16,12 @@ import item.Item;
 public class ItemController {
 	
 	private Item item;
-	private DatabaseController dbController;
+	private DatabaseController dbController = new DatabaseController();
 	private Connection conn;
+	private String sql;
+	private Statement stmt;
+	private ResultSet rsItem;
+	Item tempItem = null;
 
 	public Item getItem() {
 		return item;
@@ -26,29 +31,48 @@ public class ItemController {
 		this.item = item;
 	}
 	
-	@SuppressWarnings("null")
-	public Vector<Item> selectAllItems() throws SQLException, 
-		ClassNotFoundException {
+	public JComboBox<ComboItem> fillComboBox(JComboBox<ComboItem> itemsComboBox) 
+			throws SQLException, ClassNotFoundException {
 	
-		conn = dbController.getConnection();		
-		String sql = "select * from tb_item";	
-		
+		//Open database connection
+		conn = dbController.getConnection();
+		//Create sql statement;
+		sql = "select * from tb_item";	
 		//Create statement object
-		Statement stmt = conn.createStatement();
-		
+		stmt = conn.createStatement();	
 		//Create result set object
-		ResultSet rsItem = stmt.executeQuery(sql);
-
-		//display result set
-		Vector<Item> items  = new Vector<Item>();
+		rsItem = stmt.executeQuery(sql);
+		//Get all item name in database.
 		while(rsItem.next()){
-			
-			Item tempItem = null;
-			tempItem.setItemId(rsItem.getString("itemId"));
-			tempItem.setName(rsItem.getString("name"));
-			items.add(tempItem);
+			 itemsComboBox.addItem(new ComboItem(rsItem.getString("itemId"),
+					 rsItem.getString("name"), rsItem.getString("unitPrice")));
 		}
+		//Close database connection
 		conn.close();
-		return items;
+		//Return String to combo box.
+		return itemsComboBox;
+	}
+
+	public JTextField actionPerformed(ActionEvent arg0,
+			JComboBox<String> itemsComboBox, JTextField unitPriceTextField) 
+			throws ClassNotFoundException, SQLException {
+		
+		//Open database connection
+		conn = dbController.getConnection();
+		//Create sql statement;
+		sql = "select * from tb_item WHERE name = ?";	
+		//Create statement object
+		stmt = conn.prepareStatement(sql);
+		((PreparedStatement) stmt).setString(1,(String)itemsComboBox.getSelectedItem());
+		//Create result set object
+		rsItem = stmt.executeQuery(sql);
+		//Get all item name in database.
+		while(rsItem.next()){
+			unitPriceTextField.setText(rsItem.getString("unitPrice"));
+		}
+		//Close database connection
+		conn.close();
+		//Return String to combo box.
+		return unitPriceTextField;
 	}
 }

@@ -1,5 +1,7 @@
 package GUI;
 
+import item.Item;
+import item.db.ComboItem;
 import item.db.ItemController;
 
 import java.awt.BorderLayout;
@@ -7,6 +9,10 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
 
+
+
+
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -33,6 +39,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.EventListener;
 import java.util.Vector;
 
 import javax.swing.JList;
@@ -45,11 +52,13 @@ import javax.swing.JMenuItem;
 
 import db.DatabaseController;
 
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.PopupMenuEvent;
+
 @SuppressWarnings("serial")
 public class TransactionGUI extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
-	private ImageIcon cart;
 	private JTextField unitPriceTextField;
 	private JTextField subTotalPriceTextField;
 	private JTextField cashTextField;
@@ -59,8 +68,6 @@ public class TransactionGUI extends JFrame implements ActionListener {
 	private JTextField quantityTextField;
 	
 	private ItemController itemCtrl = new ItemController();
-	private DatabaseController dbController = new DatabaseController();
-	private Connection conn;
 	/**
 	 * Launch the application.
 	 */
@@ -152,6 +159,7 @@ public class TransactionGUI extends JFrame implements ActionListener {
 		JButton confirmButton = new JButton("Confirm");
 		confirmButton.setFont(new Font("Times New Roman", Font.BOLD, 20));
 		confirmButton.setBounds(72, 160, 114, 33);
+		confirmButton.addActionListener(this);
 		confirmPanel.add(confirmButton);
 		
 		JPanel receiptPanel = new JPanel();
@@ -269,24 +277,21 @@ public class TransactionGUI extends JFrame implements ActionListener {
 		subTotalPriceLabel.setBounds(10, 137, 129, 14);
 		addItemPanel.add(subTotalPriceLabel);
 		
-		JComboBox<String> itemsComboBox = new JComboBox<String>();
+		JComboBox<ComboItem> itemsComboBox = new JComboBox<ComboItem>();
 		itemsComboBox.setEditable(true);
 		itemsComboBox.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		itemsComboBox.setBounds(151, 9, 105, 20);
-		try{
-			conn = dbController.getConnection();
-			String sql = "select * from tb_item";
-			Statement stmt = conn.createStatement();
-			ResultSet rsItem = stmt.executeQuery(sql);
-			rsItem= stmt.executeQuery("select * from tb_item");
-		    while(rsItem.next()){                            
-		        itemsComboBox.addItem(rsItem.getString("name"));
-		    }
-		    conn.close();
-	    }catch(Exception e){
-	        System.out.println("Error"+e);
-	    }
 		addItemPanel.add(itemsComboBox);
+		
+		try {
+			itemCtrl.fillComboBox(itemsComboBox);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		quantityTextField = new JTextField();
 		quantityTextField.setBounds(151, 46, 105, 20);
@@ -336,7 +341,8 @@ public class TransactionGUI extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
-//		if(action.getSource() == )
+//		if(action.getSource() == confirmButton){
+			
+//		}
 	}
-	
 }

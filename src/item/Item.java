@@ -8,11 +8,16 @@ public class Item {
 	private String status;
 	
 	public Item(String itemId, String name, double unitPrice, String status) {
-		super();
 		this.itemId = itemId;
 		this.name = name;
 		this.unitPrice = unitPrice;
 		this.status = status;
+	}
+	
+	public Item(String itemId, String name, String unitPrice){
+		this.itemId = itemId;
+		this.name = name;
+		this.unitPrice = Double.parseDouble(unitPrice);
 	}
 	
 	public String getItemId() {
