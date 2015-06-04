@@ -1,14 +1,10 @@
 package item.db;
 
-import java.awt.event.ActionEvent;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JComboBox;
-import javax.swing.JTextField;
-
 import db.DatabaseController;
 import item.Item;
 
@@ -51,7 +47,7 @@ public class ItemController {
 		//Get all item name in database.
 		while(rsItem.next()){
 			 itemsComboBox.addItem(new ComboItem(rsItem.getString("itemId"),
-					 rsItem.getString("name"), rsItem.getString("unitPrice")));
+					 rsItem.getString("name"), rsItem.getDouble("unitPrice")));
 		}
 		//Close database connection
 		conn.close();

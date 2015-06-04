@@ -5,27 +5,20 @@ import item.db.ItemController;
 
 import java.awt.EventQueue;
 import java.awt.Toolkit;
+import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import java.awt.Color;
-
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-
-import java.awt.Font;
-
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
-import java.sql.SQLException;
-
 import javax.swing.JList;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -34,23 +27,42 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.awt.event.KeyEvent;
+
+/**
+ * This class control the interface of transaction.
+ * Interface activity happen here.
+ * @author Ho Zhen Hong
+ *
+ */
 @SuppressWarnings("serial")
 public class TransactionGUI extends JFrame 
-		implements ActionListener, DocumentListener{
+		implements ActionListener, DocumentListener, KeyListener{
 
 	private JPanel contentPane;
+	private JPanel addItemPanel;
 	private JTextField unitPriceTextField;
 	private JTextField subTotalPriceTextField;
 	private JTextField cashTextField;
 	private JTextField totalPriceTextField;
 	private JTextField changeTextField;
 	private JTable itemListTable;
-	private JTextField quantityTextField;
+	private JFormattedTextField quantityTextField;
 	private JButton addItemButton;
 	private JButton confirmButton;
 	private JButton receiptButton;
-	JComboBox<ComboItem> itemsComboBox;
+	private JMenuItem showSaleMenuItem;
+	private JMenuItem logoutMenuItem;
+	private JComboBox<ComboItem> itemsComboBox;
 	
+	//Set 2 decimal places.
+	private DecimalFormat df = new DecimalFormat("#.00");
 	
 	private ItemController itemCtrl = new ItemController();
 	private String fontStyle = "Times New Roman";
@@ -81,8 +93,6 @@ public class TransactionGUI extends JFrame
 		 		postEvent(winClosingEvent);
 	}
 	
-	
-	
 	/**
 	 * Create the frame.
 	 */
@@ -104,19 +114,21 @@ public class TransactionGUI extends JFrame
 		JMenu menu = new JMenu("Menu");
 		menuBar.add(menu);
 		
-		JMenuItem showSaleMenuItem = new JMenuItem("Show Sales");
+		showSaleMenuItem = new JMenuItem("Show Sales");
+		showSaleMenuItem.addActionListener(this);
 		menu.add(showSaleMenuItem);
 		
-		JMenuItem LogoutMenuItem = new JMenuItem("Logout");
-		menu.add(LogoutMenuItem);
+		logoutMenuItem = new JMenuItem("Logout");
+		logoutMenuItem.addActionListener(this);
+		menu.add(logoutMenuItem);
 		
-		//Left==============================================================
+		//LeftPanel===========================================================
 		JPanel itemPanel = new JPanel();
 		itemPanel.setBounds(0, 31, 338, 708);
 		contentPane.add(itemPanel);
 		itemPanel.setLayout(null);
 		
-		JPanel addItemPanel = new JPanel();
+		addItemPanel = new JPanel();
 		addItemPanel.setBounds(36, 270, 266, 289);
 		itemPanel.add(addItemPanel);
 		addItemPanel.setLayout(null);
@@ -141,11 +153,14 @@ public class TransactionGUI extends JFrame
 		subTotalPriceLabel.setBounds(10, 137, 129, 14);
 		addItemPanel.add(subTotalPriceLabel);
 		
+		DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
+		dlcr.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
 		itemsComboBox = new JComboBox<ComboItem>();
 		itemsComboBox.setEditable(true);
+		itemsComboBox.setRenderer(dlcr);
 		itemsComboBox.setFont(new Font(fontStyle, Font.BOLD, 16));
 		itemsComboBox.setBounds(151, 9, 105, 20);
-		itemsComboBox.setSelectedItem(" ");
+		itemsComboBox.setSelectedItem("");;
 		itemsComboBox.addActionListener(this);
 		addItemPanel.add(itemsComboBox);
 		
@@ -157,25 +172,31 @@ public class TransactionGUI extends JFrame
 			e.printStackTrace();
 		}
 		
-		quantityTextField = new JTextField();
+		quantityTextField = new JFormattedTextField();
+		quantityTextField.setEditable(false);
+		quantityTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		quantityTextField.setBounds(151, 46, 105, 20);
+		quantityTextField.addKeyListener(this);
 		quantityTextField.getDocument().addDocumentListener(this);
 		quantityTextField.putClientProperty("quantity", "Text Field");
 		addItemPanel.add(quantityTextField);
 		
 		unitPriceTextField = new JTextField();
 		unitPriceTextField.setEditable(false);
+		unitPriceTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		unitPriceTextField.setFont(new Font(fontStyle, Font.BOLD, 16));
 		unitPriceTextField.setBounds(151, 93, 105, 20);
 		addItemPanel.add(unitPriceTextField);
 		
 		subTotalPriceTextField = new JTextField();
 		subTotalPriceTextField.setEditable(false);
+		subTotalPriceTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		subTotalPriceTextField.setFont(new Font(fontStyle, Font.BOLD, 16));
 		subTotalPriceTextField.setBounds(151, 137, 105, 20);
 		addItemPanel.add(subTotalPriceTextField);
 		
 		addItemButton = new JButton("Add To Cart");
+		addItemButton.addActionListener(this);
 		addItemButton.setFont(new Font(fontStyle, Font.BOLD, 18));
 		addItemButton.setBounds(63, 239, 139, 39);
 		addItemPanel.add(addItemButton);
@@ -185,7 +206,7 @@ public class TransactionGUI extends JFrame
 		itemPanel.add(shoppingCartLabel);
 		shoppingCartLabel.setFont(new Font(fontStyle, Font.BOLD, 48));
 		
-		//Mid================================================================
+		//MidPanel===========================================================
 		JPanel CartPanel = new JPanel();
 		CartPanel.setBounds(341, 31, 338, 708);
 		contentPane.add(CartPanel);
@@ -243,7 +264,7 @@ public class TransactionGUI extends JFrame
 		confirmButton.addActionListener(this);
 		confirmPanel.add(confirmButton);
 		
-		//Right===============================================================
+		//RightPanel==========================================================
 		JPanel receiptPanel = new JPanel();
 		receiptPanel.setBounds(682, 31, 678, 708);
 		contentPane.add(receiptPanel);
@@ -338,50 +359,105 @@ public class TransactionGUI extends JFrame
 	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		if(action.getSource() == addItemButton) {
+		if(action.getSource() == showSaleMenuItem) {
+			
+		}else if (action.getSource() == logoutMenuItem) {
+			
+		}else if(action.getSource() == addItemButton) {
+			
 			//Add selected item to cart
+			//Refresh all text fields
+			
 		}else if (action.getSource() == confirmButton) {
+			
 			//Proceed to receipt
+			//Refresh cart
+			
 		}else if (action.getSource() == receiptButton) {
+			
 			//Print receipt in PDF/TXT file
+			
+			
 		}else if (action.getSource() == itemsComboBox) {
+			
+			//Get selected item's price
+			quantityTextField.setEditable(true);
 			ComboItem price = (ComboItem)itemsComboBox.getSelectedItem();
-			unitPriceTextField.setText(price.getPrice());
+			unitPriceTextField.setText(df.format(price.getPrice()));
 		} 
 	}
 	
+	/**
+	 * Add items in database to combo box.
+	 */
+	public void fillcombo(){
+		
+	}
 
 	/**
 	 * Override method in DocumentListener
 	 */
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		updateValue(e, "inserted into");
+		updateValue(e, "change");
 	}
 	/**
 	 * Override method in DocumentListener
 	 */
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		updateValue(e, "removed from");	
+		updateValue(e, "insert");	
 	}
 	/**
 	 * Override method in DocumentListener
 	 */
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		//Plain text components do not fire these events
+		updateValue(e, "remove");
 	}
 	
 	/**
-	 * Auto calculate sub total of a item.
+	 * Auto calculate sub total price of selected item.
 	 * @param e
 	 * @param action
 	 */
-	public void updateValue(DocumentEvent e, String action) {	
-        double unitPrice = Double.parseDouble(unitPriceTextField.getText());
-		int quantity = Integer.parseInt(quantityTextField.getText());
+	public void updateValue(DocumentEvent e, String action) {
+		//Declaraction of unit price and quantity variable
+		double unitPrice = Double.parseDouble(unitPriceTextField.getText());
+		int quantity;
+		
+		if (quantityTextField.getText().equals("")){
+			quantity = 0;
+			
+		}else {
+		//
+		quantity = Integer.parseInt(quantityTextField.getText());
+		}
+		//Calculate sub total
 		double subTotalPrice = unitPrice * quantity;
-        subTotalPriceTextField.setText(String.valueOf(subTotalPrice));
-    }
-}
+        subTotalPriceTextField.setText(String.valueOf
+        		(df.format(subTotalPrice)));
+	}
+	/**
+	 * Override method in KeyListener
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) {}
+	/**
+	 * Override method in KeyListener
+	 */
+	@Override
+	public void keyReleased(KeyEvent e) {}
+	/**
+	 * Override method in KeyListener
+	 */
+	@Override
+	public void keyTyped(KeyEvent e) {
+		char c = e.getKeyChar();
+		if (!(Character.isDigit(c)) || (c == KeyEvent.VK_BACK_SPACE) 
+				|| (c == KeyEvent.VK_DELETE)) {
+			e.consume();
+		}
+	}
+}		
+
