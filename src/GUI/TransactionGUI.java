@@ -363,18 +363,16 @@ public class TransactionGUI extends JFrame
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if(action.getSource() == showSaleMenuItem) {
+			//
 			close();
-			SaleGUI
+			SaleGUI saleFrame = new SaleGUI();
+			saleFrame.setVisible(true);
+			
 		}else if (action.getSource() == logoutMenuItem) {
 			
 		}else if(action.getSource() == addItemButton) {
 			
 			//Add selected item to cart
-//			String itemDetails = itemsComboBox.getSelectedItem() + " " 
-//					+ quantityTextField.getText() + " " 
-//					+ unitPriceTextField.getText() + " " 
-//					+ subTotalPriceTextField.getText();
-//			itemsList.add(itemDetails);
 			
 			//Calculate total price from all selected item
 			
@@ -395,7 +393,7 @@ public class TransactionGUI extends JFrame
 			//Get selected item's price
 			quantityTextField.setEditable(true);
 			ComboItem price = (ComboItem)itemsComboBox.getSelectedItem();
-			unitPriceTextField.setText(df.format(price.getPrice()));
+			unitPriceTextField.setText(df.format(price.getUnitPrice()));
 		} 
 	}
 	

@@ -47,7 +47,7 @@ public class ItemController {
 		//Get all item name in database.
 		while(rsItem.next()){
 			 itemsComboBox.addItem(new ComboItem(rsItem.getString("itemId"),
-					 rsItem.getString("name"), rsItem.getDouble("unitPrice")));
+					 rsItem.getString("name").toString(), rsItem.getDouble("unitPrice")));
 		}
 		//Close database connection
 		conn.close();
