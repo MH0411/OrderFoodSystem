@@ -34,7 +34,6 @@ import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.awt.event.KeyEvent;
-import javax.swing.AbstractListModel;
 
 /**
  * This class control the interface of transaction.
@@ -65,7 +64,7 @@ public class TransactionGUI extends JFrame
 	
 	//Set 2 decimal places.
 	private DecimalFormat df = new DecimalFormat("#.00");
-	
+	private final double GST = 1.06;
 	private ItemController itemCtrl = new ItemController();
 	private String fontStyle = "Times New Roman";
 	
@@ -363,18 +362,32 @@ public class TransactionGUI extends JFrame
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if(action.getSource() == showSaleMenuItem) {
-			//
+			//Close current frame and open sale frame
 			close();
 			SaleGUI saleFrame = new SaleGUI();
 			saleFrame.setVisible(true);
 			
 		}else if (action.getSource() == logoutMenuItem) {
+			//Close current frame and open login frame
+			close();
+			LoginGUI loginFrame = new LoginGUI();
+			loginFrame.setVisible(true);
 			
 		}else if(action.getSource() == addItemButton) {
-			
+			double subtotalPrice = 
+					Double.parseDouble(subTotalPriceTextField.getText());
+			double totalPrice;
 			//Add selected item to cart
 			
 			//Calculate total price from all selected item
+			
+			if (totalPriceTextField.getText().equals("")){
+				totalPrice = 0.0;
+			} else {
+				totalPrice = Double.parseDouble(totalPriceTextField.getText());
+			}
+			totalPrice += (subtotalPrice * GST);
+			totalPriceTextField.setText(String.valueOf(df.format(totalPrice)));
 			
 			//Refresh all text fields
 			
@@ -395,13 +408,6 @@ public class TransactionGUI extends JFrame
 			ComboItem price = (ComboItem)itemsComboBox.getSelectedItem();
 			unitPriceTextField.setText(df.format(price.getUnitPrice()));
 		} 
-	}
-	
-	/**
-	 * Add items in database to combo box.
-	 */
-	public void fillcombo(){
-		
 	}
 
 	/**
