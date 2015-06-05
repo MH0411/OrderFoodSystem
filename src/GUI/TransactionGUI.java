@@ -34,6 +34,7 @@ import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.awt.event.KeyEvent;
+import javax.swing.AbstractListModel;
 
 /**
  * This class control the interface of transaction.
@@ -60,6 +61,7 @@ public class TransactionGUI extends JFrame
 	private JMenuItem showSaleMenuItem;
 	private JMenuItem logoutMenuItem;
 	private JComboBox<ComboItem> itemsComboBox;
+	private JList<String> itemsList;
 	
 	//Set 2 decimal places.
 	private DecimalFormat df = new DecimalFormat("#.00");
@@ -212,7 +214,8 @@ public class TransactionGUI extends JFrame
 		contentPane.add(CartPanel);
 		CartPanel.setLayout(null);
 		
-		JList<?> itemsList = new JList<Object>();
+		itemsList = new JList<String>();
+		itemsList.setLayoutOrientation(JList.VERTICAL_WRAP);
 		itemsList.setBorder(new LineBorder(new Color(0, 0, 0)));
 		itemsList.setFont(new Font(fontStyle, Font.PLAIN, 14));
 		itemsList.setBounds(41, 29, 258, 388);
@@ -360,12 +363,21 @@ public class TransactionGUI extends JFrame
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if(action.getSource() == showSaleMenuItem) {
-			
+			close();
+			SaleGUI
 		}else if (action.getSource() == logoutMenuItem) {
 			
 		}else if(action.getSource() == addItemButton) {
 			
 			//Add selected item to cart
+//			String itemDetails = itemsComboBox.getSelectedItem() + " " 
+//					+ quantityTextField.getText() + " " 
+//					+ unitPriceTextField.getText() + " " 
+//					+ subTotalPriceTextField.getText();
+//			itemsList.add(itemDetails);
+			
+			//Calculate total price from all selected item
+			
 			//Refresh all text fields
 			
 		}else if (action.getSource() == confirmButton) {
