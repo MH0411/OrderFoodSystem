@@ -46,6 +46,7 @@ public class TransactionGUI extends JFrame
 		implements ActionListener, DocumentListener, KeyListener{
 
 	private JPanel contentPane;
+	private JPanel itemPanel;
 	private JPanel addItemPanel;
 	private JTextField unitPriceTextField;
 	private JTextField subTotalPriceTextField;
@@ -124,7 +125,7 @@ public class TransactionGUI extends JFrame
 		menu.add(logoutMenuItem);
 		
 		//LeftPanel===========================================================
-		JPanel itemPanel = new JPanel();
+		itemPanel = new JPanel();
 		itemPanel.setBounds(0, 31, 338, 708);
 		contentPane.add(itemPanel);
 		itemPanel.setLayout(null);
@@ -165,6 +166,7 @@ public class TransactionGUI extends JFrame
 		itemsComboBox.addActionListener(this);
 		addItemPanel.add(itemsComboBox);
 		
+		//Import items from database to combo box.
 		try {
 			itemCtrl.fillComboBox(itemsComboBox);
 		} catch (ClassNotFoundException e) {
@@ -241,9 +243,13 @@ public class TransactionGUI extends JFrame
 		confirmPanel.add(changeLabel);
 		
 		cashTextField = new JTextField();
+		cashTextField.setEditable(false);
 		cashTextField.setFont(new Font(fontStyle, Font.BOLD, 16));
 		cashTextField.setColumns(10);
 		cashTextField.setBounds(144, 7, 105, 20);
+		cashTextField.addKeyListener(this);
+		cashTextField.getDocument().addDocumentListener(this);
+		cashTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		confirmPanel.add(cashTextField);
 		
 		totalPriceTextField = new JTextField();
@@ -251,6 +257,7 @@ public class TransactionGUI extends JFrame
 		totalPriceTextField.setEditable(false);
 		totalPriceTextField.setColumns(10);
 		totalPriceTextField.setBounds(144, 47, 105, 20);
+		totalPriceTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		confirmPanel.add(totalPriceTextField);
 		
 		changeTextField = new JTextField();
@@ -258,6 +265,7 @@ public class TransactionGUI extends JFrame
 		changeTextField.setEditable(false);
 		changeTextField.setColumns(10);
 		changeTextField.setBounds(144, 87, 105, 20);
+		changeTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		confirmPanel.add(changeTextField);
 		
 		confirmButton = new JButton("Confirm");
@@ -374,25 +382,32 @@ public class TransactionGUI extends JFrame
 			loginFrame.setVisible(true);
 			
 		}else if(action.getSource() == addItemButton) {
+			
+			if (itemsComboBox.equals(null)) {
+				
+			}
 			double subtotalPrice = 
 					Double.parseDouble(subTotalPriceTextField.getText());
 			double totalPrice;
 			//Add selected item to cart
 			
 			//Calculate total price from all selected item
-			
 			if (totalPriceTextField.getText().equals("")){
 				totalPrice = 0.0;
 			} else {
 				totalPrice = Double.parseDouble(totalPriceTextField.getText());
 			}
 			totalPrice += (subtotalPrice * GST);
+			totalPrice = (Math.round(totalPrice - 0.05)) + 0.05;
 			totalPriceTextField.setText(String.valueOf(df.format(totalPrice)));
+			cashTextField.setEditable(true);
 			
 			//Refresh all text fields
 			
 		}else if (action.getSource() == confirmButton) {
 			
+			
+			cashTextField.setEditable(false);
 			//Proceed to receipt
 			//Refresh cart
 			
@@ -415,21 +430,21 @@ public class TransactionGUI extends JFrame
 	 */
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		updateValue(e, "change");
+		updateSubTotal(e, "change");
 	}
 	/**
 	 * Override method in DocumentListener
 	 */
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		updateValue(e, "insert");	
+		updateSubTotal(e, "insert");	
 	}
 	/**
 	 * Override method in DocumentListener
 	 */
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		updateValue(e, "remove");
+		updateSubTotal(e, "remove");
 	}
 	
 	/**
@@ -437,23 +452,35 @@ public class TransactionGUI extends JFrame
 	 * @param e
 	 * @param action
 	 */
-	public void updateValue(DocumentEvent e, String action) {
-		//Declaraction of unit price and quantity variable
+	public void updateSubTotal(DocumentEvent e, String action) {
+		
 		double unitPrice = Double.parseDouble(unitPriceTextField.getText());
 		int quantity;
 		
-		if (quantityTextField.getText().equals("")){
-			quantity = 0;
-			
-		}else {
-		//
+		if (quantityTextField.getText().equals(""))
+			quantity = 0;	
+		else 
 		quantity = Integer.parseInt(quantityTextField.getText());
-		}
-		//Calculate sub total
+		
 		double subTotalPrice = unitPrice * quantity;
         subTotalPriceTextField.setText(String.valueOf
         		(df.format(subTotalPrice)));
+        
+        double cash;
+        double totalItemsPrice;
+        if (cashTextField.getText().equals("")) {
+        	cash = 0.0;
+        	totalItemsPrice = 0.0;
+        }else{
+        	cash = Double.parseDouble(cashTextField.getText());
+        	totalItemsPrice = Double.parseDouble
+				(totalPriceTextField.getText());
+        }
+        double change =  cash - totalItemsPrice;
+        changeTextField.setText(String.valueOf((df.format(change))));
+
 	}
+	
 	/**
 	 * Override method in KeyListener
 	 */
@@ -470,10 +497,10 @@ public class TransactionGUI extends JFrame
 	@Override
 	public void keyTyped(KeyEvent e) {
 		char c = e.getKeyChar();
-		if (!(Character.isDigit(c)) || (c == KeyEvent.VK_BACK_SPACE) 
+		if (!(Character.isDigit(c) || (c == KeyEvent.VK_PERIOD)) 
+				|| (c == KeyEvent.VK_BACK_SPACE) 
 				|| (c == KeyEvent.VK_DELETE)) {
 			e.consume();
 		}
 	}
 }		
-
