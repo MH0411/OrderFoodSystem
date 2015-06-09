@@ -1,11 +1,11 @@
 package GUI;
 
+import item.Item;
 import item.db.ComboItem;
 import item.db.ItemController;
 
 import java.awt.EventQueue;
 import java.awt.Toolkit;
-import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JFrame;
@@ -20,9 +20,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
-import javax.swing.JList;
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.JTable;
@@ -35,6 +33,11 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.awt.event.KeyEvent;
 
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JScrollPane;
+
+import transaction.Cart;
+
 /**
  * This class control the interface of transaction.
  * Interface activity happen here.
@@ -45,6 +48,8 @@ import java.awt.event.KeyEvent;
 public class TransactionGUI extends JFrame 
 		implements ActionListener, DocumentListener, KeyListener{
 
+	private JMenuBar menuBar;
+	private JMenu menu;
 	private JPanel contentPane;
 	private JPanel itemPanel;
 	private JPanel addItemPanel;
@@ -61,13 +66,13 @@ public class TransactionGUI extends JFrame
 	private JMenuItem showSaleMenuItem;
 	private JMenuItem logoutMenuItem;
 	private JComboBox<ComboItem> itemsComboBox;
-	private JList<String> itemsList;
 	
 	//Set 2 decimal places.
 	private DecimalFormat df = new DecimalFormat("#.00");
 	private final double GST = 1.06;
 	private ItemController itemCtrl = new ItemController();
 	private String fontStyle = "Times New Roman";
+	private JTable itemsTable;
 	
 	/**
 	 * Launch the application.
@@ -110,11 +115,11 @@ public class TransactionGUI extends JFrame
 		contentPane.setLayout(null);
 		
 		//Menu bar==========================================================
-		JMenuBar menuBar = new JMenuBar();
+		menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 1360, 21);
 		contentPane.add(menuBar);
 		
-		JMenu menu = new JMenu("Menu");
+		menu = new JMenu("Menu");
 		menuBar.add(menu);
 		
 		showSaleMenuItem = new JMenuItem("Show Sales");
@@ -169,7 +174,7 @@ public class TransactionGUI extends JFrame
 		
 		//Import items from database to combo box.
 		try {
-			itemCtrl.fillComboBox(itemsComboBox);
+			itemCtrl.getItemsInfo(itemsComboBox);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -215,13 +220,6 @@ public class TransactionGUI extends JFrame
 		CartPanel.setBounds(341, 31, 338, 708);
 		contentPane.add(CartPanel);
 		CartPanel.setLayout(null);
-		
-		itemsList = new JList<String>();
-		itemsList.setLayoutOrientation(JList.VERTICAL_WRAP);
-		itemsList.setBorder(new LineBorder(new Color(0, 0, 0)));
-		itemsList.setFont(new Font(fontStyle, Font.PLAIN, 14));
-		itemsList.setBounds(41, 29, 258, 388);
-		CartPanel.add(itemsList);
 		
 		JPanel confirmPanel = new JPanel();
 		confirmPanel.setBounds(40, 452, 258, 218);
@@ -274,6 +272,19 @@ public class TransactionGUI extends JFrame
 		confirmButton.setBounds(72, 160, 114, 33);
 		confirmButton.addActionListener(this);
 		confirmPanel.add(confirmButton);
+		
+		JScrollPane itemsScrollPane = new JScrollPane();
+		itemsScrollPane.setBounds(40, 50, 258, 378);
+		CartPanel.add(itemsScrollPane);
+		
+		itemsTable = new JTable();
+		itemsTable.setModel(new DefaultTableModel(
+			new Object[][] {},
+			new String[] {
+					"Food", "Quantity", "Unit Price", "SubTotal"
+			}
+		));
+		itemsScrollPane.setViewportView(itemsTable);
 		
 		//RightPanel==========================================================
 		JPanel receiptPanel = new JPanel();
@@ -386,13 +397,14 @@ public class TransactionGUI extends JFrame
 			
 		}else if(action.getSource() == addItemButton) {
 			
-			if (itemsComboBox.equals(null)) {
-				
-			}
 			double subtotalPrice = 
 					Double.parseDouble(subTotalPriceTextField.getText());
 			double totalPrice;
 			//Add selected item to cart
+			DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
+			item.addRow(new Object[]{itemsComboBox.getSelectedItem(),
+					quantityTextField.getText(), unitPriceTextField.getText(),
+					subTotalPriceTextField.getText()});
 			
 			//Calculate total price from all selected item
 			if (totalPriceTextField.getText().equals("")){
@@ -404,6 +416,9 @@ public class TransactionGUI extends JFrame
 			totalPrice = (Math.round(totalPrice - 0.05)) + 0.05;
 			totalPriceTextField.setText(String.valueOf(df.format(totalPrice)));
 			cashTextField.setEditable(true);
+			
+			//Cart cart = new Cart();
+			//cart.addItem((Item) itemsComboBox.getSelectedItem());
 			
 			//Refresh all text fields
 			
@@ -456,7 +471,7 @@ public class TransactionGUI extends JFrame
 	 * @param action
 	 */
 	public void updateSubTotal(DocumentEvent e, String action) {
-		
+		//To calculate subtotal price
 		double unitPrice = Double.parseDouble(unitPriceTextField.getText());
 		int quantity;
 		
@@ -469,6 +484,7 @@ public class TransactionGUI extends JFrame
         subTotalPriceTextField.setText(String.valueOf
         		(df.format(subTotalPrice)));
         
+        //To calculate the change
         double cash;
         double totalItemsPrice;
         if (cashTextField.getText().equals("")) {
@@ -481,7 +497,6 @@ public class TransactionGUI extends JFrame
         }
         double change =  cash - totalItemsPrice;
         changeTextField.setText(String.valueOf((df.format(change))));
-
 	}
 	
 	/**

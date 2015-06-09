@@ -1,6 +1,5 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -9,40 +8,33 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 
 import java.awt.Font;
-import java.awt.Color;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
-import javax.swing.JComboBox;
 
 import java.awt.Dimension;
-import java.awt.List;
-import java.awt.ScrollPane;
-import java.awt.Button;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
 import javax.swing.JTable;
-import javax.swing.border.TitledBorder;
-import javax.swing.JScrollBar;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.JList;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
+
+@SuppressWarnings("serial")
 public class SaleGUI extends JFrame {
 
 	private JPanel contentPane;
 	
 	
-	String [] columnNames ={"Item","Quantity","Total Price","GST"};
-	String [][] data ={{"Burger","30","150.00","9.00"}};
-	private JTable table;
+	String [] columnNames ={"Food","Quantity","Total Price"};
+	private JTable salesTable;
 
 	/**
 	 * Launch the application.
@@ -82,64 +74,59 @@ public class SaleGUI extends JFrame {
 		this.setVisible(true);
 		contentPane.setLayout(null);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 118, 680, 621);
-		contentPane.add(panel);
-		panel.setLayout(null);
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBounds(0, 0, 1360, 21);
+		contentPane.add(menuBar);
 		
-		table = new JTable(data,columnNames);
-		table.setPreferredScrollableViewportSize(new Dimension(500,50));
-		table.setBounds(254, 260, 248, -180);
-		JScrollPane scrollPane=new JScrollPane(table);
-		scrollPane.setBounds(53, 114, 574, 399);
-		panel.add(scrollPane);
+		JMenu menu = new JMenu("Menu");
+		menuBar.add(menu);
 		
-		JButton btnPrintReport = new JButton("Print Report");
-		btnPrintReport.setBounds(499, 575, 138, 35);
-		btnPrintReport.addActionListener(new ActionListener() {
+		JMenuItem backMenuItem = new JMenuItem("Back");
+		menu.add(backMenuItem);
+		
+		JMenuItem logoutMenuItem = new JMenuItem("Logout");
+		menu.add(logoutMenuItem);
+		
+		JPanel salesPanel = new JPanel();
+		salesPanel.setBounds(0, 142, 680, 597);
+		contentPane.add(salesPanel);
+		salesPanel.setLayout(null);
+		
+		Object[][] data;
+		salesTable = new JTable(data,columnNames);
+		salesTable.setPreferredScrollableViewportSize(new Dimension(500,50));
+		salesTable.setBounds(254, 260, 248, -180);
+		JScrollPane scrollPane=new JScrollPane(salesTable);
+		scrollPane.setBounds(67, 53, 545, 491);
+		salesPanel.add(scrollPane);
+		
+		JPanel resultPanel = new JPanel();
+		resultPanel.setBounds(680, 142, 680, 597);
+		contentPane.add(resultPanel);
+		resultPanel.setLayout(null);
+		
+		JButton PrintButton = new JButton("Print Report");
+		PrintButton.setBounds(227, 522, 225, 35);
+		resultPanel.add(PrintButton);
+		PrintButton.setFont(new Font("Times New Roman", Font.BOLD, 35));
+		PrintButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		panel.add(btnPrintReport);
-		btnPrintReport.setFont(new Font("Segoe Marker", Font.PLAIN, 17));
+		PrintButton.setVisible(true);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(680, 0, 680, 739);
-		contentPane.add(panel_1);
-		panel_1.setLayout(null);
-		
-		JList list = new JList();
-		list.setBounds(120, 122, 370, 319);
-		panel_1.add(list);
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(0, 0, 680, 119);
-		contentPane.add(panel_2);
-		panel_2.setLayout(null);
-		
-		JButton btnBack = new JButton("Back");
-		btnBack.setBounds(0, 0, 63, 17);
-		panel_2.add(btnBack);
-		btnBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				close();
-				TransactionGUI transactionFrame = new TransactionGUI();
-				transactionFrame.setVisible(true);
-			}
-		});
-		btnBack.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-		btnBack.setVisible(true);
+		JPanel titlePanel = new JPanel();
+		titlePanel.setBounds(0, 21, 1360, 119);
+		contentPane.add(titlePanel);
+		titlePanel.setLayout(null);
 		
 		
-		JLabel lblSales = DefaultComponentFactory.getInstance().createTitle("Sales");
-		lblSales.setBounds(285, 35, 109, 49);
-		panel_2.add(lblSales);
-		lblSales.setBackground(Color.CYAN);
-		lblSales.setFont(new Font("Tekton Pro", Font.PLAIN, 48));
-		lblSales.setForeground(Color.BLUE);
-		lblSales.setHorizontalAlignment(SwingConstants.CENTER);
-		btnPrintReport.setVisible(true);
-		table.setVisible(true);
+		JLabel salesLabel = DefaultComponentFactory.getInstance().createTitle("Sales");
+		salesLabel.setFont(new Font("Times New Roman", Font.BOLD, 60));
+		salesLabel.setBounds(591, 35, 177, 49);
+		titlePanel.add(salesLabel);
+		salesLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		salesTable.setVisible(true);
 				
 	}
 }

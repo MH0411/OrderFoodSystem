@@ -1,6 +1,7 @@
 package transaction;
 
 import java.util.ArrayList;
+
 import item.Item;
 
 public class Cart {
@@ -9,7 +10,7 @@ public class Cart {
 	private final double GST = 1.06;
 	private double totalPrice;
 	private double chargedGST;
-	
+
 	public Cart() {
 		super();
 	}
@@ -35,4 +36,8 @@ public class Cart {
 		return GST;
 	}
 	
+	public void addItem(Item item){
+		
+		cartItems.add(item);
+	}
 }
