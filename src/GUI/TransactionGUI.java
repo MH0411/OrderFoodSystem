@@ -66,13 +66,14 @@ public class TransactionGUI extends JFrame
 	private JMenuItem showSaleMenuItem;
 	private JMenuItem logoutMenuItem;
 	private JComboBox<ComboItem> itemsComboBox;
+	private JTable itemsTable;
 	
 	//Set 2 decimal places.
 	private DecimalFormat df = new DecimalFormat("#.00");
 	private final double GST = 1.06;
 	private ItemController itemCtrl = new ItemController();
 	private String fontStyle = "Times New Roman";
-	private JTable itemsTable;
+
 	
 	/**
 	 * Launch the application.
