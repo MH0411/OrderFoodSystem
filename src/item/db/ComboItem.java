@@ -1,16 +1,20 @@
 package item.db;
 
+import item.Item;
+
 public class ComboItem {
 	
+	private Item item;
 	private String itemId;
 	private String name;
 	private double unitPrice;
 	
-	public ComboItem(String itemId, String name, double unitPrice) {
+	public ComboItem(Item item) {
 		super();
-		this.itemId = itemId;
-		this.name = name;
-		this.unitPrice = unitPrice;
+		this.item = item;
+//		this.itemId = itemId;
+//		this.name = name;
+//		this.unitPrice = unitPrice;
 	}
 	
 	public String getItemId() {
@@ -30,14 +34,14 @@ public class ComboItem {
 	}
 
 	public double getUnitPrice() {
-		return unitPrice;
+		return item.getUnitPrice();
 	}
 
 	public void setUnitPrice(double unitPrice) {
 		this.unitPrice = unitPrice;
 	}
 	
-	public String toString(){
-		return name;
+	public String toString() {
+		return item.getName();
 	}
 }

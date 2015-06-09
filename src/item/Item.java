@@ -1,5 +1,10 @@
 package item;
 
+import java.sql.SQLData;
+import java.sql.SQLException;
+import java.sql.SQLInput;
+import java.sql.SQLOutput;
+
 public class Item {
 	
 	private String itemId;
@@ -7,11 +12,10 @@ public class Item {
 	private double unitPrice;
 	private String status;
 	
-	public Item(String itemId, String name, double unitPrice, String status) {
+	public Item(String itemId, String name, double unitPrice) {
 		this.itemId = itemId;
 		this.name = name;
 		this.unitPrice = unitPrice;
-		this.status = status;
 	}
 	
 	public Item(String itemId, String name, String unitPrice){
@@ -44,6 +48,7 @@ public class Item {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
 
 
 }

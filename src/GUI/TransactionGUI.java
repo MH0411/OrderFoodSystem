@@ -68,6 +68,8 @@ public class TransactionGUI extends JFrame
 	private JMenuItem logoutMenuItem;
 	private JComboBox<ComboItem> itemsComboBox;
 	
+	private Cart cart;
+	
 	//Set 2 decimal places.
 	private DecimalFormat df = new DecimalFormat("#.00");
 	private final double GST = 1.06;
@@ -90,7 +92,7 @@ public class TransactionGUI extends JFrame
 			}
 		});
 	}
-	
+	     
 	/**
 	 * Close the current frame
 	 */
@@ -397,15 +399,17 @@ public class TransactionGUI extends JFrame
 			loginFrame.setVisible(true);
 			
 		}else if(action.getSource() == addItemButton) {
-			
 			double subtotalPrice = 
 					Double.parseDouble(subTotalPriceTextField.getText());
 			double totalPrice;
 			//Add selected item to cart
 			DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
-			item.addRow(new Object[]{itemsComboBox.getSelectedItem(),
-					quantityTextField.getText(), unitPriceTextField.getText(),
-					subTotalPriceTextField.getText()});
+			item.addRow(new Object[] {
+					itemsComboBox.getSelectedItem(),
+					quantityTextField.getText(), 
+					unitPriceTextField.getText(),
+					subTotalPriceTextField.getText()
+			});
 			
 			//Calculate total price from all selected item
 			if (totalPriceTextField.getText().equals("")){

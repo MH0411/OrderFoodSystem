@@ -11,9 +11,8 @@ public class Cart {
 	private double totalPrice;
 	private double chargedGST;
 
-	public Cart() {
-		super();
-	}
+	public Cart() {}
+	
 	public ArrayList<Item> getCartItems() {
 		return cartItems;
 	}
@@ -36,8 +35,7 @@ public class Cart {
 		return GST;
 	}
 	
-	public void addItem(Item item){
-		
+	public void addItem(Item item) {		
 		cartItems.add(item);
 	}
 }
