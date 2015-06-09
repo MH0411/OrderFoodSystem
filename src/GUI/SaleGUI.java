@@ -92,7 +92,7 @@ public class SaleGUI extends JFrame {
 		contentPane.add(salesPanel);
 		salesPanel.setLayout(null);
 		
-		Object[][] data;
+		Object[][] data = null;
 		salesTable = new JTable(data,columnNames);
 		salesTable.setPreferredScrollableViewportSize(new Dimension(500,50));
 		salesTable.setBounds(254, 260, 248, -180);
