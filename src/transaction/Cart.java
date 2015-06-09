@@ -6,7 +6,7 @@ import item.Item;
 public class Cart {
 	
 	private ArrayList<Item> cartItems;
-	private final double GST = 0.06;
+	private final double GST = 1.06;
 	private double totalPrice;
 	private double chargedGST;
 	
