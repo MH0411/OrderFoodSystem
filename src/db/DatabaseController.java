@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 
 public class DatabaseController {
-	Connection conn;
 	
 	public Connection getConnection() throws SQLException, 
 			ClassNotFoundException {

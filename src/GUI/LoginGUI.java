@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.Window;
 
@@ -19,6 +20,7 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -37,13 +39,17 @@ import user.db.UserController;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
+import java.util.EventObject;
 
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.TitledBorder;
 
 @SuppressWarnings("serial")
-public class LoginGUI extends JFrame implements ActionListener {
+public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 
 	private JPanel contentPane;
 	private JPasswordField passwordField;
@@ -55,6 +61,8 @@ public class LoginGUI extends JFrame implements ActionListener {
 	private JTextField emailTextField;
 	private JPasswordField registerPasswordField;
 	private JButton loginButton;
+	private JButton registerButton; 
+	private JTextArea addressTextArea;
 
 	/**
 	 * Launch the application.
@@ -76,7 +84,7 @@ public class LoginGUI extends JFrame implements ActionListener {
 	/**
 	 * close the current frame and display next frame
 	 */
-	public void close(){
+	public void close() {
 		 WindowEvent winClosingEvent = 
 				 new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
 		 Toolkit.getDefaultToolkit().getSystemEventQueue().
@@ -192,42 +200,54 @@ public class LoginGUI extends JFrame implements ActionListener {
 		panelRegister.add(fullNameLabel);
 		
 		JLabel registerPasswordLabel = new JLabel("Password : ");
-		registerPasswordLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		registerPasswordLabel.setFont(new Font("Times New Roman", Font.PLAIN,
+				24));
 		registerPasswordLabel.setBounds(10, 61, 114, 17);
 		panelRegister.add(registerPasswordLabel);
 		
 		JLabel registerUserNameLabel = new JLabel("Username : ");
-		registerUserNameLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		registerUserNameLabel.setFont(new Font("Times New Roman", Font.PLAIN,
+				24));
 		registerUserNameLabel.setBounds(10, 14, 114, 20);
 		panelRegister.add(registerUserNameLabel);
 		
 		registerUserNameField = new JTextField();
-		registerUserNameField.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		registerUserNameField.setFont(new Font("Times New Roman", Font.PLAIN,
+				24));
 		registerUserNameField.setBounds(150, 7, 229, 34);
 		panelRegister.add(registerUserNameField);
 		registerUserNameField.setColumns(10);
 		
 		registerPasswordField = new JPasswordField();
-		registerPasswordField.setFont(new Font("Times New Roman", Font.BOLD, 24));
+		registerPasswordField.setFont(new Font("Times New Roman", Font.BOLD,
+																																																																																																	24));
 		registerPasswordField.setBounds(150, 52, 229, 31);
 		panelRegister.add(registerPasswordField);
 		
 		registerFullNameField = new JTextField();
-		registerFullNameField.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		registerFullNameField.setFont(new Font("Times New Roman", Font.PLAIN,
+				24));
 		registerFullNameField.setColumns(10);
 		registerFullNameField.setBounds(150, 97, 229, 34);
 		panelRegister.add(registerFullNameField);
+		
+		JFormattedTextField icField = new JFormattedTextField();
+		icField.setColumns(2);
+		
 		
 		icNoTextField = new JTextField();
 		icNoTextField.setFont(new Font("Times New Roman", Font.PLAIN, 24));
 		icNoTextField.setColumns(10);
 		icNoTextField.setBounds(150, 141, 229, 34);
+		icNoTextField.addKeyListener(this);
 		panelRegister.add(icNoTextField);
 		
 		telNoTextField = new JTextField();
+		telNoTextField.setToolTipText("xxx-xxxxxxx");
 		telNoTextField.setFont(new Font("Times New Roman", Font.PLAIN, 24));
-		telNoTextField.setColumns(10);
+		telNoTextField.setColumns(1);
 		telNoTextField.setBounds(150, 278, 229, 34);
+		telNoTextField.addKeyListener(this);
 		panelRegister.add(telNoTextField);
 		
 		emailTextField = new JTextField();
@@ -236,13 +256,14 @@ public class LoginGUI extends JFrame implements ActionListener {
 		emailTextField.setBounds(150, 323, 229, 34);
 		panelRegister.add(emailTextField);
 		
-		JTextArea addressTextArea = new JTextArea();
+		addressTextArea = new JTextArea();
 		addressTextArea.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		addressTextArea.setBounds(150, 194, 229, 73);
 		panelRegister.add(addressTextArea);
 		addressTextArea.setBorder(new LineBorder(new Color(160, 160, 160)));
 		
-		JButton registerButton = new JButton("Register");
+		registerButton = new JButton("Register");
+		registerButton.addActionListener(this);
 		registerButton.setBounds(149, 368, 104, 31);
 		panelRegister.add(registerButton);
 		registerButton.setFont(new Font("Times New Roman", Font.BOLD, 18));
@@ -262,28 +283,114 @@ public class LoginGUI extends JFrame implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent action) {	
+	public void actionPerformed(ActionEvent action) {
+		Object actionSource = action.getSource();
 		// if login button is clicked
-		if (action.getSource() == loginButton) {
+		if (actionSource == loginButton) {
 			final String userName = userNameField.getText().trim();
 			final String password = String.valueOf(
 					passwordField.getPassword()).trim();
 			
 			UserController userCtrl = new UserController();
-			if (userCtrl.validateLogin(userName, password)) {
-				close();
-				TransactionGUI transactionFrame = new TransactionGUI();
-				transactionFrame.setVisible(true);
-			} else {
-				JOptionPane.showMessageDialog(null, 
-						"Incorrect username or password.");
+			try {
+				if (userCtrl.validateLogin(userName, password)) {
+					close();
+					TransactionGUI transactionFrame = new TransactionGUI();
+					transactionFrame.setVisible(true);
+				} else {
+					JOptionPane.showMessageDialog(null, 
+							"Incorrect username or password.");
+				}
+			} catch (HeadlessException | ClassNotFoundException |
+					SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+		} else if (actionSource == registerButton) {
+			final String userName = registerUserNameField.getText().trim();
+			final String password = String.valueOf(
+					registerPasswordField.getPassword()).trim();
+			final String comfirmPassword;
+			final String fullName = registerFullNameField.getText().trim();
+			final String ic = icNoTextField.getText().trim();
+			final String address = addressTextArea.getText().trim();
+//			for (String address: addressTextArea.getText().split("\\n")) {
+//				addressTextArea.append(address);
+//			}
+			final String telNo = telNoTextField.getText().trim();
+			final String email = emailTextField.getText().trim();
 			
-//			close();
-//			TransactionGUI transactionFrame = new TransactionGUI();
-//			transactionFrame.setVisible(true);
-//			System.out.println(userName + " A " + password);
+			UserController userCtrl = new UserController();
+			try {
+				if (validateRegisterRequiredField()) {
+					if (userCtrl.validateRegister(userName, password, fullName, 
+							ic, address, telNo, email)) {
+						JOptionPane.showMessageDialog(null, 
+								"Register successfully!");
+					} else {
+						JOptionPane.showMessageDialog(null, 
+								"The username is used.");
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, 
+							"Please fill in all text field.");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
+	}
+	
+	/**
+	 * Override method in KeyListener
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) {}
+	/**
+	 * Override method in KeyListener
+	 */
+	@Override
+	public void keyReleased(KeyEvent e) {}
+	/**
+	 * Override method in KeyListener
+	 */
+	@Override
+	public void keyTyped(KeyEvent e) {
+		char c = e.getKeyChar();
+		if (!(Character.isDigit(c) || (c == KeyEvent.VK_MINUS)) || 
+				(c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)) {
+			e.consume();
+		}
+	}
+	
+	/**
+	 * this method is used to validate whether all the fields in register are 
+	 * filled up or not
+	 * @return
+	 */
+	public boolean validateRegisterRequiredField() {
+		return !(registerUserNameField.getText().length() == 0 || String
+				.valueOf(registerPasswordField.getPassword()).length() == 0 || 
+				registerFullNameField.getText().length() == 0 || 
+				icNoTextField.getText().length() == 0 || 
+				addressTextArea.getText().length() == 0 || 
+				telNoTextField.getText().length() == 0 || 
+				emailTextField.getText().length() == 0);
+	}
+	
+	/**
+	 * this method is used to validate whether all the fields in login are
+	 * filled up or not
+	 * @return
+	 */
+	public boolean validateLoginRequiredField() {
+		return !(userNameField.getText().length() == 0 ||
+				String.valueOf(passwordField.getPassword()).length() == 0);
 	}
 
 }
