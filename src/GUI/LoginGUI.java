@@ -293,14 +293,20 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 			
 			UserController userCtrl = new UserController();
 			try {
-				if (userCtrl.validateLogin(userName, password)) {
-					close();
-					TransactionGUI transactionFrame = new TransactionGUI();
-					transactionFrame.setVisible(true);
+				if (validateLoginRequiredField()) {
+					if (userCtrl.validateLogin(userName, password)) {
+						close();
+						TransactionGUI transactionFrame = new TransactionGUI();
+						transactionFrame.setVisible(true);
+					} else {
+						JOptionPane.showMessageDialog(null, 
+								"Incorrect username or password.");
+					}
 				} else {
-					JOptionPane.showMessageDialog(null, 
-							"Incorrect username or password.");
+					JOptionPane.showMessageDialog(null, "Please fill in all "
+							+ "text fields.");
 				}
+				
 			} catch (HeadlessException | ClassNotFoundException |
 					SQLException e) {
 				// TODO Auto-generated catch block
@@ -333,7 +339,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 					}
 				} else {
 					JOptionPane.showMessageDialog(null, 
-							"Please fill in all text field.");
+							"Please fill in all text fields.");
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
