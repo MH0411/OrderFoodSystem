@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
@@ -66,9 +67,13 @@ public class TransactionGUI extends JFrame
 	private JMenuItem showSaleMenuItem;
 	private JMenuItem logoutMenuItem;
 	private JComboBox<Item> itemsComboBox;
+
 	private JTable itemsTable;
+
 	
-	private Cart cart;
+	private JButton removeButton;
+	
+	private Cart cart = new Cart();
 	
 	//Set 2 decimal places.
 	private DecimalFormat decimalPattern = new DecimalFormat("#.00");
@@ -280,14 +285,36 @@ public class TransactionGUI extends JFrame
 		itemsScrollPane.setBounds(40, 50, 258, 378);
 		CartPanel.add(itemsScrollPane);
 		
-		itemsTable = new JTable();
+		itemsTable = new JTable()
+		{
+			@Override
+			 public Class<?> getColumnClass(int colIndex) {
+//				 return Boolean.class;
+//				 return null;
+				 return getValueAt(0, colIndex).getClass();
+			 }
+			 
+			/**
+			 * set 1st column editable
+			 */
+			 @Override
+			    public boolean isCellEditable(int row, int col) {
+			        return col == 0;
+			    }
+		};
 		itemsTable.setModel(new DefaultTableModel(
 			new Object[][] {},
 			new String[] {
-					"Food", "Quantity", "Unit Price", "SubTotal"
+					"Select", "Food", "Quantity", "Unit Price", "SubTotal"
 			}
 		));
+
 		itemsScrollPane.setViewportView(itemsTable);
+		
+		removeButton = new JButton("Remove");
+		removeButton.addActionListener(this);
+		removeButton.setBounds(10, 160, 114, 33);
+		confirmPanel.add(removeButton);
 		
 		//RightPanel==========================================================
 		JPanel receiptPanel = new JPanel();
@@ -392,19 +419,23 @@ public class TransactionGUI extends JFrame
 			SaleGUI saleFrame = new SaleGUI();
 			saleFrame.setVisible(true);
 			
-		}else if (action.getSource() == logoutMenuItem) {
+		} else if (action.getSource() == logoutMenuItem) {
 			//Close current frame and open login frame
 			close();
 			LoginGUI loginFrame = new LoginGUI();
 			loginFrame.setVisible(true);
 			
-		}else if(action.getSource() == addItemButton) {
+		} else if(action.getSource() == addItemButton) {
+			System.out.println("before");
+			cart.addItem((Item) itemsComboBox.getSelectedItem());
+			System.out.println("after");
 			double subtotalPrice = 
 					Double.parseDouble(subTotalPriceTextField.getText());
 			double totalPrice;
 			//Add selected item to cart
 			DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
 			item.addRow(new Object[] {
+					false,
 					itemsComboBox.getSelectedItem(),
 					quantityTextField.getText(), 
 					unitPriceTextField.getText(),
@@ -431,6 +462,7 @@ public class TransactionGUI extends JFrame
 			
 			
 			cashTextField.setEditable(false);
+			
 			//Proceed to receipt
 			//Refresh cart
 			
@@ -445,7 +477,18 @@ public class TransactionGUI extends JFrame
 			quantityTextField.setEditable(true);
 			Item price = (Item)itemsComboBox.getSelectedItem();
 			unitPriceTextField.setText(decimalPattern.format(price.getUnitPrice()));
-		} 
+		} else if (action.getSource() == removeButton) {
+			// remove selected rows
+			DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
+			for (int i = 0; i < itemsTable.getRowCount(); i++) {
+				boolean chked = Boolean.valueOf(itemsTable.getValueAt(i, 0)
+				.toString());
+				if (chked) {
+					item.removeRow(i--);
+				}
+			}
+		}
+
 	}
 
 	/**
