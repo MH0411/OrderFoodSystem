@@ -6,7 +6,7 @@ import item.Item;
 
 public class Cart {
 	
-	private ArrayList<Item> cartItems;
+	private ArrayList<Item> cartItems = new ArrayList<Item>();
 	private final double GST = 1.06;
 	private double totalPrice;
 	private double chargedGST;
@@ -36,6 +36,8 @@ public class Cart {
 	}
 	
 	public void addItem(Item item) {		
+		System.out.println("~~");
 		cartItems.add(item);
+		System.out.println(item.getName());
 	}
 }
