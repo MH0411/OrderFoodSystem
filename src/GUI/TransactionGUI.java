@@ -1,6 +1,5 @@
 package GUI;
 
-import item.Item;
 import item.db.ComboItem;
 import item.db.ItemController;
 
@@ -35,8 +34,6 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
-
-import transaction.Cart;
 
 /**
  * This class control the interface of transaction.

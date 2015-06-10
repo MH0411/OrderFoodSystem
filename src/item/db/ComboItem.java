@@ -7,7 +7,6 @@ public class ComboItem {
 	private double unitPrice;
 	
 	public ComboItem(String itemId, String name, double unitPrice) {
-		super();
 		this.itemId = itemId;
 		this.name = name;
 		this.unitPrice = unitPrice;

@@ -2,7 +2,6 @@ package GUI;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
-import java.awt.DisplayMode;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Dimension;
@@ -25,12 +24,15 @@ import javax.swing.JMenuItem;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
 
+import org.jdatepicker.impl.DateComponentFormatter;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import transaction.Sale;
 
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.Properties;
 
 @SuppressWarnings("serial")
 public class SaleGUI extends JFrame implements ActionListener {
@@ -43,12 +45,14 @@ public class SaleGUI extends JFrame implements ActionListener {
 	private JPanel salesPanel;
 	private JScrollPane scrollPanel;
 	private JPanel resultPanel;
-	private JButton printButton;
+	private JButton searchButton;
 	private JTable salesTable;
 	private JTable table;
 	private JTextField startDateTextField;
 	private JTextField endDateTextField;
 
+	private String fontStyle = "Times New Roman";
+	
 	/**
 	 * Launch the application.
 	 */
@@ -130,28 +134,45 @@ public class SaleGUI extends JFrame implements ActionListener {
 		scrollPane.setViewportView(table);
 		
 		startDateTextField = new JTextField();
-		startDateTextField.setBounds(71, 67, 124, 20);
+		startDateTextField.setBounds(71, 73, 124, 20);
 		startDateTextField.addActionListener(this);
 		salesPanel.add(startDateTextField);
 		startDateTextField.setColumns(10);
 		
 		endDateTextField = new JTextField();
 		endDateTextField.setEditable(false);
-		endDateTextField.setBounds(484, 67, 124, 20);
+		endDateTextField.setBounds(71, 114, 124, 20);
 		salesPanel.add(endDateTextField);
 		endDateTextField.setColumns(10);
+		
+		searchButton = new JButton("Search");
+		searchButton.setBounds(354, 99, 168, 35);
+		salesPanel.add(searchButton);
+		searchButton.setFont(new Font(fontStyle, Font.BOLD, 35));	
+		searchButton.setVisible(true);
+		searchButton.addActionListener(this);
+		
+//		UtilDateModel model = new UtilDateModel();
+//		JDatePanelImpl datePanel = new JDatePanelImpl(model, null);
+//		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, null);		 
+//		salesPanel.add(datePicker);
+		
+		UtilDateModel model=new UtilDateModel();
+		Properties p=new Properties();
+		p.put("text.today","Today");
+		p.put("text.month","Month");
+		p.put("text.year","Year");
+		JDatePanelImpl datePanel= new JDatePanelImpl(model,p);
+		JDatePickerImpl datePicker= new JDatePickerImpl(datePanel
+				,new DateComponentFormatter());
+		datePicker.setSize(200,30);
 		
 		//Right panel =======================================================
 		resultPanel = new JPanel();
 		resultPanel.setBounds(680, 142, 680, 597);
 		contentPane.add(resultPanel);
 		resultPanel.setLayout(null);
-		
-		printButton = new JButton("Print Report");
-		printButton.setBounds(227, 522, 225, 35);
-		resultPanel.add(printButton);
-		printButton.setFont(new Font("Times New Roman", Font.BOLD, 35));
-		printButton.setVisible(true);
+
 		
 		JPanel titlePanel = new JPanel();
 		titlePanel.setBounds(0, 21, 1360, 119);
@@ -159,7 +180,7 @@ public class SaleGUI extends JFrame implements ActionListener {
 		titlePanel.setLayout(null);
 		
 		JLabel salesLabel = DefaultComponentFactory.getInstance().createTitle("Sales");
-		salesLabel.setFont(new Font("Times New Roman", Font.BOLD, 60));
+		salesLabel.setFont(new Font(fontStyle, Font.BOLD, 60));
 		salesLabel.setBounds(591, 35, 177, 49);
 		titlePanel.add(salesLabel);
 		salesLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -170,22 +191,20 @@ public class SaleGUI extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == backMenuItem){
-			close();
 			TransactionGUI transactionFrame = new TransactionGUI();
 			transactionFrame.setVisible(true);
+			close();	
 		} else if (e.getSource() == logoutMenuItem){
-			close();
 			LoginGUI loginFrame = new LoginGUI();
 			loginFrame.setVisible(true);
-		} else if (e.getSource() == printButton){
+			close();
+		} else if (e.getSource() == searchButton){
 			Sale sale = new Sale();
 			try {
-				sale.displaySales();
+				sale.displaySales(table);
 			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}

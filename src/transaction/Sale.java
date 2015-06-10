@@ -5,6 +5,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 import com.mysql.jdbc.Connection;
 
 import db.DatabaseController;
@@ -13,9 +16,16 @@ public class Sale {
 	
 	private String saleId;
 	private String itemId;
+	private String name;
 	private String receiptId;
 	private int quantity;
 	private double subTotalPrice;
+	private DatabaseController dbController = new DatabaseController();
+	private Connection conn;
+	private String sql;
+	private Statement stmt;
+	private ResultSet rsSale;
+	
 	public String getSaleId() {
 		return saleId;
 	}
@@ -55,22 +65,20 @@ public class Sale {
 	public void setSubTotalPrice(double subTotalPrice) {
 		this.subTotalPrice = subTotalPrice;
 	}
-
-	private DatabaseController dbController = new DatabaseController();
-	private Connection conn;
-	private String sql;
-	private Statement stmt;
-	private ResultSet rsSale;
 	
-	
-	//trying get data from database and display at sale table
-	public Vector<Sale> displaySales() 
+	//Get data from database and display at sale table
+	public Vector<Sale> displaySales(JTable table) 
 			throws ClassNotFoundException, SQLException {
 
 		//Open database connection
 		conn = (Connection) dbController.getConnection();
 		//Create sql statement;
-		sql = "select * from tb_Sale";	
+		sql = "SELECT name, sum(quantity), sum(subTotalPrice) FROM tb_Sale s "
+				+ "LEFT JOIN tb_item i ON s.itemId = i.itemId "
+				+ "LEFT JOIN tb_receipt r ON s.receiptId = r.receiptId "
+				+ "WHERE dateTime = '2015-06-10 09:29:15'"
+				+ "GROUP BY name ORDER BY quantity DESC";
+		
 		//Create statement object
 		stmt = conn.createStatement();	
 		//Create result set object
@@ -80,30 +88,29 @@ public class Sale {
 		//Get all item name in database.
 		while(rsSale.next()){
 	
-			// Create temporary object and set the values
-			Sale sale = new Sale();
-			sale.setSaleId(rsSale.getString(1));
-			sale.setItemId(rsSale.getString(2));
-			sale.setReceiptId(rsSale.getString(4));
-			sale.setQuantity(rsSale.getInt(3));
-			sale.setSubTotalPrice(rsSale.getDouble(5));
+			setName(rsSale.getString(1));
+			setQuantity(rsSale.getInt(2));
+			setSubTotalPrice(rsSale.getDouble(3));
 			
-			// add into vector
-			sales.add(sale);
-			
-			System.out.println(sale.getSaleId());
-			System.out.println(sale.getItemId());
-			System.out.println(sale.getReceiptId());
-			System.out.println(sale.getQuantity());
-			System.out.println(sale.getSubTotalPrice());
+			DefaultTableModel item = (DefaultTableModel)table.getModel();
+			item.addRow(new Object[]{getName(), getQuantity(),
+					getSubTotalPrice()});
 		}
 		
 		// Close connection
 		conn.close();
 		
 		// Return vector of ahtletes
-		return sales;
-		
+		return sales;		
+	}
+	
+
+	public void setName(String name){
+		this.name = name;
+	}
+	
+	public String getName(){
+		return name;
 	}
 	
 }
