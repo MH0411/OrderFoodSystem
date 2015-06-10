@@ -16,24 +16,22 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class printPDF {
 	
-	/* Get pdfName from user */
-	public static  String receiptName = JOptionPane.showInputDialog("Receipt name: ");
-	private static String FILE = "C:/Users/User/Desktop/"+receiptName+".pdf";
-	
-	public static  String salesName = JOptionPane.showInputDialog("Sales name: ");
-	private static String FILE2 = "C:/Users/User/Desktop/"+salesName+".pdf";
+	private static int receiptId = 1; 
+	private static String pathOfReceiptPDF = "./bin/PDF/Receipt/receipt_" + receiptId + ".pdf";
+	private static int salesId = 1; 
+	private static String pathOfSalesPDF = "./bin/PDF/Sales/sales_" + salesId + ".pdf";
 	
 	public static void main(String[] args) {
 	    try {
 	    
-	    Document printReceipt = new Document(PageSize.A4.rotate());     
-	      PdfWriter.getInstance(printReceipt, new FileOutputStream(FILE));
+		  Document printReceipt = new Document(PageSize.A4.rotate());     
+	      PdfWriter.getInstance(printReceipt, new FileOutputStream(pathOfReceiptPDF));
 	      printReceipt.open();
 	      printReceipt(printReceipt);
 	      printReceipt.close();
 	      
 	      Document printSales = new Document(PageSize.A4.rotate());     
-	      PdfWriter.getInstance(printSales, new FileOutputStream(FILE2));
+	      PdfWriter.getInstance(printSales, new FileOutputStream(pathOfSalesPDF));
 	      printSales.open();
 	      printSales(printSales);
 	      printSales.close();
@@ -162,8 +160,12 @@ public class printPDF {
     
         
         /* Open pdf file */
-        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
-                    "C:/Users/User/Desktop/"+receiptName+".pdf");
+        // for Window
+//        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
+//        		pathOfReceiptPDF);
+        
+        // for Mac
+        Runtime.getRuntime().exec("open " + pathOfReceiptPDF);
         
 	} catch (Exception error)
 	{
@@ -186,8 +188,12 @@ public class printPDF {
 	        printSales.add(para1);
 		
 	        /* Open pdf file */
-	        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
-	                    "C:/Users/User/Desktop/"+salesName+".pdf");
+	        // for Window
+//	        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
+//	                    pathOfSalesPDF);
+	        
+	        // for Mac
+	        Runtime.getRuntime().exec("open " + pathOfSalesPDF);
 	        
 	        
 		} catch (Exception error)
