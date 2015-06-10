@@ -2,27 +2,33 @@ package item;
 
 public class Item {
 	
-	private String itemID;
-	private String itemName;
+	private String itemId;
+	private String name;
 	private double unitPrice;
 	
-	public Item(String itemID, String itemName, double unitPrice) {
-		this.itemID = itemID;
-		this.itemName = itemName;
+	public Item(String itemId, String name, double unitPrice) {
+		this.itemId = itemId;
+		this.name = name;
 		this.unitPrice = unitPrice;
 	}
 	
-	public String getItemID() {
-		return itemID;
+	public Item(String itemId, String name, String unitPrice) {
+		this.itemId = itemId;
+		this.name = name;
+		this.unitPrice = Double.parseDouble(unitPrice);
 	}
-	public void setItemID(String itemID) {
-		this.itemID = itemID;
+	
+	public String getItemId() {
+		return itemId;
 	}
-	public String getItemName() {
-		return itemName;
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
 	}
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	public double getUnitPrice() {
 		return unitPrice;
@@ -30,5 +36,10 @@ public class Item {
 	public void setUnitPrice(double unitPrice) {
 		this.unitPrice = unitPrice;
 	}
-	
+
+	public String toString() {
+		return name;
+	}
+
+
 }

@@ -10,7 +10,7 @@ public class databaseDemo {
 		UserController userCtrl = new UserController();
 		
 		try {
-			userCtrl.selectAllUsers();
+			System.out.print(userCtrl.selectAllUsers().get(0).getUserName());
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block

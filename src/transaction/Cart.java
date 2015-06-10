@@ -1,18 +1,18 @@
 package transaction;
 
 import java.util.ArrayList;
+
 import item.Item;
 
 public class Cart {
 	
-	private ArrayList<Item> cartItems;
-	private final double GST = 0.06;
+	private ArrayList<Item> cartItems = new ArrayList<Item>();
+	private final double GST = 1.06;
 	private double totalPrice;
 	private double chargedGST;
+
+	public Cart() {}
 	
-	public Cart() {
-		super();
-	}
 	public ArrayList<Item> getCartItems() {
 		return cartItems;
 	}
@@ -35,4 +35,9 @@ public class Cart {
 		return GST;
 	}
 	
+	public void addItem(Item item) {		
+		System.out.println("~~");
+		cartItems.add(item);
+		System.out.println(item.getName());
+	}
 }
