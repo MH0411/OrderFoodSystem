@@ -1,3 +1,4 @@
+package print;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,7 +9,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-	public class printTxt implements ActionListener{
+	public class PrintTxt implements ActionListener{
 		
 	    public void writing() {
 	        try {
@@ -35,7 +36,7 @@ import java.io.Writer;
 	    }
 
 	    public static void main(String[]args) {
-	        printTxt write = new printTxt();
+	        PrintTxt write = new PrintTxt();
 	        write.writing();
 	    }
 

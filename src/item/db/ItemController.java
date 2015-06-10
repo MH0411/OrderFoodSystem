@@ -15,7 +15,7 @@ public class ItemController {
 	private String sql;
 	private Statement stmt;
 	private ResultSet rsItem;
-	private String itemId;
+	private int itemId;
 	private String name;
 	private double unitPrice;
 	Item tempItem = null;
@@ -47,7 +47,7 @@ public class ItemController {
 		rsItem = stmt.executeQuery(sql);
 		//Get all item name in database.
 		while(rsItem.next()) {
-			itemId = rsItem.getString("itemId");
+			itemId = rsItem.getInt("itemId");
 			name = rsItem.getString("name");
 			unitPrice = rsItem.getDouble("unitPrice");
 			Item item = new Item(itemId, name, unitPrice);

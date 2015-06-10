@@ -2,26 +2,26 @@ package item;
 
 public class Item {
 	
-	private String itemId;
+	private int itemId;
 	private String name;
 	private double unitPrice;
 	
-	public Item(String itemId, String name, double unitPrice) {
+	public Item(int itemId, String name, double unitPrice) {
 		this.itemId = itemId;
 		this.name = name;
 		this.unitPrice = unitPrice;
 	}
 	
-	public Item(String itemId, String name, String unitPrice) {
+	public Item(int itemId, String name, String unitPrice) {
 		this.itemId = itemId;
 		this.name = name;
 		this.unitPrice = Double.parseDouble(unitPrice);
 	}
 	
-	public String getItemId() {
+	public int getItemId() {
 		return itemId;
 	}
-	public void setItemId(String itemId) {
+	public void setItemId(int itemId) {
 		this.itemId = itemId;
 	}
 	public String getName() {

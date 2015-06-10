@@ -1,26 +1,31 @@
 package GUI;
 
-import com.jgoodies.forms.factories.DefaultComponentFactory;
-
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Properties;
+import java.util.Vector;
 
-import javax.swing.SwingConstants;
-import javax.swing.JScrollPane;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.JMenuBar;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -29,15 +34,12 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import print.PrintPDF;
 import transaction.Sale;
+import transaction.db.TransactionController;
 
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Properties;
-
-import javax.swing.border.LineBorder;
-
-import java.awt.Color;
+import com.itextpdf.text.DocumentException;
+import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 @SuppressWarnings("serial")
 public class SaleGUI extends JFrame implements ActionListener {
@@ -52,6 +54,7 @@ public class SaleGUI extends JFrame implements ActionListener {
 	private JPanel datePanel;
 	private JScrollPane scrollPane;
 	private JButton searchButton;
+	private JButton printButton;
 	private JTable table;
 	private JLabel startDateLabel;
 	private JLabel endDateLabel;
@@ -70,6 +73,8 @@ public class SaleGUI extends JFrame implements ActionListener {
 	private String endDate;
 	private String fontStyle = "Times New Roman";
 	private DefaultTableCellRenderer centerRenderer;
+	private TransactionController transactionCtrl;
+	private Vector<Sale> sales = new Vector<Sale>();
 	
 	/**
 	 * Launch the application.
@@ -175,6 +180,13 @@ public class SaleGUI extends JFrame implements ActionListener {
 		searchButton.setFont(new Font(fontStyle, Font.BOLD, 35));	
 		searchButton.setVisible(true);
 		searchButton.addActionListener(this);
+		
+		printButton = new JButton("PDF");
+		printButton.setBounds(1080, 460, 149, 49);
+		salesPanel.add(printButton);
+		printButton.setFont(new Font(fontStyle, Font.BOLD, 35));	
+		printButton.setVisible(true);
+		printButton.addActionListener(this);
 			
 		start = new Properties();
 		start.put("text.today","Today");
@@ -234,7 +246,7 @@ public class SaleGUI extends JFrame implements ActionListener {
 			loginFrame.setVisible(true);
 			close();
 			
-		} else if (e.getSource() == searchButton){
+		} else if (e.getSource() == searchButton) {
 			
 			//Check empty fields
 			if ((startDatePicker.getModel().getValue() != null) 
@@ -253,8 +265,8 @@ public class SaleGUI extends JFrame implements ActionListener {
 				try {
 					
 					//Display sales of items
-					Sale sale = new Sale();
-					sale.displaySales(table, startDate, endDate);
+					transactionCtrl = new TransactionController();
+					sales = transactionCtrl.displaySales(table, startDate, endDate);
 					
 				} catch (ClassNotFoundException e1) {
 					
@@ -271,6 +283,13 @@ public class SaleGUI extends JFrame implements ActionListener {
 				String message = "Please select both dates to search.";
 				JOptionPane.showMessageDialog(null, message, "Alert", 
 						getDefaultCloseOperation());
+			}
+		} else if (e.getSource() == printButton) {
+			try {
+				PrintPDF.createSalePDF(sales);
+			} catch (FileNotFoundException | DocumentException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 		}
 	}

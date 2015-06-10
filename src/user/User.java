@@ -1,17 +1,31 @@
 package user;
 
 public class User {
-	private String userID;
+	private int userId;
 	private String userName;
 	private String password;
 	private String address;
 	private String telNo;
 	private String email;
-	public String getUserID() {
-		return userID;
+	private String fullName;
+	
+	public User(int userId, String userName, String fullName, String password, String address,
+			String telNo, String email) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.fullName = fullName;
+		this.password = password;
+		this.address = address;
+		this.telNo = telNo;
+		this.email = email;
 	}
-	public void setUserID(String userID) {
-		this.userID = userID;
+
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	public String getUserName() {
 		return userName;
@@ -42,6 +56,14 @@ public class User {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 	
 	

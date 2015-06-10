@@ -1,10 +1,14 @@
 package user.db;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 import java.util.Vector;
 
 import db.DatabaseController;
@@ -30,9 +34,10 @@ public class UserController {
 	 * @return true if userName and password is correct
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
+	 * @throws IOException 
 	 */
 	public boolean validateLogin(String userName, String password) 
-			throws SQLException, ClassNotFoundException {
+			throws SQLException, ClassNotFoundException, IOException {
 		int count = 0;
 		conn = dbController.getConnection();
 		
@@ -47,14 +52,26 @@ public class UserController {
 
 		//display result set
 		while (rsUser.next()) {
-			System.out.println(rsUser.getInt("userID") 
-					+ " " + rsUser.getString("userName")
-					+ " " + rsUser.getString("password"));
+			user = new User(rsUser.getInt("userID"),
+							rsUser.getString("userName"),
+							rsUser.getString("fullName"),
+							rsUser.getString("password"),
+							rsUser.getString("address"),
+							rsUser.getString("telNo"),
+							rsUser.getString("email"));
+			
 			System.out.println("Login Sucessfully");
 			count++;
 		}
 		
 		if (count == 1) {
+			// store login information to config.login
+			Properties loginData = new Properties();
+			FileOutputStream output = new FileOutputStream("./bin/config/config.properties");
+			loginData.setProperty("userId", user.getUserId() + "");
+			loginData.setProperty("userName", user.getUserName());
+			loginData.setProperty("fullName", user.getFullName());
+			loginData.store(output, null);
 			conn.close();
 			return true;
 		} else {
@@ -101,33 +118,33 @@ public class UserController {
 		
 	}
 	
-	public Vector<User> selectAllUsers() throws SQLException, 
-			ClassNotFoundException {
-		
-			conn = dbController.getConnection();
-			
-			String sql = "SELECT * FROM tb_user";
-			
-			//Create statement object
-			Statement stmt = conn.createStatement();
-
-			//Create result set object
-			ResultSet rsUser = stmt.executeQuery(sql);
-	
-			
-			//display result set
-			Vector<User> users = new Vector<User>();
-			while(rsUser.next()) {
-				
-				User tempUser = new User();
-				tempUser.setUserID(rsUser.getString("userID"));
-				tempUser.setUserName(rsUser.getString("userName"));
-				
-				users.add(tempUser);
-			}
-		
-		conn.close();
-		
-		return users;
-	}
+//	public Vector<User> selectAllUsers() throws SQLException, 
+//			ClassNotFoundException {
+//		
+//			conn = dbController.getConnection();
+//			
+//			String sql = "SELECT * FROM tb_user";
+//			
+//			//Create statement object
+//			Statement stmt = conn.createStatement();
+//
+//			//Create result set object
+//			ResultSet rsUser = stmt.executeQuery(sql);
+//	
+//			
+//			//display result set
+//			Vector<User> users = new Vector<User>();
+//			while(rsUser.next()) {
+//				
+//				User tempUser = new User();
+//				tempUser.setUserID(rsUser.getString("userID"));
+//				tempUser.setUserName(rsUser.getString("userName"));
+//				
+//				users.add(tempUser);
+//			}
+//		
+//		conn.close();
+//		
+//		return users;
+//	}
 }
