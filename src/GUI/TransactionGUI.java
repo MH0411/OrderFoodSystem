@@ -59,7 +59,6 @@ public class TransactionGUI extends JFrame
 	private JTextField cashTextField;
 	private JTextField totalPriceTextField;
 	private JTextField changeTextField;
-	private JTable itemListTable;
 	private JFormattedTextField quantityTextField;
 	private JButton addItemButton;
 	private JButton confirmButton;
@@ -80,6 +79,7 @@ public class TransactionGUI extends JFrame
 	private final double GST = 1.06;
 	private ItemController itemCtrl = new ItemController();
 	private String fontStyle = "Times New Roman";
+	private JTable receiptTable;
 
 	
 	/**
@@ -117,7 +117,6 @@ public class TransactionGUI extends JFrame
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		contentPane = new JPanel();
-		contentPane.setBackground(Color.BLACK);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -282,7 +281,7 @@ public class TransactionGUI extends JFrame
 		confirmPanel.add(confirmButton);
 		
 		JScrollPane itemsScrollPane = new JScrollPane();
-		itemsScrollPane.setBounds(40, 50, 258, 378);
+		itemsScrollPane.setBounds(23, 50, 292, 378);
 		CartPanel.add(itemsScrollPane);
 		
 		itemsTable = new JTable()
@@ -302,6 +301,9 @@ public class TransactionGUI extends JFrame
 			        return col == 0;
 			    }
 		};
+		itemsTable.setShowVerticalLines(false);
+		itemsTable.setShowHorizontalLines(false);
+		itemsTable.setShowGrid(false);
 		itemsTable.setModel(new DefaultTableModel(
 			new Object[][] {},
 			new String[] {
@@ -318,24 +320,23 @@ public class TransactionGUI extends JFrame
 		
 		//RightPanel==========================================================
 		JPanel receiptPanel = new JPanel();
-		receiptPanel.setBounds(682, 31, 678, 708);
+		receiptPanel.setBounds(682, 22, 678, 717);
 		contentPane.add(receiptPanel);
 		receiptPanel.setLayout(null);
 		
 		JLabel receiptLabel = new JLabel("Receipt");
-		receiptLabel.setFont(new Font(fontStyle, Font.BOLD, 48));
-		receiptLabel.setBounds(259, 21, 162, 75);
+		receiptLabel.setFont(new Font("Times New Roman", Font.BOLD, 34));
+		receiptLabel.setBounds(280, 151, 117, 40);
 		receiptPanel.add(receiptLabel);
 		
-		JLabel companyLabel = new JLabel("BKB Sdn Bhd");
-		companyLabel.setFont(new Font(fontStyle, Font.PLAIN, 14));
-		companyLabel.setBounds(299, 107, 82, 14);
+		JLabel companyLabel = new JLabel("BKB FOOD ENTERPRISE");
+		companyLabel.setFont(new Font("Times New Roman", Font.BOLD, 49));
+		companyLabel.setBounds(42, 11, 594, 57);
 		receiptPanel.add(companyLabel);
 		
-		JLabel addressLabel = new JLabel("No.999, Jalan Ah Cheh, "
-				+ "Ayeh Keroh, Melaka");
+		JLabel addressLabel = new JLabel("No.18 MITC Mall ,Hang Tuah Jaya");
 		addressLabel.setFont(new Font(fontStyle, Font.PLAIN, 14));
-		addressLabel.setBounds(210, 131, 259, 14);
+		addressLabel.setBounds(235, 79, 207, 14);
 		receiptPanel.add(addressLabel);
 		
 		JLabel invoiceLabel = new JLabel("Invoice#");
@@ -353,56 +354,84 @@ public class TransactionGUI extends JFrame
 		dataTimeLabel.setBounds(511, 171, 132, 14);
 		receiptPanel.add(dataTimeLabel);
 		
-		itemListTable = new JTable();
-		itemListTable.setFont(new Font(fontStyle, Font.PLAIN, 12));
-		itemListTable.setBounds(36, 201, 607, 259);
-		receiptPanel.add(itemListTable);
-		
 		JLabel receiptTotalPriceLabel = new JLabel("Total Price (RM) : "
 				+ "(Incl GST)");
 		receiptTotalPriceLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
-		receiptTotalPriceLabel.setBounds(36, 508, 202, 14);
+		receiptTotalPriceLabel.setBounds(36, 477, 202, 14);
 		receiptPanel.add(receiptTotalPriceLabel);
 		
 		JLabel totalGSTLabel = new JLabel("Total Includ 6% GST");
 		totalGSTLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
-		totalGSTLabel.setBounds(36, 547, 152, 14);
+		totalGSTLabel.setBounds(36, 516, 152, 14);
 		receiptPanel.add(totalGSTLabel);
 		
 		JLabel receiptCashLabel = new JLabel("Cash Tendered  ");
 		receiptCashLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
-		receiptCashLabel.setBounds(36, 586, 117, 14);
+		receiptCashLabel.setBounds(36, 555, 117, 14);
 		receiptPanel.add(receiptCashLabel);
 		
 		JLabel receiptChangeLabel = new JLabel("Change");
 		receiptChangeLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
-		receiptChangeLabel.setBounds(36, 628, 202, 14);
+		receiptChangeLabel.setBounds(36, 597, 202, 14);
 		receiptPanel.add(receiptChangeLabel);
 		
 		JLabel totalPriceValueLabel = new JLabel("price");
 		totalPriceValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
-		totalPriceValueLabel.setBounds(574, 508, 69, 16);
+		totalPriceValueLabel.setBounds(574, 477, 69, 16);
 		receiptPanel.add(totalPriceValueLabel);
 		
 		JLabel totalGSTValueLabel = new JLabel("gst");
 		totalGSTValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
-		totalGSTValueLabel.setBounds(574, 549, 69, 16);
+		totalGSTValueLabel.setBounds(574, 518, 69, 16);
 		receiptPanel.add(totalGSTValueLabel);
 		
 		JLabel cashValueLabel = new JLabel("cash");
 		cashValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
-		cashValueLabel.setBounds(574, 588, 69, 16);
+		cashValueLabel.setBounds(574, 557, 69, 16);
 		receiptPanel.add(cashValueLabel);
 		
 		JLabel changeValueLabel = new JLabel("change");
 		changeValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
-		changeValueLabel.setBounds(574, 630, 69, 16);
+		changeValueLabel.setBounds(574, 599, 69, 16);
 		receiptPanel.add(changeValueLabel);
 		
 		receiptButton = new JButton("Receipt");
 		receiptButton.setFont(new Font(fontStyle, Font.BOLD, 20));
-		receiptButton.setBounds(511, 678, 132, 33);
+		receiptButton.setBounds(511, 657, 132, 33);
 		receiptPanel.add(receiptButton);
+		
+		JLabel addressLabel1 = new JLabel("75450 Ayer Keroh,Melaka");
+		addressLabel1.setBounds(273, 104, 132, 14);
+		receiptPanel.add(addressLabel1);
+		
+		JLabel telLabel = new JLabel("Tel : 06-2313007 Fax : 06-2313070");
+		telLabel.setBounds(250, 129, 177, 14);
+		receiptPanel.add(telLabel);
+		
+		JLabel gstLabel = new JLabel("GST ID #");
+		gstLabel.setBounds(36, 145, 46, 14);
+		receiptPanel.add(gstLabel);
+		
+		JLabel gstIdLabel = new JLabel("GST ID");
+		gstIdLabel.setBounds(107, 145, 46, 14);
+		receiptPanel.add(gstIdLabel);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(36, 195, 600, 271);
+		receiptPanel.add(scrollPane);
+		
+		receiptTable = new JTable();
+		receiptTable.setShowVerticalLines(false);
+		receiptTable.setShowHorizontalLines(false);
+		receiptTable.setShowGrid(false);
+		receiptTable.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Food", "Quantity", "Unit Price (RM)", "SubTotal Price (RM)"
+			}
+		));
+		scrollPane.setViewportView(receiptTable);
 		
 
 	}
