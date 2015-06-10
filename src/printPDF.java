@@ -20,6 +20,9 @@ public class printPDF {
 	public static  String receiptName = JOptionPane.showInputDialog("Receipt name: ");
 	private static String FILE = "C:/Users/User/Desktop/"+receiptName+".pdf";
 	
+	public static  String salesName = JOptionPane.showInputDialog("Sales name: ");
+	private static String FILE2 = "C:/Users/User/Desktop/"+salesName+".pdf";
+	
 	public static void main(String[] args) {
 	    try {
 	    
@@ -28,6 +31,13 @@ public class printPDF {
 	      printReceipt.open();
 	      printReceipt(printReceipt);
 	      printReceipt.close();
+	      
+	      Document printSales = new Document(PageSize.A4.rotate());     
+	      PdfWriter.getInstance(printSales, new FileOutputStream(FILE2));
+	      printSales.open();
+	      printSales(printSales);
+	      printSales.close();
+	      
 	    } catch (Exception e) {
 	      e.printStackTrace();
 	    }
@@ -160,5 +170,33 @@ public class printPDF {
 		System.out.println(error.getMessage());
 		error.printStackTrace();
 	}
+	}
+	
+	public static void printSales(Document printSales){
+
+		try
+		{
+	        
+	        /* Add title with center alignment */
+	        Chunk title = new Chunk("SALES REPORT", FontFactory.getFont
+	        		(FontFactory.TIMES_BOLD, 26, Font.BOLD, BaseColor.BLACK));
+	        Paragraph para1 = new Paragraph(title);
+	        para1.setAlignment(Paragraph.ALIGN_CENTER);
+	        para1.setSpacingAfter(5);
+	        printSales.add(para1);
+		
+	        /* Open pdf file */
+	        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
+	                    "C:/Users/User/Desktop/"+salesName+".pdf");
+	        
+	        
+		} catch (Exception error)
+		{
+			System.out.println(error.getMessage());
+			error.printStackTrace();
+		}
+		
+
+	        
 	}
 }
