@@ -276,7 +276,7 @@ public class TransactionGUI extends JFrame
 		
 		confirmButton = new JButton("Confirm");
 		confirmButton.setFont(new Font(fontStyle, Font.BOLD, 20));
-		confirmButton.setBounds(72, 160, 114, 33);
+		confirmButton.setBounds(134, 160, 114, 33);
 		confirmButton.addActionListener(this);
 		confirmPanel.add(confirmButton);
 		
@@ -315,6 +315,7 @@ public class TransactionGUI extends JFrame
 		
 		removeButton = new JButton("Remove");
 		removeButton.addActionListener(this);
+		removeButton.setFont(new Font(fontStyle, Font.BOLD, 20));
 		removeButton.setBounds(10, 160, 114, 33);
 		confirmPanel.add(removeButton);
 		
@@ -378,21 +379,25 @@ public class TransactionGUI extends JFrame
 		JLabel totalPriceValueLabel = new JLabel("price");
 		totalPriceValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		totalPriceValueLabel.setBounds(574, 477, 69, 16);
+		totalPriceValueLabel.setVisible(false);
 		receiptPanel.add(totalPriceValueLabel);
 		
 		JLabel totalGSTValueLabel = new JLabel("gst");
 		totalGSTValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		totalGSTValueLabel.setBounds(574, 518, 69, 16);
+		totalGSTValueLabel.setVisible(false);
 		receiptPanel.add(totalGSTValueLabel);
 		
 		JLabel cashValueLabel = new JLabel("cash");
 		cashValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		cashValueLabel.setBounds(574, 557, 69, 16);
+		cashValueLabel.setVisible(false);
 		receiptPanel.add(cashValueLabel);
 		
 		JLabel changeValueLabel = new JLabel("change");
 		changeValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		changeValueLabel.setBounds(574, 599, 69, 16);
+		changeValueLabel.setVisible(false);
 		receiptPanel.add(changeValueLabel);
 		
 		receiptButton = new JButton("Receipt");
@@ -455,13 +460,9 @@ public class TransactionGUI extends JFrame
 			loginFrame.setVisible(true);
 			
 		} else if(action.getSource() == addItemButton) {
-			System.out.println("before");
-			cart.addItem((Item) itemsComboBox.getSelectedItem());
-			System.out.println("after");
-			double subtotalPrice = 
-					Double.parseDouble(subTotalPriceTextField.getText());
-			double totalPrice;
+
 			//Add selected item to cart
+			cart.addItem((Item) itemsComboBox.getSelectedItem());
 			DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
 			item.addRow(new Object[] {
 					false,
@@ -472,6 +473,10 @@ public class TransactionGUI extends JFrame
 			});
 			
 			//Calculate total price from all selected item
+			double subtotalPrice = 
+					Double.parseDouble(subTotalPriceTextField.getText());
+			double totalPrice;
+			
 			if (totalPriceTextField.getText().equals("")){
 				totalPrice = 0.0;
 			} else {
@@ -479,7 +484,8 @@ public class TransactionGUI extends JFrame
 			}
 			totalPrice += (subtotalPrice * GST);
 			totalPrice = (Math.round(totalPrice - 0.05)) + 0.05;
-			totalPriceTextField.setText(String.valueOf(decimalPattern.format(totalPrice)));
+			totalPriceTextField.setText(String.valueOf(
+					decimalPattern.format(totalPrice)));
 			cashTextField.setEditable(true);
 			
 			//Cart cart = new Cart();
@@ -489,11 +495,17 @@ public class TransactionGUI extends JFrame
 			
 		}else if (action.getSource() == confirmButton) {
 			
-			
-			cashTextField.setEditable(false);
-			
 			//Proceed to receipt
+			for (int index = 0 ; index < itemsTable.getRowCount() ; index++) {
+				
+				DefaultTableModel item = 
+						(DefaultTableModel)receiptTable.getModel();
+				item.addRow(new Object[]{
+						itemsTable.getValueAt(index, 1)
+				});
+			}
 			//Refresh cart
+			cashTextField.setEditable(false);
 			
 		}else if (action.getSource() == receiptButton) {
 			
@@ -505,19 +517,22 @@ public class TransactionGUI extends JFrame
 			//Get selected item's price
 			quantityTextField.setEditable(true);
 			Item price = (Item)itemsComboBox.getSelectedItem();
-			unitPriceTextField.setText(decimalPattern.format(price.getUnitPrice()));
+			unitPriceTextField.setText(decimalPattern.format(
+					price.getUnitPrice()));
+			
 		} else if (action.getSource() == removeButton) {
+			
 			// remove selected rows
 			DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
 			for (int i = 0; i < itemsTable.getRowCount(); i++) {
 				boolean chked = Boolean.valueOf(itemsTable.getValueAt(i, 0)
 				.toString());
 				if (chked) {
+					cart.getCartItems().remove(i);
 					item.removeRow(i--);
 				}
 			}
 		}
-
 	}
 
 	/**
