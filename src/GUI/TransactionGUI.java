@@ -104,7 +104,7 @@ public class TransactionGUI extends JFrame
 	DefaultListCellRenderer centerRenderer;
 	//Set 2 decimal places.
 	private DecimalFormat decimalPattern = new DecimalFormat("#.00");
-	private final double GST = 1.06;
+	private final double GST = 0.06;
 	private ItemController itemCtrl = new ItemController();
 	private String fontStyle = "Times New Roman";
 	private JTable receiptTable;
@@ -362,7 +362,7 @@ public class TransactionGUI extends JFrame
 		
 		addressLabel = new JLabel("No.18 MITC Mall ,Hang Tuah Jaya");
 		addressLabel.setFont(new Font(fontStyle, Font.PLAIN, 14));
-		addressLabel.setBounds(235, 79, 207, 14);
+		addressLabel.setBounds(230, 79, 217, 14);
 		receiptPanel.add(addressLabel);
 		
 		dataTimeLabel = new JLabel("date time");
@@ -396,28 +396,24 @@ public class TransactionGUI extends JFrame
 		receiptChangeLabel.setBounds(36, 597, 202, 14);
 		receiptPanel.add(receiptChangeLabel);
 		
-		totalPriceValueLabel = new JLabel("price");
+		totalPriceValueLabel = new JLabel("PRICE");
 		totalPriceValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		totalPriceValueLabel.setBounds(574, 477, 69, 16);
-		totalPriceValueLabel.setVisible(false);
 		receiptPanel.add(totalPriceValueLabel);
 		
-		totalGSTValueLabel = new JLabel("gst");
+		totalGSTValueLabel = new JLabel("GST");
 		totalGSTValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		totalGSTValueLabel.setBounds(574, 518, 69, 16);
-		totalGSTValueLabel.setVisible(false);
 		receiptPanel.add(totalGSTValueLabel);
 		
-		cashValueLabel = new JLabel("cash");
+		cashValueLabel = new JLabel("CASH");
 		cashValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		cashValueLabel.setBounds(574, 557, 69, 16);
-		cashValueLabel.setVisible(false);
 		receiptPanel.add(cashValueLabel);
 		
-		changeValueLabel = new JLabel("change");
+		changeValueLabel = new JLabel("CHANGE");
 		changeValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		changeValueLabel.setBounds(574, 599, 69, 16);
-		changeValueLabel.setVisible(false);
 		receiptPanel.add(changeValueLabel);
 		
 		receiptButton = new JButton("Receipt");
@@ -426,15 +422,15 @@ public class TransactionGUI extends JFrame
 		receiptPanel.add(receiptButton);
 		
 		addressLabel1 = new JLabel("75450 Ayer Keroh,Melaka");
-		addressLabel1.setBounds(273, 104, 132, 14);
+		addressLabel1.setBounds(266, 104, 146, 14);
 		receiptPanel.add(addressLabel1);
 		
 		telLabel = new JLabel("Tel : 06-2313007 Fax : 06-2313070");
-		telLabel.setBounds(250, 129, 177, 14);
+		telLabel.setBounds(245, 129, 188, 14);
 		receiptPanel.add(telLabel);
 		
 		gstLabel = new JLabel("GST ID #");
-		gstLabel.setBounds(40, 171, 46, 14);
+		gstLabel.setBounds(40, 171, 57, 14);
 		receiptPanel.add(gstLabel);
 		
 		gstIdLabel = new JLabel("GST ID");
@@ -457,8 +453,6 @@ public class TransactionGUI extends JFrame
 			}
 		));
 		scrollPane.setViewportView(receiptTable);
-		
-
 	}
 
 	/**
@@ -502,7 +496,7 @@ public class TransactionGUI extends JFrame
 			} else {
 				totalPrice = Double.parseDouble(totalPriceTextField.getText());
 			}
-			totalPrice += (subtotalPrice * GST);
+			totalPrice += ((subtotalPrice * GST) + subtotalPrice);
 			totalPrice = (Math.round(totalPrice - 0.05)) + 0.05;
 			totalPriceTextField.setText(String.valueOf(
 					decimalPattern.format(totalPrice)));
@@ -542,23 +536,34 @@ public class TransactionGUI extends JFrame
 						DefaultTableModel item = 
 								(DefaultTableModel)receiptTable.getModel();
 						item.addRow(new Object[]{
-								itemsTable.getValueAt(i, 1),
-								itemsTable.getValueAt(i, 2),
-								itemsTable.getValueAt(i, 3),
-								itemsTable.getValueAt(i, 4)
+								cart.getCartItems().get(i).getName(),
+								cart.getCartItems().get(i).getQuantity(),
+								cart.getCartItems().get(i).getUnitPrice(),
+								cart.getCartItems().get(i).getSubTotalPrice(),
+								cart.getCartItems().remove(i)				
 						});
-					}
+					}	
 					
+					double totalPrice = 
+							Double.parseDouble(totalPriceTextField.getText());
+					double totalGST =
+							(Math.round((totalPrice * GST) - 0.05)) + 0.05;
+					double cash = Double.parseDouble(cashTextField.getText());
 					
+					totalPriceValueLabel.setText(totalPriceTextField.getText());
+					totalGSTValueLabel.setText(String.valueOf(totalGST));
+					cashValueLabel.setText(String.valueOf(decimalPattern.format(cash)));
+					changeValueLabel.setText(changeTextField.getText());
+					
+					//Refresh cart
+					changeTextField.setText("");
+					((DefaultTableModel) itemsTable.getModel()).
+							getDataVector().removeAllElements();
+					cashTextField.setEditable(false);
+					cashTextField.setText("");
+					totalPriceTextField.setText("");	
 				}
 			}
-			//Refresh cart
-			cashTextField.setEditable(false);
-			cashTextField.setText("");
-			totalPriceTextField.setText("");
-			changeTextField.setText("");
-			((DefaultTableModel) itemsTable.getModel()).
-			getDataVector().removeAllElements();
 			
 		}else if (action.getSource() == receiptButton) {
 			
@@ -569,9 +574,9 @@ public class TransactionGUI extends JFrame
 			
 			//Get selected item's price
 			quantityTextField.setEditable(true);
-			Item price = (Item)itemsComboBox.getSelectedItem();
+			Item item = (Item)itemsComboBox.getSelectedItem();
 			unitPriceTextField.setText(decimalPattern.format(
-					price.getUnitPrice()));
+					item.getUnitPrice()));
 			
 		} else if (action.getSource() == removeButton) {
 			
