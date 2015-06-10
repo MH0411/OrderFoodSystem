@@ -1,41 +1,76 @@
 package GUI;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-
-import java.awt.Font;
-
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
-import javax.swing.SwingConstants;
-import javax.swing.JScrollPane;
-
-import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 
+import javax.swing.SwingConstants;
+import javax.swing.JScrollPane;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
+import org.jdatepicker.impl.DateComponentFormatter;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
+import transaction.Sale;
+
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Properties;
+
+import javax.swing.border.LineBorder;
+
+import java.awt.Color;
 
 @SuppressWarnings("serial")
-public class SaleGUI extends JFrame {
+public class SaleGUI extends JFrame implements ActionListener {
 
+	private JMenuBar menuBar;
+	private JMenu menu;
+	private JMenuItem backMenuItem;
+	private JMenuItem logoutMenuItem;
 	private JPanel contentPane;
+	private JPanel salesPanel;
+	private JPanel titlePanel;
+	private JPanel datePanel;
+	private JScrollPane scrollPane;
+	private JButton searchButton;
+	private JTable table;
+	private JLabel startDateLabel;
+	private JLabel endDateLabel;
+	private JLabel salesLabel;
+	private UtilDateModel startModel = new UtilDateModel();
+	private UtilDateModel endModel = new UtilDateModel();
+	private Properties start;
+	private Properties end;
+	private JDatePanelImpl startDatePanel;
+	private JDatePickerImpl startDatePicker;
+	private JDatePanelImpl endDatePanel;
+	private JDatePickerImpl endDatePicker;
+	private String datePattern = "yyyy-MM-dd";
+	private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+	private String startDate;
+	private String endDate;
+	private String fontStyle = "Times New Roman";
+	private DefaultTableCellRenderer centerRenderer;
 	
-	
-	String [] columnNames ={"Food","Quantity","Total Price"};
-	private JTable salesTable;
-
 	/**
 	 * Launch the application.
 	 */
@@ -53,80 +88,200 @@ public class SaleGUI extends JFrame {
 		});
 	}
 	
+	/**
+	 * Method to close current frame
+	 */
 	public void close(){
-		 WindowEvent winClosingEvent = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
-		 Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(winClosingEvent);
+		 WindowEvent winClosingEvent = 
+				 new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+		 Toolkit.getDefaultToolkit().
+		 		getSystemEventQueue().postEvent(winClosingEvent);
 	}
 
 	/**
-	 * Create the frame.
+	 * Create frame and components
 	 */
 	public SaleGUI() {
 		
-		this.setResizable(false);
-		this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
-		this.setVisible(true);
-		
+		setResizable(false);
+		setSize(Toolkit.getDefaultToolkit().getScreenSize());
+		setVisible(true);		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		this.setVisible(true);
 		contentPane.setLayout(null);
 		
-		JMenuBar menuBar = new JMenuBar();
+		titlePanel = new JPanel();
+		titlePanel.setBounds(0, 32, 1360, 108);
+		contentPane.add(titlePanel);
+		titlePanel.setLayout(null);
+		
+		salesLabel = DefaultComponentFactory.getInstance().createTitle("Sales");
+		salesLabel.setFont(new Font(fontStyle, Font.BOLD, 60));
+		salesLabel.setBounds(591, 22, 177, 49);
+		titlePanel.add(salesLabel);
+		salesLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 1360, 21);
 		contentPane.add(menuBar);
 		
-		JMenu menu = new JMenu("Menu");
+		menu = new JMenu("Menu");
 		menuBar.add(menu);
 		
-		JMenuItem backMenuItem = new JMenuItem("Back");
+		backMenuItem = new JMenuItem("Back");
+		backMenuItem.addActionListener(this);
 		menu.add(backMenuItem);
 		
-		JMenuItem logoutMenuItem = new JMenuItem("Logout");
+		logoutMenuItem = new JMenuItem("Logout");
+		logoutMenuItem.addActionListener(this);
 		menu.add(logoutMenuItem);
 		
-		JPanel salesPanel = new JPanel();
-		salesPanel.setBounds(0, 142, 680, 597);
+		salesPanel = new JPanel();
+		salesPanel.setBounds(0, 142, 1360, 597);
 		contentPane.add(salesPanel);
 		salesPanel.setLayout(null);
 		
+<<<<<<< HEAD
 		Object[][] data = null;
 		salesTable = new JTable(data,columnNames);
 		salesTable.setPreferredScrollableViewportSize(new Dimension(500,50));
 		salesTable.setBounds(254, 260, 248, -180);
 		JScrollPane scrollPane=new JScrollPane(salesTable);
 		scrollPane.setBounds(67, 53, 545, 491);
+=======
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(56, 37, 905, 549);
+>>>>>>> 02796ae7ad89ce061effa4acb6f95723e1da0f88
 		salesPanel.add(scrollPane);
 		
-		JPanel resultPanel = new JPanel();
-		resultPanel.setBounds(680, 142, 680, 597);
-		contentPane.add(resultPanel);
-		resultPanel.setLayout(null);
-		
-		JButton PrintButton = new JButton("Print Report");
-		PrintButton.setBounds(227, 522, 225, 35);
-		resultPanel.add(PrintButton);
-		PrintButton.setFont(new Font("Times New Roman", Font.BOLD, 35));
-		PrintButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		table = new JTable();
+		table.setEnabled(false);
+		//Set table column
+		table.setModel(new DefaultTableModel(
+			new Object[][] {},
+			new String[] {
+				"ID", "Food", "Quantity", "Unit Price (RM)", "Total Price (RM)"
 			}
-		});
-		PrintButton.setVisible(true);
+		));
+		centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+		//Center table content
+		for(int index = 0 ; index < 5 ; index++){
+	         table.getColumnModel().getColumn(index).
+	         	setCellRenderer( centerRenderer );
+	    }
+		table.getColumnModel().getColumn(2).setCellRenderer( centerRenderer );
+		table.getColumnModel().getColumn(3).setCellRenderer( centerRenderer );
+		table.getColumnModel().getColumn(4).setCellRenderer( centerRenderer );
+		scrollPane.setViewportView(table);
 		
-		JPanel titlePanel = new JPanel();
-		titlePanel.setBounds(0, 21, 1360, 119);
-		contentPane.add(titlePanel);
-		titlePanel.setLayout(null);
+		searchButton = new JButton("Search");
+		searchButton.setBounds(1080, 360, 149, 49);
+		salesPanel.add(searchButton);
+		searchButton.setFont(new Font(fontStyle, Font.BOLD, 35));	
+		searchButton.setVisible(true);
+		searchButton.addActionListener(this);
+			
+		start = new Properties();
+		start.put("text.today","Today");
+		start.put("text.month","Month");
+		start.put("text.year","Year");
 		
+		startDatePanel = new JDatePanelImpl(startModel, start);
 		
-		JLabel salesLabel = DefaultComponentFactory.getInstance().createTitle("Sales");
-		salesLabel.setFont(new Font("Times New Roman", Font.BOLD, 60));
-		salesLabel.setBounds(591, 35, 177, 49);
-		titlePanel.add(salesLabel);
-		salesLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		salesTable.setVisible(true);
-				
+		end = new Properties();
+		end.put("text.today","Today");
+		end.put("text.month","Month");
+		end.put("text.year","Year");
+		endDatePanel = new JDatePanelImpl(endModel, end);
+		
+		datePanel = new JPanel();
+		datePanel.setBorder(new LineBorder(new Color(192, 192, 192), 10));
+		datePanel.setBounds(1003, 73, 287, 200);
+		salesPanel.add(datePanel);
+		datePanel.setLayout(null);
+		startDatePicker = new JDatePickerImpl(startDatePanel
+				,new DateComponentFormatter());
+		startDatePicker.setBounds(44, 61, 202, 30);
+		datePanel.add(startDatePicker);
+		endDatePicker = new JDatePickerImpl(endDatePanel
+				,new DateComponentFormatter());
+		endDatePicker.setBounds(44, 139, 202, 30);
+		datePanel.add(endDatePicker);
+		
+		endDateLabel = new JLabel("End Date : ");
+		endDateLabel.setFont(new Font("fontStyle", Font.BOLD, 18));
+		endDateLabel.setBounds(44, 114, 95, 14);
+		datePanel.add(endDateLabel);
+		
+		startDateLabel = new JLabel("Start Date : ");
+		startDateLabel.setFont(new Font("fontStyle", Font.BOLD, 18));
+		startDateLabel.setBounds(44, 36, 95, 14);
+		datePanel.add(startDateLabel);
 	}
+
+	/**
+	 * Method to access when click event perform.
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		if (e.getSource() == backMenuItem){
+			
+			//Close current frame and go to transaction frame
+			TransactionGUI transactionFrame = new TransactionGUI();
+			transactionFrame.setVisible(true);
+			close();	
+			
+		} else if (e.getSource() == logoutMenuItem){
+			
+			//Close current frame and go to login frame
+			LoginGUI loginFrame = new LoginGUI();
+			loginFrame.setVisible(true);
+			close();
+			
+		} else if (e.getSource() == searchButton){
+			
+			//Check empty fields
+			if ((startDatePicker.getModel().getValue() != null) 
+					&& (endDatePicker.getModel().getValue() != null)) {
+				
+				//Refresh table
+				((DefaultTableModel) table.getModel()).
+					getDataVector().removeAllElements();
+				
+				//Get start and end date from date picker.
+				startDate = dateFormatter.format
+						(startDatePicker.getModel().getValue());
+				endDate = dateFormatter.format
+						(endDatePicker.getModel().getValue());
+	
+				try {
+					
+					//Display sales of items
+					Sale sale = new Sale();
+					sale.displaySales(table, startDate, endDate);
+					
+				} catch (ClassNotFoundException e1) {
+					
+					e1.printStackTrace();
+					
+				} catch (SQLException e1) {
+					
+					e1.printStackTrace();
+				}
+				
+			} else {
+				
+				//Prompt user select dates
+				String message = "Please select both dates to search.";
+				JOptionPane.showMessageDialog(null, message, "Alert", 
+						getDefaultCloseOperation());
+			}
+		}
+	}
+ 
 }

@@ -10,7 +10,6 @@ public class Item {
 	private String itemId;
 	private String name;
 	private double unitPrice;
-	private String status;
 	
 	public Item(String itemId, String name, double unitPrice) {
 		this.itemId = itemId;
@@ -41,12 +40,6 @@ public class Item {
 	}
 	public void setUnitPrice(double unitPrice) {
 		this.unitPrice = unitPrice;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 

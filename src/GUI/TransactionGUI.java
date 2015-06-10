@@ -1,6 +1,5 @@
 package GUI;
 
-import item.Item;
 import item.db.ComboItem;
 import item.db.ItemController;
 
@@ -37,8 +36,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 
-import transaction.Cart;
-
 /**
  * This class control the interface of transaction.
  * Interface activity happen here.
@@ -67,15 +64,16 @@ public class TransactionGUI extends JFrame
 	private JMenuItem showSaleMenuItem;
 	private JMenuItem logoutMenuItem;
 	private JComboBox<ComboItem> itemsComboBox;
+	private JTable itemsTable;
 	
 	private Cart cart;
 	
 	//Set 2 decimal places.
-	private DecimalFormat df = new DecimalFormat("#.00");
+	private DecimalFormat decimalPattern = new DecimalFormat("#.00");
 	private final double GST = 1.06;
 	private ItemController itemCtrl = new ItemController();
 	private String fontStyle = "Times New Roman";
-	private JTable itemsTable;
+
 	
 	/**
 	 * Launch the application.
@@ -419,7 +417,7 @@ public class TransactionGUI extends JFrame
 			}
 			totalPrice += (subtotalPrice * GST);
 			totalPrice = (Math.round(totalPrice - 0.05)) + 0.05;
-			totalPriceTextField.setText(String.valueOf(df.format(totalPrice)));
+			totalPriceTextField.setText(String.valueOf(decimalPattern.format(totalPrice)));
 			cashTextField.setEditable(true);
 			
 			//Cart cart = new Cart();
@@ -444,7 +442,7 @@ public class TransactionGUI extends JFrame
 			//Get selected item's price
 			quantityTextField.setEditable(true);
 			ComboItem price = (ComboItem)itemsComboBox.getSelectedItem();
-			unitPriceTextField.setText(df.format(price.getUnitPrice()));
+			unitPriceTextField.setText(decimalPattern.format(price.getUnitPrice()));
 		} 
 	}
 
@@ -487,7 +485,7 @@ public class TransactionGUI extends JFrame
 		
 		double subTotalPrice = unitPrice * quantity;
         subTotalPriceTextField.setText(String.valueOf
-        		(df.format(subTotalPrice)));
+        		(decimalPattern.format(subTotalPrice)));
         
         //To calculate the change
         double cash;
@@ -501,7 +499,7 @@ public class TransactionGUI extends JFrame
 				(totalPriceTextField.getText());
         }
         double change =  cash - totalItemsPrice;
-        changeTextField.setText(String.valueOf((df.format(change))));
+        changeTextField.setText(String.valueOf((decimalPattern.format(change))));
 	}
 	
 	/**

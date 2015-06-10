@@ -4,14 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
-import java.awt.Window;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.BoxLayout;
-
-import java.awt.SystemColor;
 import java.awt.Color;
 
 import javax.swing.JLabel;
@@ -26,15 +21,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
-import javax.swing.JSeparator;
-
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.border.LineBorder;
-import javax.swing.UIManager;
-
 import user.db.UserController;
 
 import java.awt.event.ActionListener;
