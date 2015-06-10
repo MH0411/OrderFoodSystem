@@ -1,6 +1,5 @@
 /GUI/
-/item/
-/print/
-/transaction/
-/user/
 /db/
+/user/
+/print/
+/item/

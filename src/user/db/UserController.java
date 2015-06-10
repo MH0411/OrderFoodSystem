@@ -52,7 +52,7 @@ public class UserController {
 
 		//display result set
 		while (rsUser.next()) {
-			user = new User(rsUser.getInt("userID"),
+			user = new User(rsUser.getInt("userId"),
 							rsUser.getString("userName"),
 							rsUser.getString("fullName"),
 							rsUser.getString("password"),
