@@ -82,8 +82,8 @@ public class UserController {
 	}
 	
 	public boolean validateRegister(String userName, String password, 
-			String fullName, String ic, String address, String telNo, 
-			String email) throws SQLException, ClassNotFoundException {
+			String fullName, String ic, String telNo, String email) 
+					throws SQLException, ClassNotFoundException {
 		conn = dbController.getConnection();
 		
 		String sql = "SELECT * FROM tb_user WHERE userName = '"
@@ -98,15 +98,14 @@ public class UserController {
 		// If this userName is not yet used
 		if (!rsUser.next()) {
 			sql = "INSERT INTO tb_user (userName, password, fullName, ic,"
-					+ " address, telNo, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
+					+ " telNo, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement psUser = conn.prepareStatement(sql);
 			psUser.setString(1, userName);
 			psUser.setString(2, password);
 			psUser.setString(3, fullName);
 			psUser.setString(4, ic);
-			psUser.setString(5, address);
-			psUser.setString(6, telNo);
-			psUser.setString(7, email);
+			psUser.setString(5, telNo);
+			psUser.setString(6, email);
 			
 			psUser.executeUpdate();
 			conn.close();

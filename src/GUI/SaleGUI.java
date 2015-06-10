@@ -74,7 +74,10 @@ public class SaleGUI extends JFrame implements ActionListener {
 	private String fontStyle = "Times New Roman";
 	private DefaultTableCellRenderer centerRenderer;
 	private TransactionController transactionCtrl;
+<<<<<<< HEAD
 	private Vector<Sale> sales = new Vector<Sale>();
+=======
+>>>>>>> 1d2f8aab4bdd6b72245c5ac54e955e916cdc75d7
 	
 	/**
 	 * Launch the application.
@@ -266,7 +269,8 @@ public class SaleGUI extends JFrame implements ActionListener {
 					
 					//Display sales of items
 					transactionCtrl = new TransactionController();
-					sales = transactionCtrl.displaySales(table, startDate, endDate);
+					transactionCtrl.displaySales(table, startDate, endDate);
+
 					
 				} catch (ClassNotFoundException e1) {
 					

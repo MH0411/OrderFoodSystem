@@ -4,7 +4,9 @@ public class Item {
 	
 	private int itemId;
 	private String name;
+	private int quantity;
 	private double unitPrice;
+	private double subTotalPrice;
 	
 	public Item(int itemId, String name, double unitPrice) {
 		this.itemId = itemId;
@@ -24,6 +26,14 @@ public class Item {
 	public void setItemId(int itemId) {
 		this.itemId = itemId;
 	}
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -37,6 +47,14 @@ public class Item {
 		this.unitPrice = unitPrice;
 	}
 
+	public double getSubTotalPrice() {
+		return subTotalPrice;
+	}
+
+	public void setSubTotalPrice(double subTotalPrice) {
+		this.subTotalPrice = subTotalPrice;
+	}
+	
 	public String toString() {
 		return name;
 	}

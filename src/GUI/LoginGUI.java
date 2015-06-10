@@ -45,7 +45,9 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 	private JPasswordField registerPasswordField;
 	private JButton loginButton;
 	private JButton registerButton; 
-	private JTextArea addressTextArea;
+	private JTextField confirmPasswordTextField;
+	
+	private String fontStyle = "Times New Roman";
 
 	/**
 	 * Launch the application.
@@ -95,7 +97,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		
 		JLabel loginLabel = new JLabel("Login");
 		loginLabel.setBounds(275, 34, 130, 70);
-		loginLabel.setFont(new Font("Times New Roman", Font.BOLD, 50));
+		loginLabel.setFont(new Font(fontStyle, Font.BOLD, 50));
 		loginLabel.setVerticalAlignment(SwingConstants.TOP);
 		loginLabel.setAlignmentY(CENTER_ALIGNMENT);
 		loginLabel.setAlignmentY(0.5f);
@@ -110,32 +112,32 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		passwordField.setBounds(168, 97, 250, 40);
 		loginInputpanel.add(passwordField);
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
-		passwordField.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		passwordField.setFont(new Font(fontStyle, Font.PLAIN, 24));
 		
 		userNameField = new JTextField();
 		userNameField.setBounds(168, 8, 250, 40);
 		loginInputpanel.add(userNameField);
 		userNameField.setToolTipText("");
 		userNameField.setHorizontalAlignment(SwingConstants.LEFT);
-		userNameField.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		userNameField.setFont(new Font(fontStyle, Font.PLAIN, 24));
 		userNameField.setColumns(10);
 		
 		JLabel userNameLabel = new JLabel("Username : ");
 		userNameLabel.setBounds(10, 11, 123, 35);
 		loginInputpanel.add(userNameLabel);
 		userNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		userNameLabel.setFont(new Font("Times New Roman", Font.BOLD, 24));
+		userNameLabel.setFont(new Font(fontStyle, Font.BOLD, 24));
 		
 		JLabel passwordLabel = new JLabel("Password : ");
 		passwordLabel.setBounds(10, 101, 123, 33);
 		loginInputpanel.add(passwordLabel);
 		passwordLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		passwordLabel.setFont(new Font("Times New Roman", Font.BOLD, 24));
+		passwordLabel.setFont(new Font(fontStyle, Font.BOLD, 24));
 		
 		loginButton = new JButton("Login");
 		loginButton.setBounds(311, 204, 107, 33);
 		loginInputpanel.add(loginButton);
-		loginButton.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		loginButton.setFont(new Font(fontStyle, Font.BOLD, 18));
 		// call addActionListener when loginButton is clicked
 		loginButton.addActionListener(this);
 		
@@ -147,71 +149,66 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		JLabel registrationLabel = new JLabel("Registration");
 		registrationLabel.setBounds(203, 30, 274, 70);
 		registrationLabel.setVerticalAlignment(SwingConstants.TOP);
-		registrationLabel.setFont(new Font("Times New Roman", Font.BOLD, 50));
+		registrationLabel.setFont(new Font(fontStyle, Font.BOLD, 50));
 		registrationLabel.setAlignmentY(0.5f);
 		registerPanel.add(registrationLabel);
 		
 		JPanel panelRegister = new JPanel();
-		panelRegister.setBounds(145, 97, 389, 435);
+		panelRegister.setBounds(77, 91, 458, 435);
 		registerPanel.add(panelRegister);
 		
 		panelRegister.setLayout(null);
 		
 		JLabel emailLabel = new JLabel("E-mail : ");
-		emailLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24));
-		emailLabel.setBounds(10, 330, 95, 20);
+		emailLabel.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		emailLabel.setBounds(10, 294, 95, 20);
 		panelRegister.add(emailLabel);
 		
 		JLabel telNoLabel = new JLabel("Tel.No : ");
-		telNoLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24));
-		telNoLabel.setBounds(10, 287, 95, 17);
+		telNoLabel.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		telNoLabel.setBounds(10, 251, 95, 17);
 		panelRegister.add(telNoLabel);
 		
-		JLabel addressLabel = new JLabel("Address : ");
-		addressLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24));
-		addressLabel.setBounds(10, 194, 114, 18);
-		panelRegister.add(addressLabel);
-		
 		JLabel icNoLabel = new JLabel("IC.No :");
-		icNoLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24));
-		icNoLabel.setBounds(10, 148, 71, 20);
+		icNoLabel.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		icNoLabel.setBounds(10, 204, 71, 20);
 		panelRegister.add(icNoLabel);
 		
 		JLabel fullNameLabel = new JLabel("Full Name : ");
-		fullNameLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24));
-		fullNameLabel.setBounds(10, 105, 132, 18);
+		fullNameLabel.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		fullNameLabel.setBounds(10, 160, 132, 18);
 		panelRegister.add(fullNameLabel);
 		
 		JLabel registerPasswordLabel = new JLabel("Password : ");
-		registerPasswordLabel.setFont(new Font("Times New Roman", Font.PLAIN,
+		registerPasswordLabel.setFont(new Font(fontStyle, Font.PLAIN,
 				24));
 		registerPasswordLabel.setBounds(10, 61, 114, 17);
 		panelRegister.add(registerPasswordLabel);
 		
 		JLabel registerUserNameLabel = new JLabel("Username : ");
-		registerUserNameLabel.setFont(new Font("Times New Roman", Font.PLAIN,
+		registerUserNameLabel.setFont(new Font(fontStyle, Font.PLAIN,
 				24));
 		registerUserNameLabel.setBounds(10, 14, 114, 20);
 		panelRegister.add(registerUserNameLabel);
 		
 		registerUserNameField = new JTextField();
-		registerUserNameField.setFont(new Font("Times New Roman", Font.PLAIN,
+		registerUserNameField.setFont(new Font(fontStyle, Font.PLAIN,
 				24));
-		registerUserNameField.setBounds(150, 7, 229, 34);
+		registerUserNameField.setBounds(216, 14, 229, 34);
 		panelRegister.add(registerUserNameField);
 		registerUserNameField.setColumns(10);
 		
 		registerPasswordField = new JPasswordField();
-		registerPasswordField.setFont(new Font("Times New Roman", Font.BOLD,
+		registerPasswordField.setFont(new Font(fontStyle, Font.BOLD,
 																																																																																																	24));
-		registerPasswordField.setBounds(150, 52, 229, 31);
+		registerPasswordField.setBounds(216, 59, 229, 31);
 		panelRegister.add(registerPasswordField);
 		
 		registerFullNameField = new JTextField();
-		registerFullNameField.setFont(new Font("Times New Roman", Font.PLAIN,
+		registerFullNameField.setFont(new Font(fontStyle, Font.PLAIN,
 				24));
 		registerFullNameField.setColumns(10);
-		registerFullNameField.setBounds(150, 97, 229, 34);
+		registerFullNameField.setBounds(216, 152, 229, 34);
 		panelRegister.add(registerFullNameField);
 		
 		JFormattedTextField icField = new JFormattedTextField();
@@ -219,47 +216,51 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		
 		
 		icNoTextField = new JTextField();
-		icNoTextField.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		icNoTextField.setFont(new Font(fontStyle, Font.PLAIN, 24));
 		icNoTextField.setColumns(10);
-		icNoTextField.setBounds(150, 141, 229, 34);
+		icNoTextField.setBounds(216, 197, 229, 34);
 		icNoTextField.addKeyListener(this);
 		panelRegister.add(icNoTextField);
 		
 		telNoTextField = new JTextField();
 		telNoTextField.setToolTipText("xxx-xxxxxxx");
-		telNoTextField.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		telNoTextField.setFont(new Font(fontStyle, Font.PLAIN, 24));
 		telNoTextField.setColumns(1);
-		telNoTextField.setBounds(150, 278, 229, 34);
+		telNoTextField.setBounds(216, 242, 229, 34);
 		telNoTextField.addKeyListener(this);
 		panelRegister.add(telNoTextField);
 		
 		emailTextField = new JTextField();
-		emailTextField.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		emailTextField.setFont(new Font(fontStyle, Font.PLAIN, 24));
 		emailTextField.setColumns(10);
-		emailTextField.setBounds(150, 323, 229, 34);
+		emailTextField.setBounds(216, 287, 229, 34);
 		panelRegister.add(emailTextField);
-		
-		addressTextArea = new JTextArea();
-		addressTextArea.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		addressTextArea.setBounds(150, 194, 229, 73);
-		panelRegister.add(addressTextArea);
-		addressTextArea.setBorder(new LineBorder(new Color(160, 160, 160)));
 		
 		registerButton = new JButton("Register");
 		registerButton.addActionListener(this);
 		registerButton.setBounds(149, 368, 104, 31);
 		panelRegister.add(registerButton);
-		registerButton.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		registerButton.setFont(new Font(fontStyle, Font.BOLD, 18));
+		
+		confirmPasswordTextField = new JTextField();
+		confirmPasswordTextField.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		confirmPasswordTextField.setColumns(10);
+		confirmPasswordTextField.setBounds(216, 106, 229, 34);
+		panelRegister.add(confirmPasswordTextField);
+		
+		JLabel confirmPasswordlabel = new JLabel("Confirm Password : ");
+		confirmPasswordlabel.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		confirmPasswordlabel.setBounds(10, 115, 196, 17);
+		panelRegister.add(confirmPasswordlabel);
 		
 		JPanel titlePanel = new JPanel();
 		titlePanel.setBounds(0, 0, 1360, 169);
 		contentPane.add(titlePanel);
 		titlePanel.setLayout(null);
 		
-		JLabel foodOrderSystemLabel = new JLabel("Food Order System");
-		foodOrderSystemLabel.setBounds(475, 59, 410, 51);
-		foodOrderSystemLabel.setFont(new Font("Minion Pro SmBd", 
-				foodOrderSystemLabel.getFont().getStyle() | Font.BOLD, 50));
+		JLabel foodOrderSystemLabel = new JLabel("BKB FOOD ENTERPRISE");
+		foodOrderSystemLabel.setBounds(345, 35, 669, 77);
+		foodOrderSystemLabel.setFont(new Font(fontStyle, Font.BOLD, 55));
 		foodOrderSystemLabel.setVerticalAlignment(SwingConstants.TOP);
 		foodOrderSystemLabel.setAlignmentY(CENTER_ALIGNMENT);
 		titlePanel.add(foodOrderSystemLabel);
@@ -305,7 +306,6 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 			final String comfirmPassword;
 			final String fullName = registerFullNameField.getText().trim();
 			final String ic = icNoTextField.getText().trim();
-			final String address = addressTextArea.getText().trim();
 //			for (String address: addressTextArea.getText().split("\\n")) {
 //				addressTextArea.append(address);
 //			}
@@ -316,7 +316,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 			try {
 				if (validateRegisterRequiredField()) {
 					if (userCtrl.validateRegister(userName, password, fullName, 
-							ic, address, telNo, email)) {
+							ic, telNo, email)) {
 						JOptionPane.showMessageDialog(null, 
 								"Register successfully!");
 					} else {
@@ -370,7 +370,6 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 				.valueOf(registerPasswordField.getPassword()).length() == 0 || 
 				registerFullNameField.getText().length() == 0 || 
 				icNoTextField.getText().length() == 0 || 
-				addressTextArea.getText().length() == 0 || 
 				telNoTextField.getText().length() == 0 || 
 				emailTextField.getText().length() == 0);
 	}
@@ -384,5 +383,4 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		return !(userNameField.getText().length() == 0 ||
 				String.valueOf(passwordField.getPassword()).length() == 0);
 	}
-
 }
