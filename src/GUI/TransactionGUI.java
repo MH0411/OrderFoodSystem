@@ -1,6 +1,6 @@
 package GUI;
 
-import item.db.ComboItem;
+import item.Item;
 import item.db.ItemController;
 
 import java.awt.Color;
@@ -36,6 +36,8 @@ import java.awt.event.KeyEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 
+import transaction.Cart;
+
 /**
  * This class control the interface of transaction.
  * Interface activity happen here.
@@ -63,7 +65,7 @@ public class TransactionGUI extends JFrame
 	private JButton receiptButton;
 	private JMenuItem showSaleMenuItem;
 	private JMenuItem logoutMenuItem;
-	private JComboBox<ComboItem> itemsComboBox;
+	private JComboBox<Item> itemsComboBox;
 	private JTable itemsTable;
 	
 	private Cart cart;
@@ -164,7 +166,7 @@ public class TransactionGUI extends JFrame
 		
 		DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
 		dlcr.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
-		itemsComboBox = new JComboBox<ComboItem>();
+		itemsComboBox = new JComboBox<Item>();
 		itemsComboBox.setEditable(true);
 		itemsComboBox.setRenderer(dlcr);
 		itemsComboBox.setFont(new Font(fontStyle, Font.BOLD, 16));
@@ -441,7 +443,7 @@ public class TransactionGUI extends JFrame
 			
 			//Get selected item's price
 			quantityTextField.setEditable(true);
-			ComboItem price = (ComboItem)itemsComboBox.getSelectedItem();
+			Item price = (Item)itemsComboBox.getSelectedItem();
 			unitPriceTextField.setText(decimalPattern.format(price.getUnitPrice()));
 		} 
 	}

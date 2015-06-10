@@ -35,7 +35,7 @@ public class ItemController {
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public JComboBox<ComboItem> getItemsInfo(JComboBox<ComboItem> itemsComboBox) 
+	public JComboBox<Item> getItemsInfo(JComboBox<Item> itemsComboBox) 
 			throws SQLException, ClassNotFoundException {
 		//Open database connection
 		conn = dbController.getConnection();
@@ -53,7 +53,7 @@ public class ItemController {
 			Item item = new Item(itemId, name, unitPrice);
 //			 itemsComboBox.addItem(new ComboItem(rsItem.getString("itemId"),
 //					 rsItem.getString("name").toString(), rsItem.getDouble("unitPrice")));
-			itemsComboBox.addItem(new ComboItem(item));
+			itemsComboBox.addItem(item);
 			
 		}
 		//Close database connection

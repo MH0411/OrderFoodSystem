@@ -144,17 +144,8 @@ public class SaleGUI extends JFrame implements ActionListener {
 		contentPane.add(salesPanel);
 		salesPanel.setLayout(null);
 		
-<<<<<<< HEAD
-		Object[][] data = null;
-		salesTable = new JTable(data,columnNames);
-		salesTable.setPreferredScrollableViewportSize(new Dimension(500,50));
-		salesTable.setBounds(254, 260, 248, -180);
-		JScrollPane scrollPane=new JScrollPane(salesTable);
-		scrollPane.setBounds(67, 53, 545, 491);
-=======
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(56, 37, 905, 549);
->>>>>>> 02796ae7ad89ce061effa4acb6f95723e1da0f88
 		salesPanel.add(scrollPane);
 		
 		table = new JTable();
