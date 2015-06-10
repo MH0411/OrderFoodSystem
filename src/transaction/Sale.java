@@ -67,7 +67,7 @@ public class Sale {
 	}
 	
 	//Get data from database and display at sale table
-	public Vector<Sale> displaySales(JTable table) 
+	public Vector<Sale> displaySales(JTable table, String startDate, String endDate) 
 			throws ClassNotFoundException, SQLException {
 
 		//Open database connection
@@ -76,7 +76,8 @@ public class Sale {
 		sql = "SELECT name, sum(quantity), sum(subTotalPrice) FROM tb_Sale s "
 				+ "LEFT JOIN tb_item i ON s.itemId = i.itemId "
 				+ "LEFT JOIN tb_receipt r ON s.receiptId = r.receiptId "
-				+ "WHERE dateTime = '2015-06-10 09:29:15'"
+				+ "WHERE dateTime BETWEEN '" + startDate + "' "
+				+ "AND '" + endDate + "' "
 				+ "GROUP BY name ORDER BY quantity DESC";
 		
 		//Create statement object
@@ -112,5 +113,6 @@ public class Sale {
 	public String getName(){
 		return name;
 	}
+	
 	
 }

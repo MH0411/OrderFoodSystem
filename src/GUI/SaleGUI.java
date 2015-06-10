@@ -22,7 +22,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JTextField;
 
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -31,7 +30,11 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import transaction.Sale;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Properties;
 
 @SuppressWarnings("serial")
@@ -43,13 +46,26 @@ public class SaleGUI extends JFrame implements ActionListener {
 	private JMenuItem logoutMenuItem;
 	private JPanel contentPane;
 	private JPanel salesPanel;
+	private JPanel titlePanel;
 	private JScrollPane scrollPanel;
+	private JScrollPane scrollPane;
 	private JPanel resultPanel;
 	private JButton searchButton;
 	private JTable salesTable;
 	private JTable table;
-	private JTextField startDateTextField;
-	private JTextField endDateTextField;
+	private JLabel startDateLabel;
+	private JLabel endDateLabel;
+	private JLabel salesLabel;
+	private UtilDateModel startModel = new UtilDateModel();
+	private UtilDateModel endModel = new UtilDateModel();
+	private Properties start;
+	private Properties end;
+	private JDatePanelImpl startDatePanel;
+	private JDatePickerImpl startDatePicker;
+	private JDatePanelImpl endDatePanel;
+	private JDatePickerImpl endDatePicker;
+	private String datePattern = "yyyy-MM-dd";
+	private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
 
 	private String fontStyle = "Times New Roman";
 	
@@ -119,7 +135,7 @@ public class SaleGUI extends JFrame implements ActionListener {
 		scrollPanel.setBounds(67, 53, 545, 491);
 		salesPanel.setLayout(null);
 		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		scrollPane.setBounds(71, 167, 537, 375);
 		salesPanel.add(scrollPane);
 		
@@ -133,39 +149,43 @@ public class SaleGUI extends JFrame implements ActionListener {
 		));
 		scrollPane.setViewportView(table);
 		
-		startDateTextField = new JTextField();
-		startDateTextField.setBounds(71, 73, 124, 20);
-		startDateTextField.addActionListener(this);
-		salesPanel.add(startDateTextField);
-		startDateTextField.setColumns(10);
-		
-		endDateTextField = new JTextField();
-		endDateTextField.setEditable(false);
-		endDateTextField.setBounds(71, 114, 124, 20);
-		salesPanel.add(endDateTextField);
-		endDateTextField.setColumns(10);
-		
 		searchButton = new JButton("Search");
-		searchButton.setBounds(354, 99, 168, 35);
+		searchButton.setBounds(440, 99, 168, 35);
 		salesPanel.add(searchButton);
 		searchButton.setFont(new Font(fontStyle, Font.BOLD, 35));	
 		searchButton.setVisible(true);
 		searchButton.addActionListener(this);
+			
+		start = new Properties();
+		start.put("text.today","Today");
+		start.put("text.month","Month");
+		start.put("text.year","Year");
 		
-//		UtilDateModel model = new UtilDateModel();
-//		JDatePanelImpl datePanel = new JDatePanelImpl(model, null);
-//		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, null);		 
-//		salesPanel.add(datePicker);
-		
-		UtilDateModel model=new UtilDateModel();
-		Properties p=new Properties();
-		p.put("text.today","Today");
-		p.put("text.month","Month");
-		p.put("text.year","Year");
-		JDatePanelImpl datePanel= new JDatePanelImpl(model,p);
-		JDatePickerImpl datePicker= new JDatePickerImpl(datePanel
+		startDatePanel = new JDatePanelImpl(startModel, start);
+		startDatePicker = new JDatePickerImpl(startDatePanel
 				,new DateComponentFormatter());
-		datePicker.setSize(200,30);
+		startDatePicker.setLocation(71, 42);
+		startDatePicker.setSize(200,30);
+		salesPanel.add(startDatePicker);
+		
+		end = new Properties();
+		end.put("text.today","Today");
+		end.put("text.month","Month");
+		end.put("text.year","Year");
+		endDatePanel = new JDatePanelImpl(endModel, end);
+		endDatePicker = new JDatePickerImpl(endDatePanel
+				,new DateComponentFormatter());
+		endDatePicker.setLocation(71, 119);
+		endDatePicker.setSize(200,30);
+		salesPanel.add(endDatePicker);
+		
+		startDateLabel = new JLabel("Start Date : ");
+		startDateLabel.setBounds(71, 11, 77, 20);
+		salesPanel.add(startDateLabel);
+		
+		endDateLabel = new JLabel("End Date : ");
+		endDateLabel.setBounds(71, 88, 77, 20);
+		salesPanel.add(endDateLabel);
 		
 		//Right panel =======================================================
 		resultPanel = new JPanel();
@@ -174,12 +194,12 @@ public class SaleGUI extends JFrame implements ActionListener {
 		resultPanel.setLayout(null);
 
 		
-		JPanel titlePanel = new JPanel();
+		titlePanel = new JPanel();
 		titlePanel.setBounds(0, 21, 1360, 119);
 		contentPane.add(titlePanel);
 		titlePanel.setLayout(null);
 		
-		JLabel salesLabel = DefaultComponentFactory.getInstance().createTitle("Sales");
+		salesLabel = DefaultComponentFactory.getInstance().createTitle("Sales");
 		salesLabel.setFont(new Font(fontStyle, Font.BOLD, 60));
 		salesLabel.setBounds(591, 35, 177, 49);
 		titlePanel.add(salesLabel);
@@ -200,14 +220,29 @@ public class SaleGUI extends JFrame implements ActionListener {
 			close();
 		} else if (e.getSource() == searchButton){
 			Sale sale = new Sale();
+			
+			String startDate;
+			String endDate;
 			try {
-				sale.displaySales(table);
-			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			} catch (SQLException e1) {
+				startDate =valueToString(startDatePicker.getModel().getValue());
+				endDate = valueToString(endDatePicker.getModel().getValue());
+				System.out.println(startDate + endDate);
+			} catch (ParseException e1) {
 				e1.printStackTrace();
 			}
+			
+//			try {
+//				
+//				sale.displaySales(table);
+//			} catch (ClassNotFoundException e1) {
+//				e1.printStackTrace();
+//			} catch (SQLException e1) {
+//				e1.printStackTrace();
+//			}
 		}
 	}
-	
+ 
+    public String valueToString(Object value) throws ParseException {
+    	return dateFormatter.format(startDatePicker.getModel().getValue());
+    }
 }
