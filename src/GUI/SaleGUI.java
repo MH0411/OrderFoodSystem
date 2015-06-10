@@ -30,6 +30,7 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import transaction.Sale;
+import transaction.db.TransactionController;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -70,6 +71,7 @@ public class SaleGUI extends JFrame implements ActionListener {
 	private String endDate;
 	private String fontStyle = "Times New Roman";
 	private DefaultTableCellRenderer centerRenderer;
+	private TransactionController transactionCtrl;
 	
 	/**
 	 * Launch the application.
@@ -253,8 +255,8 @@ public class SaleGUI extends JFrame implements ActionListener {
 				try {
 					
 					//Display sales of items
-					Sale sale = new Sale();
-					sale.displaySales(table, startDate, endDate);
+					transactionCtrl = new TransactionController();
+					transactionCtrl.displaySales(table, startDate, endDate);
 					
 				} catch (ClassNotFoundException e1) {
 					

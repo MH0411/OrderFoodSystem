@@ -3,7 +3,6 @@ package GUI;
 import item.Item;
 import item.db.ItemController;
 
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.Font;
@@ -32,6 +31,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.awt.event.KeyEvent;
 
 import javax.swing.table.DefaultTableModel;
@@ -54,11 +54,40 @@ public class TransactionGUI extends JFrame
 	private JPanel contentPane;
 	private JPanel itemPanel;
 	private JPanel addItemPanel;
+	private JPanel CartPanel;
+	private JPanel confirmPanel;
+	private JPanel receiptPanel;
+	private JScrollPane itemsScrollPane;
+	private JScrollPane scrollPane;
 	private JTextField unitPriceTextField;
 	private JTextField subTotalPriceTextField;
 	private JTextField cashTextField;
 	private JTextField totalPriceTextField;
 	private JTextField changeTextField;
+	private JLabel itemLabel;
+	private JLabel quantityLabel;
+	private JLabel unitPriceLabel;
+	private JLabel subTotalPriceLabel;
+	private JLabel shoppingCartLabel;
+	private JLabel cashLabel;
+	private JLabel totalPriceLabel;
+	private JLabel changeLabel;
+	private JLabel receiptLabel;
+	private JLabel companyLabel;
+	private JLabel addressLabel;
+	private JLabel dataTimeLabel;
+	private JLabel receiptTotalPriceLabel;
+	private JLabel totalGSTLabel;
+	private JLabel receiptCashLabel;
+	private JLabel receiptChangeLabel;
+	private JLabel totalPriceValueLabel;
+	private JLabel totalGSTValueLabel;
+	private JLabel cashValueLabel;
+	private JLabel changeValueLabel;
+	private JLabel addressLabel1;
+	private JLabel telLabel;
+	private JLabel gstLabel;
+	private JLabel gstIdLabel;
 	private JFormattedTextField quantityTextField;
 	private JButton addItemButton;
 	private JButton confirmButton;
@@ -66,14 +95,13 @@ public class TransactionGUI extends JFrame
 	private JMenuItem showSaleMenuItem;
 	private JMenuItem logoutMenuItem;
 	private JComboBox<Item> itemsComboBox;
-
 	private JTable itemsTable;
-
-	
+	private Calendar calendar;
+	private java.util.Date now;
 	private JButton removeButton;
-	
+	private java.sql.Timestamp currentTimestamp;
 	private Cart cart = new Cart();
-	
+	DefaultListCellRenderer centerRenderer;
 	//Set 2 decimal places.
 	private DecimalFormat decimalPattern = new DecimalFormat("#.00");
 	private final double GST = 1.06;
@@ -148,31 +176,31 @@ public class TransactionGUI extends JFrame
 		itemPanel.add(addItemPanel);
 		addItemPanel.setLayout(null);
 		
-		JLabel itemLabel = new JLabel("Item : ");
+		itemLabel = new JLabel("Item : ");
 		itemLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
 		itemLabel.setBounds(10, 9, 44, 14);
 		addItemPanel.add(itemLabel);
 		
-		JLabel quantityLabel = new JLabel("Quantity : ");
+		quantityLabel = new JLabel("Quantity : ");
 		quantityLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
 		quantityLabel.setBounds(10, 48, 69, 14);
 		addItemPanel.add(quantityLabel);
 		
-		JLabel unitPriceLabel = new JLabel("Unit Price (RM) : ");
+		unitPriceLabel = new JLabel("Unit Price (RM) : ");
 		unitPriceLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
 		unitPriceLabel.setBounds(10, 93, 119, 14);
 		addItemPanel.add(unitPriceLabel);
 		
-		JLabel subTotalPriceLabel = new JLabel("Total Price (RM) :  ");
+		subTotalPriceLabel = new JLabel("Total Price (RM) :  ");
 		subTotalPriceLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
 		subTotalPriceLabel.setBounds(10, 137, 129, 14);
 		addItemPanel.add(subTotalPriceLabel);
 		
-		DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
-		dlcr.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
+		centerRenderer = new DefaultListCellRenderer();
+		centerRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
 		itemsComboBox = new JComboBox<Item>();
 		itemsComboBox.setEditable(true);
-		itemsComboBox.setRenderer(dlcr);
+		itemsComboBox.setRenderer(centerRenderer);
 		itemsComboBox.setFont(new Font(fontStyle, Font.BOLD, 16));
 		itemsComboBox.setBounds(151, 9, 105, 20);
 		itemsComboBox.setSelectedItem("");;
@@ -217,33 +245,33 @@ public class TransactionGUI extends JFrame
 		addItemButton.setBounds(63, 239, 139, 39);
 		addItemPanel.add(addItemButton);
 		
-		JLabel shoppingCartLabel = new JLabel("Shopping Cart");
+		shoppingCartLabel = new JLabel("Shopping Cart");
 		shoppingCartLabel.setBounds(10, 57, 310, 71);
 		itemPanel.add(shoppingCartLabel);
 		shoppingCartLabel.setFont(new Font(fontStyle, Font.BOLD, 48));
 		
 		//MidPanel===========================================================
-		JPanel CartPanel = new JPanel();
+		CartPanel = new JPanel();
 		CartPanel.setBounds(341, 31, 338, 708);
 		contentPane.add(CartPanel);
 		CartPanel.setLayout(null);
 		
-		JPanel confirmPanel = new JPanel();
+		confirmPanel = new JPanel();
 		confirmPanel.setBounds(40, 452, 258, 218);
 		CartPanel.add(confirmPanel);
 		confirmPanel.setLayout(null);
 		
-		JLabel cashLabel = new JLabel("Cash Tendered : ");
+		cashLabel = new JLabel("Cash Tendered : ");
 		cashLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
 		cashLabel.setBounds(10, 7, 114, 14);
 		confirmPanel.add(cashLabel);
 		
-		JLabel totalPriceLabel = new JLabel("Total Price (RM) :");
+		totalPriceLabel = new JLabel("Total Price (RM) :");
 		totalPriceLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
 		totalPriceLabel.setBounds(10, 47, 123, 14);
 		confirmPanel.add(totalPriceLabel);
 		
-		JLabel changeLabel = new JLabel("Change : ");
+		changeLabel = new JLabel("Change : ");
 		changeLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
 		changeLabel.setBounds(10, 87, 63, 14);
 		confirmPanel.add(changeLabel);
@@ -280,16 +308,13 @@ public class TransactionGUI extends JFrame
 		confirmButton.addActionListener(this);
 		confirmPanel.add(confirmButton);
 		
-		JScrollPane itemsScrollPane = new JScrollPane();
+		itemsScrollPane = new JScrollPane();
 		itemsScrollPane.setBounds(23, 50, 292, 378);
-		CartPanel.add(itemsScrollPane);
-		
-		itemsTable = new JTable()
-		{
+		CartPanel.add(itemsScrollPane);	
+		itemsTable = new JTable(){
 			@Override
 			 public Class<?> getColumnClass(int colIndex) {
-//				 return Boolean.class;
-//				 return null;
+				
 				 return getValueAt(0, colIndex).getClass();
 			 }
 			 
@@ -320,81 +345,76 @@ public class TransactionGUI extends JFrame
 		confirmPanel.add(removeButton);
 		
 		//RightPanel==========================================================
-		JPanel receiptPanel = new JPanel();
+		receiptPanel = new JPanel();
 		receiptPanel.setBounds(682, 22, 678, 717);
 		contentPane.add(receiptPanel);
 		receiptPanel.setLayout(null);
 		
-		JLabel receiptLabel = new JLabel("Receipt");
+		receiptLabel = new JLabel("Receipt");
 		receiptLabel.setFont(new Font("Times New Roman", Font.BOLD, 34));
 		receiptLabel.setBounds(280, 151, 117, 40);
 		receiptPanel.add(receiptLabel);
 		
-		JLabel companyLabel = new JLabel("BKB FOOD ENTERPRISE");
+		companyLabel = new JLabel("BKB FOOD ENTERPRISE");
 		companyLabel.setFont(new Font("Times New Roman", Font.BOLD, 49));
 		companyLabel.setBounds(42, 11, 594, 57);
 		receiptPanel.add(companyLabel);
 		
-		JLabel addressLabel = new JLabel("No.18 MITC Mall ,Hang Tuah Jaya");
+		addressLabel = new JLabel("No.18 MITC Mall ,Hang Tuah Jaya");
 		addressLabel.setFont(new Font(fontStyle, Font.PLAIN, 14));
 		addressLabel.setBounds(235, 79, 207, 14);
 		receiptPanel.add(addressLabel);
 		
-		JLabel invoiceLabel = new JLabel("Invoice#");
-		invoiceLabel.setFont(new Font(fontStyle, Font.PLAIN, 14));
-		invoiceLabel.setBounds(36, 170, 56, 14);
-		receiptPanel.add(invoiceLabel);
-		
-		JLabel invoiceNoLabel = new JLabel("Invoice No");
-		invoiceNoLabel.setFont(new Font(fontStyle, Font.PLAIN, 14));
-		invoiceNoLabel.setBounds(105, 170, 69, 14);
-		receiptPanel.add(invoiceNoLabel);
-		
-		JLabel dataTimeLabel = new JLabel("??/??/???? ??:??:??");
+		dataTimeLabel = new JLabel("date time");
 		dataTimeLabel.setFont(new Font(fontStyle, Font.PLAIN, 14));
-		dataTimeLabel.setBounds(511, 171, 132, 14);
+		dataTimeLabel.setBounds(491, 171, 152, 14);
+		calendar = Calendar.getInstance();
+		now = calendar.getTime();
+		currentTimestamp = 
+				new java.sql.Timestamp(now.getTime());
+		dataTimeLabel.setText(String.valueOf(currentTimestamp));
 		receiptPanel.add(dataTimeLabel);
 		
-		JLabel receiptTotalPriceLabel = new JLabel("Total Price (RM) : "
+		receiptTotalPriceLabel = new JLabel("Total Price (RM) : "
 				+ "(Incl GST)");
 		receiptTotalPriceLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		receiptTotalPriceLabel.setBounds(36, 477, 202, 14);
 		receiptPanel.add(receiptTotalPriceLabel);
 		
-		JLabel totalGSTLabel = new JLabel("Total Includ 6% GST");
+		totalGSTLabel = new JLabel("Total Includ 6% GST");
 		totalGSTLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		totalGSTLabel.setBounds(36, 516, 152, 14);
 		receiptPanel.add(totalGSTLabel);
 		
-		JLabel receiptCashLabel = new JLabel("Cash Tendered  ");
+		receiptCashLabel = new JLabel("Cash Tendered  ");
 		receiptCashLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		receiptCashLabel.setBounds(36, 555, 117, 14);
 		receiptPanel.add(receiptCashLabel);
 		
-		JLabel receiptChangeLabel = new JLabel("Change");
+		receiptChangeLabel = new JLabel("Change");
 		receiptChangeLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		receiptChangeLabel.setBounds(36, 597, 202, 14);
 		receiptPanel.add(receiptChangeLabel);
 		
-		JLabel totalPriceValueLabel = new JLabel("price");
+		totalPriceValueLabel = new JLabel("price");
 		totalPriceValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		totalPriceValueLabel.setBounds(574, 477, 69, 16);
 		totalPriceValueLabel.setVisible(false);
 		receiptPanel.add(totalPriceValueLabel);
 		
-		JLabel totalGSTValueLabel = new JLabel("gst");
+		totalGSTValueLabel = new JLabel("gst");
 		totalGSTValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		totalGSTValueLabel.setBounds(574, 518, 69, 16);
 		totalGSTValueLabel.setVisible(false);
 		receiptPanel.add(totalGSTValueLabel);
 		
-		JLabel cashValueLabel = new JLabel("cash");
+		cashValueLabel = new JLabel("cash");
 		cashValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		cashValueLabel.setBounds(574, 557, 69, 16);
 		cashValueLabel.setVisible(false);
 		receiptPanel.add(cashValueLabel);
 		
-		JLabel changeValueLabel = new JLabel("change");
+		changeValueLabel = new JLabel("change");
 		changeValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		changeValueLabel.setBounds(574, 599, 69, 16);
 		changeValueLabel.setVisible(false);
@@ -405,23 +425,23 @@ public class TransactionGUI extends JFrame
 		receiptButton.setBounds(511, 657, 132, 33);
 		receiptPanel.add(receiptButton);
 		
-		JLabel addressLabel1 = new JLabel("75450 Ayer Keroh,Melaka");
+		addressLabel1 = new JLabel("75450 Ayer Keroh,Melaka");
 		addressLabel1.setBounds(273, 104, 132, 14);
 		receiptPanel.add(addressLabel1);
 		
-		JLabel telLabel = new JLabel("Tel : 06-2313007 Fax : 06-2313070");
+		telLabel = new JLabel("Tel : 06-2313007 Fax : 06-2313070");
 		telLabel.setBounds(250, 129, 177, 14);
 		receiptPanel.add(telLabel);
 		
-		JLabel gstLabel = new JLabel("GST ID #");
-		gstLabel.setBounds(36, 145, 46, 14);
+		gstLabel = new JLabel("GST ID #");
+		gstLabel.setBounds(40, 171, 46, 14);
 		receiptPanel.add(gstLabel);
 		
-		JLabel gstIdLabel = new JLabel("GST ID");
-		gstIdLabel.setBounds(107, 145, 46, 14);
+		gstIdLabel = new JLabel("GST ID");
+		gstIdLabel.setBounds(107, 171, 46, 14);
 		receiptPanel.add(gstIdLabel);
 		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		scrollPane.setBounds(36, 195, 600, 271);
 		receiptPanel.add(scrollPane);
 		
@@ -495,17 +515,50 @@ public class TransactionGUI extends JFrame
 			
 		}else if (action.getSource() == confirmButton) {
 			
-			//Proceed to receipt
-			for (int index = 0 ; index < itemsTable.getRowCount() ; index++) {
+			//Refresh recipt table
+			((DefaultTableModel) receiptTable.getModel()).
+				getDataVector().removeAllElements();
+			
+			if (cart.getCartItems().isEmpty()){
 				
-				DefaultTableModel item = 
-						(DefaultTableModel)receiptTable.getModel();
-				item.addRow(new Object[]{
-						itemsTable.getValueAt(index, 1)
-				});
+				JOptionPane.showMessageDialog(null, "The cart is empty.");
+				
+			} else {
+				
+				if ((cashTextField.getText().equals("")) 
+						|| (Double.parseDouble(cashTextField.getText()) 
+						< (Double.parseDouble(totalPriceTextField.getText())))){
+					
+					JOptionPane.showMessageDialog(
+							null, "Insufficient cash tendered");
+					
+				} else {
+					
+					//Proceed to receipt
+					dataTimeLabel.setText(String.valueOf(currentTimestamp));
+					
+					for (int i = 0 ; i < itemsTable.getRowCount() ; i++) {
+						
+						DefaultTableModel item = 
+								(DefaultTableModel)receiptTable.getModel();
+						item.addRow(new Object[]{
+								itemsTable.getValueAt(i, 1),
+								itemsTable.getValueAt(i, 2),
+								itemsTable.getValueAt(i, 3),
+								itemsTable.getValueAt(i, 4)
+						});
+					}
+					
+					
+				}
 			}
 			//Refresh cart
 			cashTextField.setEditable(false);
+			cashTextField.setText("");
+			totalPriceTextField.setText("");
+			changeTextField.setText("");
+			((DefaultTableModel) itemsTable.getModel()).
+			getDataVector().removeAllElements();
 			
 		}else if (action.getSource() == receiptButton) {
 			
