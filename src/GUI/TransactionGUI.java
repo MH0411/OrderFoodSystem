@@ -29,15 +29,24 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.awt.event.KeyEvent;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 
+import com.mysql.jdbc.Connection;
+
+import db.DatabaseController;
 import transaction.Cart;
+import transaction.db.TransactionController;
 
 /**
  * This class control the interface of transaction.
@@ -108,7 +117,15 @@ public class TransactionGUI extends JFrame
 	private ItemController itemCtrl = new ItemController();
 	private String fontStyle = "Times New Roman";
 	private JTable receiptTable;
-
+	private TransactionController transactionCtrl = new TransactionController();
+	
+	private DatabaseController dbController = new DatabaseController();
+	private Connection conn;
+	private String sql;
+	private Statement stmt;
+	private ResultSet rsSale;
+	private String datePattern = "yyyy-MM-dd hh:mm:ss";
+	private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
 	
 	/**
 	 * Launch the application.
@@ -209,11 +226,13 @@ public class TransactionGUI extends JFrame
 		
 		//Import items from database to combo box.
 		try {
+			
 			itemCtrl.getItemsInfo(itemsComboBox);
-		} catch (ClassNotFoundException e) {
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+			
 		}
 		
 		quantityTextField = new JFormattedTextField();
@@ -370,8 +389,7 @@ public class TransactionGUI extends JFrame
 		dataTimeLabel.setBounds(491, 171, 152, 14);
 		calendar = Calendar.getInstance();
 		now = calendar.getTime();
-		currentTimestamp = 
-				new java.sql.Timestamp(now.getTime());
+		currentTimestamp = new java.sql.Timestamp(now.getTime());				
 		dataTimeLabel.setText(String.valueOf(currentTimestamp));
 		receiptPanel.add(dataTimeLabel);
 		
@@ -477,6 +495,12 @@ public class TransactionGUI extends JFrame
 
 			//Add selected item to cart
 			cart.addItem((Item) itemsComboBox.getSelectedItem());
+			cart.getCartItems().get(cart.getCartItems().size()-1).
+				setQuantity(Integer.parseInt(quantityTextField.getText()));
+			cart.getCartItems().get(cart.getCartItems().size()-1).
+				setSubTotalPrice(Double.parseDouble(
+						subTotalPriceTextField.getText()));
+			
 			DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
 			item.addRow(new Object[] {
 					false,
@@ -502,9 +526,6 @@ public class TransactionGUI extends JFrame
 					decimalPattern.format(totalPrice)));
 			cashTextField.setEditable(true);
 			
-			//Cart cart = new Cart();
-			//cart.addItem((Item) itemsComboBox.getSelectedItem());
-			
 			//Refresh all text fields
 			
 		}else if (action.getSource() == confirmButton) {
@@ -528,11 +549,44 @@ public class TransactionGUI extends JFrame
 					
 				} else {
 					
-					//Proceed to receipt
+					double totalPrice = 
+							Double.parseDouble(totalPriceTextField.getText());
+					double totalGST =
+							(Math.round((totalPrice * GST) - 0.05)) + 0.05;
+					double cash = Double.parseDouble(cashTextField.getText());
+					
+					totalPriceValueLabel.setText(String.valueOf(totalPrice));
+					totalGSTValueLabel.setText(String.valueOf(totalGST));
+					cashValueLabel.setText(String.valueOf(
+							decimalPattern.format(cash)));
+					changeValueLabel.setText(changeTextField.getText());
+					
+					//Insert to receipt database
+					try {
+						
+						transactionCtrl.insertReceiptTable(totalPrice);
+						
+					} catch (ClassNotFoundException | SQLException e) {
+						
+						e.printStackTrace();
+					}
+					
+					//Set time
 					dataTimeLabel.setText(String.valueOf(currentTimestamp));
 					
 					for (int i = 0 ; i < itemsTable.getRowCount() ; i++) {
 						
+						try{ 
+							
+							transactionCtrl.insertSaleTable(
+									cart.getCartItems().get(i));
+							
+						} catch (ClassNotFoundException | SQLException e){
+							
+							e.printStackTrace();
+						}
+						
+						//Insert to receipt interface
 						DefaultTableModel item = 
 								(DefaultTableModel)receiptTable.getModel();
 						item.addRow(new Object[]{
@@ -542,19 +596,9 @@ public class TransactionGUI extends JFrame
 								cart.getCartItems().get(i).getSubTotalPrice(),
 								cart.getCartItems().remove(i)				
 						});
+
 					}	
-					
-					double totalPrice = 
-							Double.parseDouble(totalPriceTextField.getText());
-					double totalGST =
-							(Math.round((totalPrice * GST) - 0.05)) + 0.05;
-					double cash = Double.parseDouble(cashTextField.getText());
-					
-					totalPriceValueLabel.setText(totalPriceTextField.getText());
-					totalGSTValueLabel.setText(String.valueOf(totalGST));
-					cashValueLabel.setText(String.valueOf(decimalPattern.format(cash)));
-					changeValueLabel.setText(changeTextField.getText());
-					
+							
 					//Refresh cart
 					changeTextField.setText("");
 					((DefaultTableModel) itemsTable.getModel()).

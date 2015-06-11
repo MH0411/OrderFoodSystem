@@ -304,6 +304,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 				e.printStackTrace();
 			}
 		} else if (actionSource == registerButton) {
+			
 			final String userName = registerUserNameField.getText().trim();
 			final String password = String.valueOf(
 					registerPasswordField.getPassword()).trim();
@@ -317,6 +318,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 			final String email = emailTextField.getText().trim();
 			
 			UserController userCtrl = new UserController();
+			
 			try {
 				if (validateRegisterRequiredField()) {
 					if (userCtrl.validateRegister(userName, password, fullName, 
