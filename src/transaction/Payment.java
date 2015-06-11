@@ -2,6 +2,11 @@ package transaction;
 
 import java.sql.Timestamp;
 
+/**
+ * 
+ * @author JKGan
+ *
+ */
 public class Payment {
 
 	private Timestamp dateTime;

@@ -20,13 +20,19 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-
+/**
+ * 
+ * @author JKGan
+ *
+ */
 public class PrintPDF {
 	
 	private static int receiptId = 1; 
-	private static String pathOfReceiptPDF = "./bin/PDF/Receipt/receipt_" + receiptId + ".pdf";
+	private static String pathOfReceiptPDF = "./bin/PDF/Receipt/receipt_" 
+			+ receiptId + ".pdf";
 	private static int salesId = 1; 
-	private static String pathOfSalesPDF = "./bin/PDF/Sales/sales_" + salesId + ".pdf";
+	private static String pathOfSalesPDF = "./bin/PDF/Sales/sales_" + salesId 
+			+ ".pdf";
 	
 	private static Properties property = new Properties();
 	private static FileInputStream input;
@@ -51,15 +57,17 @@ public class PrintPDF {
 //	    }
 //	  }
 	
-	public static void createSalePDF(Vector<Sale> sales) throws FileNotFoundException, DocumentException {
+	public static void createSalePDF(Vector<Sale> sales) throws 
+			FileNotFoundException, DocumentException {
 		Document printSales = new Document(PageSize.A4.rotate());     
-	    PdfWriter.getInstance(printSales, new FileOutputStream(pathOfSalesPDF));
+	    PdfWriter.getInstance(printSales, new FileOutputStream(
+	    											pathOfSalesPDF));
 	    printSales.open();
 	    printSales(printSales, sales);
 	    printSales.close();
 	}
 	
-	public static void printReceipt(Document printReceipt){
+	public static void printReceipt(Document printReceipt) {
 
 		try
 		{
@@ -119,28 +127,32 @@ public class PrintPDF {
 	        printReceipt.add(para6);
 	        
 	        /* Add cashier name */
-	        Chunk cashier = new Chunk( "Cashier name : " + property.getProperty("fullName") ,FontFactory.getFont
+	        Chunk cashier = new Chunk( "Cashier name : " + property.
+	        		getProperty("fullName") ,FontFactory.getFont
 	        		(FontFactory.TIMES_BOLD, 16, BaseColor.BLACK));
 	        Paragraph para7 = new Paragraph(cashier);
 	        para7.setAlignment(Paragraph.ALIGN_LEFT);
 	        para7.setSpacingAfter(5);
 	        printReceipt.add(para7);
 	        
-	        Chunk line = new Chunk( "----------------------------------------------"
-	        		+ "---------------------------------------------------------------");
+	        Chunk line = new Chunk( "---------------------------------"
+	        		+ "-----------------------------------------------"
+	        		+ "-----------------------------");
 	        Paragraph para8 = new Paragraph(line);
 	        para8.setSpacingAfter(5);
 	        printReceipt.add(para8);
 	        
-	        Chunk line2 = new Chunk( "----------------------------------------------"
-	        		+ "---------------------------------------------------------------");
+	        Chunk line2 = new Chunk( "---------------------------------"
+	        		+ "------------------------------------------------"
+	        		+ "----------------------------");
 	        Paragraph para9 = new Paragraph(line2);
 	        para9.setSpacingAfter(5);
 	        printReceipt.add(para9);
 	        
 	        /* Add Total Price */
-	        Chunk totalPrice = new Chunk( "TOTAL PRICE (RM) :",FontFactory.getFont
-	        		(FontFactory.TIMES_BOLD, 16, Font.BOLD, BaseColor.BLACK));
+	        Chunk totalPrice = new Chunk( "TOTAL PRICE (RM) :",FontFactory.
+	        		getFont(FontFactory.TIMES_BOLD, 16, Font.BOLD, 
+	        				BaseColor.BLACK));
 	        Paragraph para10 = new Paragraph(totalPrice);
 	        para10.setAlignment(Paragraph.ALIGN_LEFT);
 	        para10.setSpacingAfter(5);
@@ -155,8 +167,8 @@ public class PrintPDF {
 	        printReceipt.add(para11);
 	        
 	        /* Add cash tendered */
-	        Chunk cashTendered = new Chunk( "Cash Tendered :",FontFactory.getFont
-	        		(FontFactory.TIMES_BOLD, 16, BaseColor.BLACK));
+	        Chunk cashTendered = new Chunk( "Cash Tendered :",FontFactory.
+	        		getFont(FontFactory.TIMES_BOLD, 16, BaseColor.BLACK));
 	        Paragraph para12 = new Paragraph(cashTendered);
 	        para12.setAlignment(Paragraph.ALIGN_LEFT);
 	        para12.setSpacingAfter(5);
@@ -171,8 +183,9 @@ public class PrintPDF {
 	        printReceipt.add(para13);
 	        
 	        /* Add phrase */
-	        Chunk phrase = new Chunk( "Thank you. Please Come Again !",FontFactory.getFont
-	        		(FontFactory.TIMES_BOLD, 20, BaseColor.BLACK));
+	        Chunk phrase = new Chunk( "Thank you. Please Come Again !",
+	        		FontFactory.getFont(FontFactory.TIMES_BOLD, 20, 
+	        				BaseColor.BLACK));
 	        Paragraph para14 = new Paragraph(phrase);
 	        para14.setAlignment(Paragraph.ALIGN_CENTER);
 	        para14.setSpacingAfter(5);
@@ -203,8 +216,7 @@ public class PrintPDF {
 	
 	public static void printSales(Document printSales, Vector<Sale> sales) {
 
-		try
-		{
+		try {
 	        
 	        /* Add title with center alignment */
 	        Chunk title = new Chunk("SALES REPORT", FontFactory.getFont
@@ -257,8 +269,7 @@ public class PrintPDF {
 	        Runtime.getRuntime().exec("open " + pathOfSalesPDF);
 	        
 	        
-		} catch (Exception error)
-		{
+		} catch (Exception error) {
 			System.out.println(error.getMessage());
 			error.printStackTrace();
 		}

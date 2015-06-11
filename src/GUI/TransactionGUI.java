@@ -13,6 +13,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
@@ -32,17 +33,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.JTable;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowEvent;
-import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.util.Calendar;
-import java.awt.event.KeyEvent;
-
 import javax.swing.table.DefaultTableModel;
 
 import transaction.Cart;
@@ -117,22 +107,22 @@ public class TransactionGUI extends JFrame
 	private String fontStyle = "Times New Roman";
 	private JTable receiptTable;
 
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TransactionGUI frame = new TransactionGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					TransactionGUI frame = new TransactionGUI();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 	     
 	/**
 	 * Close the current frame
@@ -318,7 +308,8 @@ public class TransactionGUI extends JFrame
 		
 		itemsScrollPane = new JScrollPane();
 		itemsScrollPane.setBounds(23, 50, 292, 378);
-		CartPanel.add(itemsScrollPane);	
+		CartPanel.add(itemsScrollPane);
+		
 		itemsTable = new JTable(){
 			@Override
 			 public Class<?> getColumnClass(int colIndex) {
@@ -468,23 +459,26 @@ public class TransactionGUI extends JFrame
 	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		
+		// if showSaleMenuItem is clicked
 		if(action.getSource() == showSaleMenuItem) {
 			//Close current frame and open sale frame
 			close();
 			SaleGUI saleFrame = new SaleGUI();
 			saleFrame.setVisible(true);
 			
+			// if logoutMenuItem is clicked
 		} else if (action.getSource() == logoutMenuItem) {
 			//Close current frame and open login frame
 			close();
 			LoginGUI loginFrame = new LoginGUI();
 			loginFrame.setVisible(true);
 			
+			// if addItemButton is clicked
 		} else if(action.getSource() == addItemButton) {
 
-			//Add selected item to cart
+			// Add selected item to cart
 			cart.addItem((Item) itemsComboBox.getSelectedItem());
+			// Show selected item into cart table
 			DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
 			item.addRow(new Object[] {
 					false,
@@ -499,12 +493,15 @@ public class TransactionGUI extends JFrame
 					Double.parseDouble(subTotalPriceTextField.getText());
 			double totalPrice;
 			
+			// get totalPrice from totalPriceTextField
 			if (totalPriceTextField.getText().equals("")){
 				totalPrice = 0.0;
 			} else {
 				totalPrice = Double.parseDouble(totalPriceTextField.getText());
 			}
+			// calculate totalPrice with GST
 			totalPrice += ((subtotalPrice * GST) + subtotalPrice);
+			// rounding totalPrice
 			totalPrice = (Math.round(totalPrice - 0.05)) + 0.05;
 			totalPriceTextField.setText(String.valueOf(
 					decimalPattern.format(totalPrice)));
@@ -515,6 +512,7 @@ public class TransactionGUI extends JFrame
 			
 			//Refresh all text fields
 			
+			// if confirmButton is clicked
 		}else if (action.getSource() == confirmButton) {
 			
 			//Refresh recipt table
@@ -558,9 +556,11 @@ public class TransactionGUI extends JFrame
 							(Math.round((totalPrice * GST) - 0.05)) + 0.05;
 					double cash = Double.parseDouble(cashTextField.getText());
 					
-					totalPriceValueLabel.setText(totalPriceTextField.getText());
+					totalPriceValueLabel.setText(totalPriceTextField.
+							getText());
 					totalGSTValueLabel.setText(String.valueOf(totalGST));
-					cashValueLabel.setText(String.valueOf(decimalPattern.format(cash)));
+					cashValueLabel.setText(String.valueOf(decimalPattern.
+							format(cash)));
 					changeValueLabel.setText(changeTextField.getText());
 					
 					//Refresh cart
@@ -573,11 +573,12 @@ public class TransactionGUI extends JFrame
 				}
 			}
 			
+			// if receiptButton is clicked
 		}else if (action.getSource() == receiptButton) {
 			
 			//Print receipt in PDF/TXT file
 			
-			
+			// if itemsComboBox is clicked
 		}else if (action.getSource() == itemsComboBox) {
 			
 			//Get selected item's price
@@ -586,6 +587,7 @@ public class TransactionGUI extends JFrame
 			unitPriceTextField.setText(decimalPattern.format(
 					item.getUnitPrice()));
 			
+			// if removeButton is clicked
 		} else if (action.getSource() == removeButton) {
 			
 			// remove selected rows
@@ -654,7 +656,8 @@ public class TransactionGUI extends JFrame
 				(totalPriceTextField.getText());
         }
         double change =  cash - totalItemsPrice;
-        changeTextField.setText(String.valueOf((decimalPattern.format(change))));
+        changeTextField.setText(String.valueOf((decimalPattern.
+        		format(change))));
 	}
 	
 	/**
@@ -669,6 +672,7 @@ public class TransactionGUI extends JFrame
 	public void keyReleased(KeyEvent e) {}
 	/**
 	 * Override method in KeyListener
+	 * Allow only integer in specific text field
 	 */
 	@Override
 	public void keyTyped(KeyEvent e) {

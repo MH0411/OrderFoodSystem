@@ -31,6 +31,13 @@ import javax.swing.border.LineBorder;
 
 import user.db.UserController;
 
+/**
+ * This class represent GUI of Login and Register page
+ * User can either login or register in this GUI
+ * @author JKGan
+ *
+ */
+
 @SuppressWarnings("serial")
 public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 
@@ -47,7 +54,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 	private JButton registerButton; 
 	private JTextField confirmPasswordTextField;
 	
-	private String fontStyle = "Times New Roman";
+	private final String FONT_STYLE = "Times New Roman";
 
 	/**
 	 * Launch the application.
@@ -97,7 +104,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		
 		JLabel loginLabel = new JLabel("Login");
 		loginLabel.setBounds(275, 34, 130, 70);
-		loginLabel.setFont(new Font(fontStyle, Font.BOLD, 50));
+		loginLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 50));
 		loginLabel.setVerticalAlignment(SwingConstants.TOP);
 		loginLabel.setAlignmentY(CENTER_ALIGNMENT);
 		loginLabel.setAlignmentY(0.5f);
@@ -112,32 +119,32 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		passwordField.setBounds(168, 97, 250, 40);
 		loginInputpanel.add(passwordField);
 		passwordField.setHorizontalAlignment(SwingConstants.LEFT);
-		passwordField.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		passwordField.setFont(new Font(FONT_STYLE, Font.PLAIN, 24));
 		
 		userNameField = new JTextField();
 		userNameField.setBounds(168, 8, 250, 40);
 		loginInputpanel.add(userNameField);
 		userNameField.setToolTipText("");
 		userNameField.setHorizontalAlignment(SwingConstants.LEFT);
-		userNameField.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		userNameField.setFont(new Font(FONT_STYLE, Font.PLAIN, 24));
 		userNameField.setColumns(10);
 		
 		JLabel userNameLabel = new JLabel("Username : ");
 		userNameLabel.setBounds(10, 11, 123, 35);
 		loginInputpanel.add(userNameLabel);
 		userNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		userNameLabel.setFont(new Font(fontStyle, Font.BOLD, 24));
+		userNameLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 24));
 		
 		JLabel passwordLabel = new JLabel("Password : ");
 		passwordLabel.setBounds(10, 101, 123, 33);
 		loginInputpanel.add(passwordLabel);
 		passwordLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		passwordLabel.setFont(new Font(fontStyle, Font.BOLD, 24));
+		passwordLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 24));
 		
 		loginButton = new JButton("Login");
 		loginButton.setBounds(311, 204, 107, 33);
 		loginInputpanel.add(loginButton);
-		loginButton.setFont(new Font(fontStyle, Font.BOLD, 18));
+		loginButton.setFont(new Font(FONT_STYLE, Font.BOLD, 18));
 		// call addActionListener when loginButton is clicked
 		loginButton.addActionListener(this);
 		
@@ -149,7 +156,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		JLabel registrationLabel = new JLabel("Registration");
 		registrationLabel.setBounds(203, 30, 274, 70);
 		registrationLabel.setVerticalAlignment(SwingConstants.TOP);
-		registrationLabel.setFont(new Font(fontStyle, Font.BOLD, 50));
+		registrationLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 50));
 		registrationLabel.setAlignmentY(0.5f);
 		registerPanel.add(registrationLabel);
 		
@@ -160,52 +167,52 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		panelRegister.setLayout(null);
 		
 		JLabel emailLabel = new JLabel("E-mail : ");
-		emailLabel.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		emailLabel.setFont(new Font(FONT_STYLE, Font.PLAIN, 24));
 		emailLabel.setBounds(10, 294, 95, 20);
 		panelRegister.add(emailLabel);
 		
 		JLabel telNoLabel = new JLabel("Tel.No : ");
-		telNoLabel.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		telNoLabel.setFont(new Font(FONT_STYLE, Font.PLAIN, 24));
 		telNoLabel.setBounds(10, 251, 95, 17);
 		panelRegister.add(telNoLabel);
 		
 		JLabel icNoLabel = new JLabel("IC.No :");
-		icNoLabel.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		icNoLabel.setFont(new Font(FONT_STYLE, Font.PLAIN, 24));
 		icNoLabel.setBounds(10, 204, 71, 20);
 		panelRegister.add(icNoLabel);
 		
 		JLabel fullNameLabel = new JLabel("Full Name : ");
-		fullNameLabel.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		fullNameLabel.setFont(new Font(FONT_STYLE, Font.PLAIN, 24));
 		fullNameLabel.setBounds(10, 160, 132, 18);
 		panelRegister.add(fullNameLabel);
 		
 		JLabel registerPasswordLabel = new JLabel("Password : ");
-		registerPasswordLabel.setFont(new Font(fontStyle, Font.PLAIN,
+		registerPasswordLabel.setFont(new Font(FONT_STYLE, Font.PLAIN,
 				24));
 		registerPasswordLabel.setBounds(10, 61, 114, 17);
 		panelRegister.add(registerPasswordLabel);
 		
 		JLabel registerUserNameLabel = new JLabel("Username : ");
-		registerUserNameLabel.setFont(new Font(fontStyle, Font.PLAIN,
+		registerUserNameLabel.setFont(new Font(FONT_STYLE, Font.PLAIN,
 				24));
 		registerUserNameLabel.setBounds(10, 14, 114, 20);
 		panelRegister.add(registerUserNameLabel);
 		
 		registerUserNameField = new JTextField();
-		registerUserNameField.setFont(new Font(fontStyle, Font.PLAIN,
+		registerUserNameField.setFont(new Font(FONT_STYLE, Font.PLAIN,
 				24));
 		registerUserNameField.setBounds(216, 14, 229, 34);
 		panelRegister.add(registerUserNameField);
 		registerUserNameField.setColumns(10);
 		
 		registerPasswordField = new JPasswordField();
-		registerPasswordField.setFont(new Font(fontStyle, Font.BOLD,
+		registerPasswordField.setFont(new Font(FONT_STYLE, Font.BOLD,
 																																																																																																	24));
 		registerPasswordField.setBounds(216, 59, 229, 31);
 		panelRegister.add(registerPasswordField);
 		
 		registerFullNameField = new JTextField();
-		registerFullNameField.setFont(new Font(fontStyle, Font.PLAIN,
+		registerFullNameField.setFont(new Font(FONT_STYLE, Font.PLAIN,
 				24));
 		registerFullNameField.setColumns(10);
 		registerFullNameField.setBounds(216, 152, 229, 34);
@@ -216,7 +223,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		
 		
 		icNoTextField = new JTextField();
-		icNoTextField.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		icNoTextField.setFont(new Font(FONT_STYLE, Font.PLAIN, 24));
 		icNoTextField.setColumns(10);
 		icNoTextField.setBounds(216, 197, 229, 34);
 		icNoTextField.addKeyListener(this);
@@ -224,14 +231,14 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		
 		telNoTextField = new JTextField();
 		telNoTextField.setToolTipText("xxx-xxxxxxx");
-		telNoTextField.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		telNoTextField.setFont(new Font(FONT_STYLE, Font.PLAIN, 24));
 		telNoTextField.setColumns(1);
 		telNoTextField.setBounds(216, 242, 229, 34);
 		telNoTextField.addKeyListener(this);
 		panelRegister.add(telNoTextField);
 		
 		emailTextField = new JTextField();
-		emailTextField.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		emailTextField.setFont(new Font(FONT_STYLE, Font.PLAIN, 24));
 		emailTextField.setColumns(10);
 		emailTextField.setBounds(216, 287, 229, 34);
 		panelRegister.add(emailTextField);
@@ -240,16 +247,16 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		registerButton.addActionListener(this);
 		registerButton.setBounds(149, 368, 104, 31);
 		panelRegister.add(registerButton);
-		registerButton.setFont(new Font(fontStyle, Font.BOLD, 18));
+		registerButton.setFont(new Font(FONT_STYLE, Font.BOLD, 18));
 		
 		confirmPasswordTextField = new JTextField();
-		confirmPasswordTextField.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		confirmPasswordTextField.setFont(new Font(FONT_STYLE, Font.PLAIN, 24));
 		confirmPasswordTextField.setColumns(10);
 		confirmPasswordTextField.setBounds(216, 106, 229, 34);
 		panelRegister.add(confirmPasswordTextField);
 		
 		JLabel confirmPasswordlabel = new JLabel("Confirm Password : ");
-		confirmPasswordlabel.setFont(new Font(fontStyle, Font.PLAIN, 24));
+		confirmPasswordlabel.setFont(new Font(FONT_STYLE, Font.PLAIN, 24));
 		confirmPasswordlabel.setBounds(10, 115, 196, 17);
 		panelRegister.add(confirmPasswordlabel);
 		
@@ -260,33 +267,43 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		
 		JLabel foodOrderSystemLabel = new JLabel("BKB FOOD ENTERPRISE");
 		foodOrderSystemLabel.setBounds(345, 35, 669, 77);
-		foodOrderSystemLabel.setFont(new Font(fontStyle, Font.BOLD, 55));
+		foodOrderSystemLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 55));
 		foodOrderSystemLabel.setVerticalAlignment(SwingConstants.TOP);
 		foodOrderSystemLabel.setAlignmentY(CENTER_ALIGNMENT);
 		titlePanel.add(foodOrderSystemLabel);
 	}
 
+	/**
+	 * Method to access when click event perform.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		Object actionSource = action.getSource();
 		// if login button is clicked
 		if (actionSource == loginButton) {
+			// Get userName and password from text fields
 			final String userName = userNameField.getText().trim();
 			final String password = String.valueOf(
 					passwordField.getPassword()).trim();
 			
+			// Create an UserController object
 			UserController userCtrl = new UserController();
 			try {
+				// will be true if all required fields is filled in
 				if (validateLoginRequiredField()) {
+					// will be true if userName and password is valid
 					if (userCtrl.validateLogin(userName, password)) {
+						// close current frame and redirect to TransactionGUI
 						close();
 						TransactionGUI transactionFrame = new TransactionGUI();
 						transactionFrame.setVisible(true);
 					} else {
+						// Prompt a dialog to explain error
 						JOptionPane.showMessageDialog(null, 
 								"Incorrect username or password.");
 					}
 				} else {
+					// Prompt a dialog to explain error
 					JOptionPane.showMessageDialog(null, "Please fill in all "
 							+ "text fields.");
 				}
@@ -299,30 +316,45 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			// if registerButton is clicked
 		} else if (actionSource == registerButton) {
-			final String userName = registerUserNameField.getText().trim();
-			final String password = String.valueOf(
-					registerPasswordField.getPassword()).trim();
-			final String comfirmPassword;
-			final String fullName = registerFullNameField.getText().trim();
-			final String ic = icNoTextField.getText().trim();
-//			for (String address: addressTextArea.getText().split("\\n")) {
-//				addressTextArea.append(address);
-//			}
-			final String telNo = telNoTextField.getText().trim();
-			final String email = emailTextField.getText().trim();
-			
+			// Create an UserContoller object
 			UserController userCtrl = new UserController();
 			try {
+				// will be true if all required fields are filled in
 				if (validateRegisterRequiredField()) {
-					if (userCtrl.validateRegister(userName, password, fullName, 
-							ic, telNo, email)) {
-						JOptionPane.showMessageDialog(null, 
-								"Register successfully!");
+					// Get inputs from all text fields
+					final String userName = registerUserNameField.getText().
+							trim();
+					final String password = String.valueOf(
+							registerPasswordField.getPassword()).trim();
+					final String comfirmPassword = confirmPasswordTextField.
+							getText().trim();
+					final String fullName = registerFullNameField.getText().
+							trim();
+					final String ic = icNoTextField.getText().trim();
+					final String telNo = telNoTextField.getText().trim();
+					final String email = emailTextField.getText().trim();
+					
+					// will be true if password and confirmPassword are same
+					if (password.equals(comfirmPassword)) {
+						// will be true if userName in valid and haven't been 
+						// used and stored user info into database
+						if (userCtrl.validateRegister(userName, password, 
+								fullName, ic, telNo, email)) {
+							// Prompt success message
+							JOptionPane.showMessageDialog(null, 
+									"Register successfully!");
+						} else {
+							JOptionPane.showMessageDialog(null, 
+									"The username is used.");
+						}
 					} else {
 						JOptionPane.showMessageDialog(null, 
-								"The username is used.");
+								"Your password and confirm password are not "
+								+ "same.");
 					}
+					
 				} else {
 					JOptionPane.showMessageDialog(null, 
 							"Please fill in all text fields.");
@@ -350,6 +382,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 	public void keyReleased(KeyEvent e) {}
 	/**
 	 * Override method in KeyListener
+	 * Allow only integer in specific text field
 	 */
 	@Override
 	public void keyTyped(KeyEvent e) {

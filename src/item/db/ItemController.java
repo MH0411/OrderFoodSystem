@@ -1,13 +1,21 @@
 package item.db;
 
+import item.Item;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.JComboBox;
-import db.DatabaseController;
-import item.Item;
 
+import javax.swing.JComboBox;
+
+import db.DatabaseController;
+
+/**
+ * This class represent all process between Item class and database
+ * @author JKGan
+ *
+ */
 public class ItemController {
 	
 	private DatabaseController dbController = new DatabaseController();
@@ -31,7 +39,7 @@ public class ItemController {
 	/**
 	 * Add items from database to combo box
 	 * @param itemsComboBox
-	 * @return
+	 * @return itemComboBox
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */

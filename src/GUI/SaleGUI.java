@@ -41,6 +41,14 @@ import transaction.db.TransactionController;
 import com.itextpdf.text.DocumentException;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
+/**
+ * This class represent GUI of Sales page
+ * User can check sales report between 2 dates and print to PDF or txt file
+ * in this GUI
+ * @author JKGan
+ *
+ */
+
 @SuppressWarnings("serial")
 public class SaleGUI extends JFrame implements ActionListener {
 
@@ -76,22 +84,22 @@ public class SaleGUI extends JFrame implements ActionListener {
 	private TransactionController transactionCtrl;
 	private Vector<Sale> sales = new Vector<Sale>();
 	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SaleGUI frame = new SaleGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					SaleGUI frame = new SaleGUI();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 	
 	/**
 	 * Method to close current frame
@@ -231,21 +239,23 @@ public class SaleGUI extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		if (e.getSource() == backMenuItem){
+		// if backMenuItem is clicked
+		if (e.getSource() == backMenuItem) {
 			
 			//Close current frame and go to transaction frame
 			TransactionGUI transactionFrame = new TransactionGUI();
 			transactionFrame.setVisible(true);
 			close();	
 			
-		} else if (e.getSource() == logoutMenuItem){
+			// if logoutMenuItem is clicked
+		} else if (e.getSource() == logoutMenuItem) {
 			
 			//Close current frame and go to login frame
 			LoginGUI loginFrame = new LoginGUI();
 			loginFrame.setVisible(true);
 			close();
-			
+		
+			// if searchButton is clicked
 		} else if (e.getSource() == searchButton) {
 			
 			//Check empty fields
@@ -266,7 +276,8 @@ public class SaleGUI extends JFrame implements ActionListener {
 					
 					//Display sales of items
 					transactionCtrl = new TransactionController();
-					sales = transactionCtrl.displaySales(table, startDate, endDate);
+					sales = transactionCtrl.displaySales(table, startDate, 
+							endDate);
 
 					
 				} catch (ClassNotFoundException e1) {
@@ -285,6 +296,7 @@ public class SaleGUI extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, message, "Alert", 
 						getDefaultCloseOperation());
 			}
+			// if printButton is clicked
 		} else if (e.getSource() == printButton) {
 			try {
 				PrintPDF.createSalePDF(sales);

@@ -4,6 +4,12 @@ import java.awt.EventQueue;
 
 import GUI.LoginGUI;
 
+/**
+ * This class represent the main of this application
+ * This application is started from here
+ * @author JKGan
+ *
+ */
 public class Application {
 
 	/**
