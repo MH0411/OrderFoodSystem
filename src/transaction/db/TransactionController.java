@@ -1,5 +1,8 @@
 package transaction.db;
 
+/**
+ * 
+ */
 import item.Item;
 
 import java.sql.PreparedStatement;
