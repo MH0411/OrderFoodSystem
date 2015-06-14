@@ -113,7 +113,7 @@ public class TransactionGUI extends JFrame
 	DefaultListCellRenderer centerRenderer;
 	//Set 2 decimal places.
 	private DecimalFormat decimalPattern = new DecimalFormat("#.00");
-	private final double GST = 0.06;
+	private final double GST = 1.06;
 	private ItemController itemCtrl = new ItemController();
 	private String fontStyle = "Times New Roman";
 	private JTable receiptTable;
@@ -480,53 +480,73 @@ public class TransactionGUI extends JFrame
 	public void actionPerformed(ActionEvent action) {
 		
 		if(action.getSource() == showSaleMenuItem) {
+			
 			//Close current frame and open sale frame
 			close();
 			SaleGUI saleFrame = new SaleGUI();
 			saleFrame.setVisible(true);
 			
 		} else if (action.getSource() == logoutMenuItem) {
+			
 			//Close current frame and open login frame
 			close();
 			LoginGUI loginFrame = new LoginGUI();
 			loginFrame.setVisible(true);
 			
-		} else if(action.getSource() == addItemButton) {
+		} else if (action.getSource() == addItemButton) {
 
-			//Add selected item to cart
-			cart.addItem((Item) itemsComboBox.getSelectedItem());
-			cart.getCartItems().get(cart.getCartItems().size()-1).
-				setQuantity(Integer.parseInt(quantityTextField.getText()));
-			cart.getCartItems().get(cart.getCartItems().size()-1).
-				setSubTotalPrice(Double.parseDouble(
-						subTotalPriceTextField.getText()));
-			
-			DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
-			item.addRow(new Object[] {
-					false,
-					itemsComboBox.getSelectedItem(),
-					quantityTextField.getText(), 
-					unitPriceTextField.getText(),
-					subTotalPriceTextField.getText()
-			});
-			
-			//Calculate total price from all selected item
-			double subtotalPrice = 
-					Double.parseDouble(subTotalPriceTextField.getText());
-			double totalPrice;
-			
-			if (totalPriceTextField.getText().equals("")){
-				totalPrice = 0.0;
+			//Check empty fields.
+			if (itemsComboBox.getSelectedItem().equals(null)){
+				
+				JOptionPane.showMessageDialog(null, "Please select an item.");
+				
+			} else if (quantityTextField.getText().equals("")) {
+				
+				JOptionPane.showMessageDialog(null, "Please enter a quantity.");
+				
 			} else {
-				totalPrice = Double.parseDouble(totalPriceTextField.getText());
+				
+				//Add selected item to cart
+				cart.addItem((Item) itemsComboBox.getSelectedItem());
+				cart.getCartItems().get(cart.getCartItems().size()-1).
+					setQuantity(Integer.parseInt(quantityTextField.getText()));
+				cart.getCartItems().get(cart.getCartItems().size()-1).
+					setSubTotalPrice(Double.parseDouble(
+							subTotalPriceTextField.getText()));
+				
+				DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
+				item.addRow(new Object[] {
+						false,
+						itemsComboBox.getSelectedItem(),
+						quantityTextField.getText(), 
+						unitPriceTextField.getText(),
+						subTotalPriceTextField.getText()
+				});
+				
+				//Calculate total price from all selected item
+				double subtotalPrice = 
+						Double.parseDouble(subTotalPriceTextField.getText());
+				double totalPrice;
+				
+				if (totalPriceTextField.getText().equals("")){
+					totalPrice = 0.0;
+				} else {
+					totalPrice = Double.parseDouble(totalPriceTextField.getText());
+				}
+				totalPrice += subtotalPrice * GST;
+				totalPrice = (Math.round(totalPrice - 0.05)) + 0.05;
+				totalPriceTextField.setText(String.valueOf(
+						decimalPattern.format(totalPrice)));
+				cashTextField.setEditable(true);
+				
+				//Refresh all text fields
+				
+//				totalPriceTextField.setText("");
+//				unitPriceTextField.setText("");
+//				quantityTextField.setText("");
+//				quantityTextField.setEditable(false);
+//				itemsComboBox.setSelectedItem(1);
 			}
-			totalPrice += ((subtotalPrice * GST) + subtotalPrice);
-			totalPrice = (Math.round(totalPrice - 0.05)) + 0.05;
-			totalPriceTextField.setText(String.valueOf(
-					decimalPattern.format(totalPrice)));
-			cashTextField.setEditable(true);
-			
-			//Refresh all text fields
 			
 		}else if (action.getSource() == confirmButton) {
 			
@@ -593,11 +613,12 @@ public class TransactionGUI extends JFrame
 								cart.getCartItems().get(i).getName(),
 								cart.getCartItems().get(i).getQuantity(),
 								cart.getCartItems().get(i).getUnitPrice(),
-								cart.getCartItems().get(i).getSubTotalPrice(),
-								cart.getCartItems().remove(i)				
+								cart.getCartItems().get(i).getSubTotalPrice()
 						});
-
 					}	
+					
+					// set cart to null so it can be destroyed
+					cart = null;
 							
 					//Refresh cart
 					changeTextField.setText("");
@@ -626,12 +647,24 @@ public class TransactionGUI extends JFrame
 			
 			// remove selected rows
 			DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
-			for (int i = 0; i < itemsTable.getRowCount(); i++) {
-				boolean chked = Boolean.valueOf(itemsTable.getValueAt(i, 0)
+			for (int index = 0; index < itemsTable.getRowCount(); index++) {
+				boolean chked = Boolean.valueOf(itemsTable.getValueAt(index, 0)
 				.toString());
+				
 				if (chked) {
-					cart.getCartItems().remove(i);
-					item.removeRow(i--);
+					
+					cart.getCartItems().remove(index);
+					item.removeRow(index--);
+					
+					int totalPrice = 0;
+					for (int i = 0 ; i < cart.getCartItems().size() ; i++) {
+						
+						totalPrice += cart.getCartItems().get(i).
+								getSubTotalPrice() * GST;
+					
+						totalPriceTextField.setText(String.valueOf(
+								decimalPattern.format(totalPrice)));
+					}
 				}
 			}
 		}
@@ -665,6 +698,7 @@ public class TransactionGUI extends JFrame
 	 * @param action
 	 */
 	public void updateSubTotal(DocumentEvent e, String action) {
+		
 		//To calculate subtotal price
 		double unitPrice = Double.parseDouble(unitPriceTextField.getText());
 		int quantity;
@@ -708,12 +742,50 @@ public class TransactionGUI extends JFrame
 	 */
 	@Override
 	public void keyTyped(KeyEvent e) {
+		
 		char c = e.getKeyChar();
-		if (!(Character.isDigit(c) || (c == KeyEvent.VK_PERIOD)) 
-				|| (c == KeyEvent.VK_BACK_SPACE) 
-				|| (c == KeyEvent.VK_DELETE)) {
-			e.consume();
+		if (e.getSource() == quantityTextField){
+			
+			if (!(Character.isDigit(c)) || (c == KeyEvent.VK_BACK_SPACE) 
+					|| (c == KeyEvent.VK_DELETE)) {
+				e.consume();	
+			} 
+			
+		}else if (e.getSource() == cashTextField) { 
+			
+			if (!(Character.isDigit(c) || (c == KeyEvent.VK_PERIOD)) 
+					|| (c == KeyEvent.VK_BACK_SPACE) 
+					|| (c == KeyEvent.VK_DELETE)) { 
+				
+				String cash = cashTextField.getText();
+				
+				if (validateDot(cash)) {
+					
+					e.consume();
+					
+				}
+				
+				e.consume();			
+			}
+			
 		}
-
+	}
+	
+	/**
+	 * Method to check '.' in a text field.
+	 * Return true if contain '.'
+	 */
+	public boolean validateDot(String cash) {
+		
+		for (int index = 0 ; index < cash.length() ; index++) {
+			
+			if (cash.charAt(index) == '.') {
+				
+				return true;
+				
+			}
+		}
+		
+		return false;
 	}
 }		

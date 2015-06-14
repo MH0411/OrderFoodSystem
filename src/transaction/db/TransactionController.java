@@ -33,6 +33,7 @@ public class TransactionController {
 	private Statement stmt;
 	private ResultSet rsSale;
 	private DecimalFormat decimalPattern = new DecimalFormat("#.00");
+	
 	/**
 	 * Get data from database and display at sale table
 	 * @param table
@@ -55,7 +56,7 @@ public class TransactionController {
 				+ "LEFT JOIN tb_receipt r ON s.receiptId = r.receiptId "
 				+ "WHERE dateTime BETWEEN '" + startDate + "' "
 				+ "AND '" + endDate + "' "
-				+ "GROUP BY i.itemId ORDER BY quantity DESC";
+				+ "GROUP BY i.itemId ORDER BY sum(quantity) DESC";
 		
 		//Create statement object
 		stmt = conn.createStatement();
@@ -90,6 +91,12 @@ public class TransactionController {
 		return sales;		
 	}
 	
+	/**
+	 * Method to save receipt details into database
+	 * @param totalPrice
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
 	public void insertReceiptTable(double totalPrice )
 			throws SQLException, ClassNotFoundException {
 		
@@ -110,33 +117,43 @@ public class TransactionController {
 		conn.close();
 	}
 	
-	
+	/**
+	 * Method to save sale details into database
+	 * @param cartItem
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
 	public void insertSaleTable(Item cartItem) 
 			throws SQLException, ClassNotFoundException {
 		
 		//Open connection
 		conn = (Connection) dbController.getConnection();
 		
+		//Create sql query
 		sql = "SELECT MAX(receiptId) FROM tb_receipt";
 		
 		stmt = conn.createStatement();	
 		
 		//Create result set object
 		ResultSet rsReceipt = stmt.executeQuery(sql);
+		
+		//Get current receipt id
 		int maxReceiptId = 0;
-		while (rsReceipt.next()) {
+		if (rsReceipt.next()) {
 			maxReceiptId = rsReceipt.getInt(1);
+		} else {
+			maxReceiptId = 1;
 		}
-
-		if (maxReceiptId == 0) {
-			
-		}
+		System.out.println(maxReceiptId);
+		
+		//Create sql query
 		sql = "INSERT INTO tb_sale (itemId, receiptId,"
 				+ "quantity, subTotalPrice)"
 				+ " VALUES (?, ?, ?, ?)";
 		
 		PreparedStatement psSale = conn.prepareStatement(sql);
 		
+		//Insert to sale table
 		psSale.setInt(1, cartItem.getItemId());
 		psSale.setInt(2, maxReceiptId);
 		psSale.setInt(3, cartItem.getQuantity());
