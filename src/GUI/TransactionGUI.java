@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -39,10 +40,14 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
+import print.PDFPrinter;
+import print.TxtPrinter;
 import transaction.Cart;
 import transaction.Payment;
 import transaction.db.TransactionController;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.mysql.jdbc.Connection;
 
 import db.DatabaseController;
@@ -130,6 +135,7 @@ public class TransactionGUI extends JFrame
 	
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private Payment payment = new Payment(cart);
+	private Document receipt;
 	
 	/**
 	 * Launch the application.
@@ -448,6 +454,7 @@ public class TransactionGUI extends JFrame
 		receiptPanel.add(changeValueLabel);
 		
 		receiptButton = new JButton("Receipt");
+		receiptButton.setEnabled(false);
 		receiptButton.setFont(new Font(fontStyle, Font.BOLD, 20));
 		receiptButton.setBounds(511, 657, 132, 33);
 		receiptPanel.add(receiptButton);
@@ -528,12 +535,6 @@ public class TransactionGUI extends JFrame
 							subTotalPriceTextField.getText()));
 				cart.addItem(selectedItem);
 				
-//				cart.getCartItems().get(cart.getCartItems().size()-1).
-//					setQuantity(Integer.parseInt(quantityTextField.getText()));
-//				cart.getCartItems().get(cart.getCartItems().size()-1).
-//					setSubTotalPrice(Double.parseDouble(
-//							subTotalPriceTextField.getText()));
-				
 				DefaultTableModel item = (DefaultTableModel)itemsTable.
 											getModel();
 				item.addRow(new Object[] {
@@ -545,33 +546,10 @@ public class TransactionGUI extends JFrame
 				});
 				
 				//Calculate total price from all selected item
-//				double subtotalPrice = 
-//						Double.parseDouble(subTotalPriceTextField.getText());
-//				double totalPrice;
-//				
-//				if (totalPriceTextField.getText().equals("")){
-//					totalPrice = 0.0;
-//				} else {
-//					totalPrice = Double.parseDouble(totalPriceTextField.getText());
-//				}
-//				
-//				totalPrice += subtotalPrice * GST;
-//				totalPrice = (Math.round(totalPrice - 0.05)) + 0.05;
 				totalPriceTextField.setText(String.valueOf(
 						decimalPattern.format(cart.getRoundTotalPrice())));
 				cashTextField.setEditable(true);
 				
-				
-//				quantityTextField.setText("");
-//				subTotalPriceTextField.setText("");
-				
-				//Refresh all text fields
-				
-//				totalPriceTextField.setText("");
-//				unitPriceTextField.setText("");
-//				quantityTextField.setText("");
-//				quantityTextField.setEditable(false);
-//				itemsComboBox.setSelectedItem(1);
 			}
 			// if confirmButton is clicked
 		}else if (action.getSource() == confirmButton) {
@@ -651,6 +629,7 @@ public class TransactionGUI extends JFrame
 					totalPriceTextField.setText("");	
 					changeTextField.setText("");
 					cashTextField.setEditable(false);
+					receiptButton.setEnabled(true);
 				}
 			}
 			
@@ -658,6 +637,42 @@ public class TransactionGUI extends JFrame
 		}else if (action.getSource() == receiptButton) {
 			
 			//Print receipt in PDF/TXT file
+			Object[] options = { "PDF", "txt" , "Both"};
+			int reply = 
+			JOptionPane.showOptionDialog(null, "Select a option to print.", 
+					"Message", JOptionPane.DEFAULT_OPTION, 
+					JOptionPane.DEFAULT_OPTION, null, options, options[0]);
+			
+			if (reply == 0){
+
+				try {
+					
+					PDFPrinter.printReceipt(receipt);
+					
+				} catch (FileNotFoundException | DocumentException e1) {
+					
+					e1.printStackTrace();
+				}
+
+			} else if (reply == 1){
+				
+					
+				TxtPrinter.printReceipt(receipt);
+					
+				
+			} else if (reply == 2){
+
+				try {
+					
+					PDFPrinter.printReceipt(receipt);
+					
+				} catch (FileNotFoundException | DocumentException e1) {
+					
+					e1.printStackTrace();
+				}
+				
+				TxtPrinter.printReceipt(receipt);
+			} 
 			
 			// if itemsComboBox is clicked
 		}else if (action.getSource() == itemsComboBox) {
@@ -687,15 +702,6 @@ public class TransactionGUI extends JFrame
 					
 					totalPriceTextField.setText(String.valueOf(
 							decimalPattern.format(cart.getRoundTotalPrice())));
-//					int totalPrice = 0;
-//					for (int i = 0 ; i < cart.getCartItems().size() ; i++) {
-//						
-//						totalPrice += cart.getCartItems().get(i).
-//								getSubTotalPrice() * GST;
-//					
-//						totalPriceTextField.setText(String.valueOf(
-//								decimalPattern.format(totalPrice)));
-//					}
 				}
 			}
 		}
@@ -751,40 +757,34 @@ public class TransactionGUI extends JFrame
 		int quantity;
 		
 		if (quantityTextField.getText().equals(""))
+			
 			quantity = 0;	
+		
 		else 
+			
 		quantity = Integer.parseInt(quantityTextField.getText());
+		
 		
 		double subTotalPrice = unitPrice * quantity;
         subTotalPriceTextField.setText(String.valueOf
         		(decimalPattern.format(subTotalPrice)));
-        
-        //To calculate the change
-//        double cash;
-//        double totalItemsPrice;
-//        if (cashTextField.getText().equals("")) {
-//        	cash = 0.0;
-//        	totalItemsPrice = 0.0;
-//        }else{
-//        	cash = Double.parseDouble(cashTextField.getText());
-//        	totalItemsPrice = Double.parseDouble
-//				(totalPriceTextField.getText());
-//        }
-//        double change =  cash - totalItemsPrice;
-//        changeTextField.setText(String.valueOf((decimalPattern.
-//        		format(change))));
 	}
 	
 	public void calculateChange(DocumentEvent e) {
+		
 		double cash;
-      if (cashTextField.getText().equals("")) {
-      	cash = 0.0;
-      }else{
-      	cash = Double.parseDouble(cashTextField.getText());
-      }
-      double change = payment.calculateChange(cash);
-      changeTextField.setText(String.valueOf((decimalPattern.
-      		format(change))));
+		if (cashTextField.getText().equals("")) {
+			
+			cash = 0.0;
+			
+		}else{
+			
+			cash = Double.parseDouble(cashTextField.getText());
+		}
+		
+		double change = payment.calculateChange(cash);
+		changeTextField.setText(String.valueOf((decimalPattern.
+	  		format(change))));
 	}
 	
 	/**

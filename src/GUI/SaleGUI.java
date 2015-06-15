@@ -39,7 +39,6 @@ import print.TxtPrinter;
 import transaction.Sale;
 import transaction.db.TransactionController;
 
-import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 

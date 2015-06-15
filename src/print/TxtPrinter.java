@@ -9,7 +9,10 @@ import java.io.Writer;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Properties;
 import java.util.Vector;
+
+import com.itextpdf.text.Document;
 
 import transaction.Sale;
 
@@ -29,6 +32,7 @@ public class TxtPrinter {
 			+ dateTime + ".txt";
 	private static String pathOfSalesTxt = "./bin/Txt/Sales/sales_" + 
 			dateTime + ".txt";
+	private static Properties property = new Properties();
 
     public static void printSales(Vector<Sale> sales, String startDate, 
     		String endDate) {
@@ -68,10 +72,10 @@ public class TxtPrinter {
             e.printStackTrace();
         }
     }
-    
-    public static void printReceipt(String startDate, String endDate) {
-        try {
-        	File statText = new File(pathOfSalesTxt);
+
+    public static void printReceipt(Document receipt) {
+		try {
+        	File statText = new File(pathOfReceiptTxt);
             FileOutputStream is = new FileOutputStream(statText);
             OutputStreamWriter osw = new OutputStreamWriter(is);    
             Writer w = new BufferedWriter(osw);
@@ -82,8 +86,8 @@ public class TxtPrinter {
             w.write("Tel : 06-2313007  Fax : 06-2313070" + newLine);
             w.write("GST ID : 001134034944" + newLine);
             w.write("RECEIPT" + newLine);
-            w.write("Date" + newLine);
-            w.write("Cashier : " + newLine);
+            w.write("Date : " + dateTime + newLine);
+            w.write("Cashier : " + property.getProperty("fullName") + newLine);
             w.write("----------------------------------------------" + newLine);
             w.write("TOTAL PRICE (RM)" + newLine);
             w.write("GST 6% (Incl) :" + newLine);
@@ -93,7 +97,7 @@ public class TxtPrinter {
         } catch (IOException e) {
             System.err.println("Problem writing to the file statsTest.txt");
         }
-    }
+	}
 }
 
 
