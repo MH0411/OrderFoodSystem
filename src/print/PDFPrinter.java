@@ -4,6 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -25,14 +28,22 @@ import com.itextpdf.text.pdf.PdfWriter;
  * @author JKGan
  *
  */
-public class PrintPDF {
+public class PDFPrinter {
 	
-	private static int receiptId = 1; 
+	private static DecimalFormat decimalPattern = new DecimalFormat("#.00");
+	private static String datePattern = "yyyy-MM-dd HH-mm-ss";
+	private static SimpleDateFormat dateFormatter = 
+			new SimpleDateFormat(datePattern);
+	
+	private static java.util.Date date= new java.util.Date();
+	private static String dateTime = 
+			dateFormatter.format(new Timestamp(date.getTime()));
+	
+	
 	private static String pathOfReceiptPDF = "./bin/PDF/Receipt/receipt_" 
-			+ receiptId + ".pdf";
-	private static int salesId = 1; 
-	private static String pathOfSalesPDF = "./bin/PDF/Sales/sales_" + salesId 
-			+ ".pdf";
+			+ dateTime + ".pdf";
+	private static String pathOfSalesPDF = "./bin/PDF/Sales/sales_" + 
+			dateTime + ".pdf";
 	
 	private static Properties property = new Properties();
 	private static FileInputStream input;
@@ -57,18 +68,14 @@ public class PrintPDF {
 //	    }
 //	  }
 	
-	public static void createSalePDF(Vector<Sale> sales) throws 
-			FileNotFoundException, DocumentException {
+	public static void printReceipt(Document printReceipt) throws
+		FileNotFoundException, DocumentException {
+
 		Document printSales = new Document(PageSize.A4.rotate());     
 	    PdfWriter.getInstance(printSales, new FileOutputStream(
 	    											pathOfSalesPDF));
 	    printSales.open();
-	    printSales(printSales, sales);
-	    printSales.close();
-	}
-	
-	public static void printReceipt(Document printReceipt) {
-
+	    
 		try
 		{
 			input = new FileInputStream("config.properties");
@@ -194,11 +201,11 @@ public class PrintPDF {
 	        
 	        /* Open pdf file */
 	        // for Window
-	//        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
-	//        		pathOfReceiptPDF);
+	        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
+	        		pathOfReceiptPDF);
 	        
 	        // for Mac
-	        Runtime.getRuntime().exec("open " + pathOfReceiptPDF);
+//	        Runtime.getRuntime().exec("open " + pathOfReceiptPDF);
 	        
 		} catch (Exception error) {
 			System.out.println(error.getMessage());
@@ -214,10 +221,16 @@ public class PrintPDF {
 		}
 	}
 	
-	public static void printSales(Document printSales, Vector<Sale> sales) {
+	public static void printSales(Vector<Sale> sales, String startDate, 
+			String endDate) throws FileNotFoundException, DocumentException {
 
+			Document printSales = new Document(PageSize.A4.rotate());     
+			PdfWriter.getInstance(printSales, new FileOutputStream(
+	    		pathOfSalesPDF));
+			printSales.open();
+			
 		try {
-	        
+			
 	        /* Add title with center alignment */
 	        Chunk title = new Chunk("SALES REPORT", FontFactory.getFont
 	        		(FontFactory.TIMES_BOLD, 26, Font.BOLD, BaseColor.BLACK));
@@ -227,7 +240,7 @@ public class PrintPDF {
 	        printSales.add(para1);
 	        
 	        /* Add from */
-	        Chunk from = new Chunk( "From :",FontFactory.getFont
+	        Chunk from = new Chunk( "From : " + startDate, FontFactory.getFont
 	        		(FontFactory.TIMES_BOLD, 16, BaseColor.BLACK));
 	        Paragraph para2 = new Paragraph(from);
 	        para2.setAlignment(Paragraph.ALIGN_LEFT);
@@ -235,14 +248,14 @@ public class PrintPDF {
 	        printSales.add(para2);
 	        
 	        /* Add to */
-	        Chunk to = new Chunk( "To :",FontFactory.getFont
+	        Chunk to = new Chunk( "To     : " + endDate, FontFactory.getFont
 	        		(FontFactory.TIMES_BOLD, 16, BaseColor.BLACK));
 	        Paragraph para3 = new Paragraph(to);
 	        para3.setAlignment(Paragraph.ALIGN_LEFT);
 	        para3.setSpacingAfter(25);
 	        printSales.add(para3);
 		
-	     // a table with three columns
+	        // a table with three columns
 	        PdfPTable table = new PdfPTable(5);
 	        
 	        // add the title of table
@@ -256,25 +269,25 @@ public class PrintPDF {
 	        	table.addCell(sales.get(index).getItemId() + "");
 		        table.addCell(sales.get(index).getName());
 		        table.addCell(sales.get(index).getQuantity() + "");
-		        table.addCell(sales.get(index).getUnitPrice() + "");
-		        table.addCell(sales.get(index).getTotalPrice() + "");
+		        table.addCell(decimalPattern.format(sales.get(index)
+		        		.getUnitPrice()) + "");
+		        table.addCell(decimalPattern.format(sales.get(index)
+		        		.getTotalPrice()) + "");
 	        }
+	        
 	        printSales.add(table);
 	        /* Open pdf file */
 	        // for Window
-//	        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
-//	                    pathOfSalesPDF);
+	        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
+	                    pathOfSalesPDF);
 	        
 	        // for Mac
-	        Runtime.getRuntime().exec("open " + pathOfSalesPDF);
-	        
+//	        Runtime.getRuntime().exec("open " + pathOfSalesPDF);
+	        printSales.close();
 	        
 		} catch (Exception error) {
 			System.out.println(error.getMessage());
 			error.printStackTrace();
-		}
-		
-
-	        
+		}	        
 	}
 }
