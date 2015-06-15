@@ -98,7 +98,7 @@ public class UserController {
 		// If this userName is not yet used
 		if (!rsUser.next()) {
 			sql = "INSERT INTO tb_user (userName, password, fullName, ic,"
-					+ " telNo, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
+					+ " telNo, email) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement psUser = conn.prepareStatement(sql);
 			psUser.setString(1, userName);
 			psUser.setString(2, password);
