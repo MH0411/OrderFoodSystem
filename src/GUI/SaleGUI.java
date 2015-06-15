@@ -39,6 +39,7 @@ import print.TxtPrinter;
 import transaction.Sale;
 import transaction.db.TransactionController;
 
+import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
@@ -297,61 +298,52 @@ public class SaleGUI extends JFrame implements ActionListener {
 			// if printButton is clicked
 		} else if (e.getSource() == printButton) {
 			
-//			//Check empty jtable
-//			if ((startDatePicker.getModel().getValue() != null) 
-//					&& (endDatePicker.getModel().getValue() != null)) {
-//				
+			//Check empty jtable
+			if ((startDatePicker.getModel().getValue() != null) 
+					&& (endDatePicker.getModel().getValue() != null)) {
+				
 			
-//				Object[] options = { "PDF", "txt" , "Both"};
-//				int reply = 
-//				JOptionPane.showOptionDialog(null, "Select a option to print.", 
-//						"Message", JOptionPane.DEFAULT_OPTION, 
-//						JOptionPane.DEFAULT_OPTION, null, options, options[0]);
-//				System.out.println(reply);
-//				
-//				if (reply == 0){
-//					
-//					try {
-//						
-//						PDFPrinter.createSalePDF(sales, startDate, endDate);
-//						
-//					} catch (FileNotFoundException | DocumentException e1) {
-//						
-//						e1.printStackTrace();
-//					}
-//
-//				} else if (reply == 1){
-//					
+				Object[] options = { "PDF", "txt" , "Both"};
+				int reply = 
+				JOptionPane.showOptionDialog(null, "Select a option to print.", 
+						"Message", JOptionPane.DEFAULT_OPTION, 
+						JOptionPane.DEFAULT_OPTION, null, options, options[0]);
+				
+				if (reply == 0){
+
 					try {
-						
-						TxtPrinter.
-						
-					} catch (FileNotFoundException | DocumentException e2) {
-						
-						e2.printStackTrace();
+						PDFPrinter.printSales(sales, startDate, endDate);
+					} catch (FileNotFoundException | DocumentException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
-//					
-//				} else if (reply == 2){
-//					
-//					try {
-//						
-//						PDFPrinter.createSalePDF(sales);
-//						
-//					} catch (FileNotFoundException | DocumentException e1) {
-//						
-//						e1.printStackTrace();
-//					}
-//					
-//				} 
-//				
-//			} else {
-//				
-//				//Prompt user search first
-//				String message = "Please search sales before print.";
-//				JOptionPane.showMessageDialog(null, message, "Alert", 
-//						getDefaultCloseOperation());
-//				
-//			}
+
+				} else if (reply == 1){
+					
+						
+					TxtPrinter.printSales(sales, startDate, endDate);
+						
+					
+				} else if (reply == 2){
+
+					try {
+						PDFPrinter.printSales(sales, startDate, endDate);
+						TxtPrinter.printSales(sales, startDate, endDate);
+					} catch (FileNotFoundException | DocumentException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				} 
+				
+			} else {
+				
+				//Prompt user search first
+				String message = "Please search sales before print.";
+				JOptionPane.showMessageDialog(null, message, "Alert", 
+						getDefaultCloseOperation());
+				
+			}
 		}
 	}
  

@@ -9,8 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.Vector;
 
-import javax.swing.text.DateFormatter;
-
 import transaction.Sale;
 
 import com.itextpdf.text.BaseColor;
@@ -35,8 +33,8 @@ public class PDFPrinter {
 	private static SimpleDateFormat dateFormatter = 
 			new SimpleDateFormat(datePattern);
 	
-	static java.util.Date date= new java.util.Date();
-	static String dateTime = 
+	private static java.util.Date date= new java.util.Date();
+	private static String dateTime = 
 			dateFormatter.format(new Timestamp(date.getTime()));
 	
 	
@@ -68,19 +66,14 @@ public class PDFPrinter {
 //	    }
 //	  }
 	
-	public static void createSalePDF(Vector<Sale> sales, String startDate,
-			String endDate) throws FileNotFoundException, DocumentException {
-		
+	public static void printReceipt(Document printReceipt) throws
+		FileNotFoundException, DocumentException {
+
 		Document printSales = new Document(PageSize.A4.rotate());     
 	    PdfWriter.getInstance(printSales, new FileOutputStream(
 	    											pathOfSalesPDF));
 	    printSales.open();
-	    printSales(printSales, sales, startDate, endDate);
-	    printSales.close();
-	}
-	
-	public static void printReceipt(Document printReceipt) {
-
+	    
 		try
 		{
 			input = new FileInputStream("config.properties");
@@ -226,11 +219,14 @@ public class PDFPrinter {
 		}
 	}
 	
-	public static void printSales(Document printSales, Vector<Sale> sales, 
-			String startDate, String endDate) {
+	public static void printSales(Vector<Sale> sales, String startDate, 
+			String endDate) throws FileNotFoundException, DocumentException {
 
+			Document printSales = new Document(PageSize.A4.rotate());     
+			PdfWriter.getInstance(printSales, new FileOutputStream(
+	    		pathOfSalesPDF));
 		try {
-	        
+			
 	        /* Add title with center alignment */
 	        Chunk title = new Chunk("SALES REPORT", FontFactory.getFont
 	        		(FontFactory.TIMES_BOLD, 26, Font.BOLD, BaseColor.BLACK));
@@ -280,7 +276,7 @@ public class PDFPrinter {
 	        
 	        // for Mac
 //	        Runtime.getRuntime().exec("open " + pathOfSalesPDF);
-	        
+	        printSales.close();
 	        
 		} catch (Exception error) {
 			System.out.println(error.getMessage());
