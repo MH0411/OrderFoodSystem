@@ -34,7 +34,8 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import print.PrintPDF;
+import print.PDFPrinter;
+import print.TxtPrinter;
 import transaction.Sale;
 import transaction.db.TransactionController;
 
@@ -84,22 +85,22 @@ public class SaleGUI extends JFrame implements ActionListener {
 	private TransactionController transactionCtrl;
 	private Vector<Sale> sales = new Vector<Sale>();
 	
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					SaleGUI frame = new SaleGUI();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					SaleGUI frame = new SaleGUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 	
 	/**
 	 * Method to close current frame
@@ -189,7 +190,7 @@ public class SaleGUI extends JFrame implements ActionListener {
 		searchButton.setVisible(true);
 		searchButton.addActionListener(this);
 		
-		printButton = new JButton("PDF");
+		printButton = new JButton("Print");
 		printButton.setBounds(1080, 460, 149, 49);
 		salesPanel.add(printButton);
 		printButton.setFont(new Font(fontStyle, Font.BOLD, 35));	
@@ -280,11 +281,7 @@ public class SaleGUI extends JFrame implements ActionListener {
 							endDate);
 
 					
-				} catch (ClassNotFoundException e1) {
-					
-					e1.printStackTrace();
-					
-				} catch (SQLException e1) {
+				} catch (ClassNotFoundException | SQLException e1) {
 					
 					e1.printStackTrace();
 				}
@@ -296,14 +293,65 @@ public class SaleGUI extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, message, "Alert", 
 						getDefaultCloseOperation());
 			}
+			
 			// if printButton is clicked
 		} else if (e.getSource() == printButton) {
-			try {
-				PrintPDF.createSalePDF(sales);
-			} catch (FileNotFoundException | DocumentException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			
+//			//Check empty jtable
+//			if ((startDatePicker.getModel().getValue() != null) 
+//					&& (endDatePicker.getModel().getValue() != null)) {
+//				
+			
+//				Object[] options = { "PDF", "txt" , "Both"};
+//				int reply = 
+//				JOptionPane.showOptionDialog(null, "Select a option to print.", 
+//						"Message", JOptionPane.DEFAULT_OPTION, 
+//						JOptionPane.DEFAULT_OPTION, null, options, options[0]);
+//				System.out.println(reply);
+//				
+//				if (reply == 0){
+//					
+//					try {
+//						
+//						PDFPrinter.createSalePDF(sales, startDate, endDate);
+//						
+//					} catch (FileNotFoundException | DocumentException e1) {
+//						
+//						e1.printStackTrace();
+//					}
+//
+//				} else if (reply == 1){
+//					
+					try {
+						
+						TxtPrinter.
+						
+					} catch (FileNotFoundException | DocumentException e2) {
+						
+						e2.printStackTrace();
+					}
+//					
+//				} else if (reply == 2){
+//					
+//					try {
+//						
+//						PDFPrinter.createSalePDF(sales);
+//						
+//					} catch (FileNotFoundException | DocumentException e1) {
+//						
+//						e1.printStackTrace();
+//					}
+//					
+//				} 
+//				
+//			} else {
+//				
+//				//Prompt user search first
+//				String message = "Please search sales before print.";
+//				JOptionPane.showMessageDialog(null, message, "Alert", 
+//						getDefaultCloseOperation());
+//				
+//			}
 		}
 	}
  
