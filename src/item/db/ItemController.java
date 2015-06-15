@@ -67,6 +67,7 @@ public class ItemController {
 			itemsComboBox.addItem(item);
 			
 		}
+		
 		//Close database connection
 		conn.close();
 		

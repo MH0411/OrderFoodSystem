@@ -11,8 +11,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.swing.DefaultListCellRenderer;
@@ -36,6 +39,11 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 import transaction.Cart;
+import transaction.db.TransactionController;
+
+import com.mysql.jdbc.Connection;
+
+import db.DatabaseController;
 
 /**
  * This class control the interface of transaction.
@@ -102,27 +110,36 @@ public class TransactionGUI extends JFrame
 	DefaultListCellRenderer centerRenderer;
 	//Set 2 decimal places.
 	private DecimalFormat decimalPattern = new DecimalFormat("#.00");
-	private final double GST = 0.06;
+	private final double GST = 1.06;
 	private ItemController itemCtrl = new ItemController();
 	private String fontStyle = "Times New Roman";
 	private JTable receiptTable;
 
-//	
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					TransactionGUI frame = new TransactionGUI();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	private TransactionController transactionCtrl = new TransactionController();
+	
+	private DatabaseController dbController = new DatabaseController();
+	private Connection conn;
+	private String sql;
+	private Statement stmt;
+	private ResultSet rsSale;
+	private String datePattern = "yyyy-MM-dd hh:mm:ss";
+	private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TransactionGUI frame = new TransactionGUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 	     
 	/**
 	 * Close the current frame
@@ -207,11 +224,13 @@ public class TransactionGUI extends JFrame
 		
 		//Import items from database to combo box.
 		try {
+			
 			itemCtrl.getItemsInfo(itemsComboBox);
-		} catch (ClassNotFoundException e) {
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+			
 		}
 		
 		quantityTextField = new JFormattedTextField();
@@ -369,8 +388,7 @@ public class TransactionGUI extends JFrame
 		dataTimeLabel.setBounds(491, 171, 152, 14);
 		calendar = Calendar.getInstance();
 		now = calendar.getTime();
-		currentTimestamp = 
-				new java.sql.Timestamp(now.getTime());
+		currentTimestamp = new java.sql.Timestamp(now.getTime());				
 		dataTimeLabel.setText(String.valueOf(currentTimestamp));
 		receiptPanel.add(dataTimeLabel);
 		
@@ -461,6 +479,7 @@ public class TransactionGUI extends JFrame
 	public void actionPerformed(ActionEvent action) {
 		// if showSaleMenuItem is clicked
 		if(action.getSource() == showSaleMenuItem) {
+			
 			//Close current frame and open sale frame
 			close();
 			SaleGUI saleFrame = new SaleGUI();
@@ -468,50 +487,66 @@ public class TransactionGUI extends JFrame
 			
 			// if logoutMenuItem is clicked
 		} else if (action.getSource() == logoutMenuItem) {
+			
 			//Close current frame and open login frame
 			close();
 			LoginGUI loginFrame = new LoginGUI();
 			loginFrame.setVisible(true);
 			
 			// if addItemButton is clicked
-		} else if(action.getSource() == addItemButton) {
+		} else if (action.getSource() == addItemButton) {
 
-			// Add selected item to cart
-			cart.addItem((Item) itemsComboBox.getSelectedItem());
-			// Show selected item into cart table
-			DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
-			item.addRow(new Object[] {
-					false,
-					itemsComboBox.getSelectedItem(),
-					quantityTextField.getText(), 
-					unitPriceTextField.getText(),
-					subTotalPriceTextField.getText()
-			});
-			
-			//Calculate total price from all selected item
-			double subtotalPrice = 
-					Double.parseDouble(subTotalPriceTextField.getText());
-			double totalPrice;
-			
-			// get totalPrice from totalPriceTextField
-			if (totalPriceTextField.getText().equals("")){
-				totalPrice = 0.0;
+			//Check empty fields.
+			if (itemsComboBox.getSelectedItem().equals(null)){
+				
+				JOptionPane.showMessageDialog(null, "Please select an item.");
+				
+			} else if (quantityTextField.getText().equals("")) {
+				
+				JOptionPane.showMessageDialog(null, "Please enter a quantity.");
 			} else {
-				totalPrice = Double.parseDouble(totalPriceTextField.getText());
+				
+				//Add selected item to cart
+				cart.addItem((Item) itemsComboBox.getSelectedItem());
+				cart.getCartItems().get(cart.getCartItems().size()-1).
+					setQuantity(Integer.parseInt(quantityTextField.getText()));
+				cart.getCartItems().get(cart.getCartItems().size()-1).
+					setSubTotalPrice(Double.parseDouble(
+							subTotalPriceTextField.getText()));
+				
+				DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
+				item.addRow(new Object[] {
+						false,
+						itemsComboBox.getSelectedItem(),
+						quantityTextField.getText(), 
+						unitPriceTextField.getText(),
+						subTotalPriceTextField.getText()
+				});
+				
+				//Calculate total price from all selected item
+				double subtotalPrice = 
+						Double.parseDouble(subTotalPriceTextField.getText());
+				double totalPrice;
+				
+				if (totalPriceTextField.getText().equals("")){
+					totalPrice = 0.0;
+				} else {
+					totalPrice = Double.parseDouble(totalPriceTextField.getText());
+				}
+				totalPrice += subtotalPrice * GST;
+				totalPrice = (Math.round(totalPrice - 0.05)) + 0.05;
+				totalPriceTextField.setText(String.valueOf(
+						decimalPattern.format(totalPrice)));
+				cashTextField.setEditable(true);
+				
+				//Refresh all text fields
+				
+//				totalPriceTextField.setText("");
+//				unitPriceTextField.setText("");
+//				quantityTextField.setText("");
+//				quantityTextField.setEditable(false);
+//				itemsComboBox.setSelectedItem(1);
 			}
-			// calculate totalPrice with GST
-			totalPrice += ((subtotalPrice * GST) + subtotalPrice);
-			// rounding totalPrice
-			totalPrice = (Math.round(totalPrice - 0.05)) + 0.05;
-			totalPriceTextField.setText(String.valueOf(
-					decimalPattern.format(totalPrice)));
-			cashTextField.setEditable(true);
-			
-			//Cart cart = new Cart();
-			//cart.addItem((Item) itemsComboBox.getSelectedItem());
-			
-			//Refresh all text fields
-			
 			// if confirmButton is clicked
 		}else if (action.getSource() == confirmButton) {
 			
@@ -534,35 +569,56 @@ public class TransactionGUI extends JFrame
 					
 				} else {
 					
-					//Proceed to receipt
-					dataTimeLabel.setText(String.valueOf(currentTimestamp));
-					
-					for (int i = 0 ; i < itemsTable.getRowCount() ; i++) {
-						
-						DefaultTableModel item = 
-								(DefaultTableModel)receiptTable.getModel();
-						item.addRow(new Object[]{
-								cart.getCartItems().get(i).getName(),
-								cart.getCartItems().get(i).getQuantity(),
-								cart.getCartItems().get(i).getUnitPrice(),
-								cart.getCartItems().get(i).getSubTotalPrice(),
-								cart.getCartItems().remove(i)				
-						});
-					}	
-					
 					double totalPrice = 
 							Double.parseDouble(totalPriceTextField.getText());
 					double totalGST =
 							(Math.round((totalPrice * GST) - 0.05)) + 0.05;
 					double cash = Double.parseDouble(cashTextField.getText());
 					
-					totalPriceValueLabel.setText(totalPriceTextField.
-							getText());
+					totalPriceValueLabel.setText(String.valueOf(totalPrice));
 					totalGSTValueLabel.setText(String.valueOf(totalGST));
-					cashValueLabel.setText(String.valueOf(decimalPattern.
-							format(cash)));
+					cashValueLabel.setText(String.valueOf(
+							decimalPattern.format(cash)));
 					changeValueLabel.setText(changeTextField.getText());
 					
+					//Insert to receipt database
+					try {
+						
+						transactionCtrl.insertReceiptTable(totalPrice);
+						
+					} catch (ClassNotFoundException | SQLException e) {
+						
+						e.printStackTrace();
+					}
+					
+					//Set time
+					dataTimeLabel.setText(String.valueOf(currentTimestamp));
+					
+					for (int i = 0 ; i < itemsTable.getRowCount() ; i++) {
+						
+						try{ 
+							
+							transactionCtrl.insertSaleTable(
+									cart.getCartItems().get(i));
+							
+						} catch (ClassNotFoundException | SQLException e){
+							
+							e.printStackTrace();
+						}
+						
+						//Insert to receipt interface
+						DefaultTableModel item = 
+								(DefaultTableModel)receiptTable.getModel();
+						item.addRow(new Object[]{
+								cart.getCartItems().get(i).getName(),
+								cart.getCartItems().get(i).getQuantity(),
+								cart.getCartItems().get(i).getUnitPrice(),
+								cart.getCartItems().get(i).getSubTotalPrice()
+						});
+					}	
+					// set cart to null so it can be destroyed
+					cart = null;
+
 					//Refresh cart
 					changeTextField.setText("");
 					((DefaultTableModel) itemsTable.getModel()).
@@ -592,12 +648,24 @@ public class TransactionGUI extends JFrame
 			
 			// remove selected rows
 			DefaultTableModel item = (DefaultTableModel)itemsTable.getModel();
-			for (int i = 0; i < itemsTable.getRowCount(); i++) {
-				boolean chked = Boolean.valueOf(itemsTable.getValueAt(i, 0)
+			for (int index = 0; index < itemsTable.getRowCount(); index++) {
+				boolean chked = Boolean.valueOf(itemsTable.getValueAt(index, 0)
 				.toString());
+				
 				if (chked) {
-					cart.getCartItems().remove(i);
-					item.removeRow(i--);
+					
+					cart.getCartItems().remove(index);
+					item.removeRow(index--);
+					
+					int totalPrice = 0;
+					for (int i = 0 ; i < cart.getCartItems().size() ; i++) {
+						
+						totalPrice += cart.getCartItems().get(i).
+								getSubTotalPrice() * GST;
+					
+						totalPriceTextField.setText(String.valueOf(
+								decimalPattern.format(totalPrice)));
+					}
 				}
 			}
 		}
@@ -631,6 +699,7 @@ public class TransactionGUI extends JFrame
 	 * @param action
 	 */
 	public void updateSubTotal(DocumentEvent e, String action) {
+		
 		//To calculate subtotal price
 		double unitPrice = Double.parseDouble(unitPriceTextField.getText());
 		int quantity;
@@ -676,12 +745,50 @@ public class TransactionGUI extends JFrame
 	 */
 	@Override
 	public void keyTyped(KeyEvent e) {
+		
 		char c = e.getKeyChar();
-		if (!(Character.isDigit(c) || (c == KeyEvent.VK_PERIOD)) 
-				|| (c == KeyEvent.VK_BACK_SPACE) 
-				|| (c == KeyEvent.VK_DELETE)) {
-			e.consume();
+		if (e.getSource() == quantityTextField){
+			
+			if (!(Character.isDigit(c)) || (c == KeyEvent.VK_BACK_SPACE) 
+					|| (c == KeyEvent.VK_DELETE)) {
+				e.consume();	
+			} 
+			
+		}else if (e.getSource() == cashTextField) { 
+			
+			if (!(Character.isDigit(c) || (c == KeyEvent.VK_PERIOD)) 
+					|| (c == KeyEvent.VK_BACK_SPACE) 
+					|| (c == KeyEvent.VK_DELETE)) { 
+				
+				String cash = cashTextField.getText();
+				
+				if (validateDot(cash)) {
+					
+					e.consume();
+					
+				}
+				
+				e.consume();			
+			}
+			
 		}
-
+	}
+	
+	/**
+	 * Method to check '.' in a text field.
+	 * Return true if contain '.'
+	 */
+	public boolean validateDot(String cash) {
+		
+		for (int index = 0 ; index < cash.length() ; index++) {
+			
+			if (cash.charAt(index) == '.') {
+				
+				return true;
+				
+			}
+		}
+		
+		return false;
 	}
 }		

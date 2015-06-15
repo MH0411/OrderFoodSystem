@@ -15,9 +15,10 @@ import db.DatabaseController;
 import user.User;
 
 public class UserController {
-	User user;
-	DatabaseController dbController;
-	Connection conn;
+	
+	private User user;
+	private DatabaseController dbController;
+	private Connection conn;
 	
 	public UserController() {
 		dbController = new DatabaseController();
@@ -84,8 +85,11 @@ public class UserController {
 	public boolean validateRegister(String userName, String password, 
 			String fullName, String ic, String telNo, String email) 
 					throws SQLException, ClassNotFoundException {
+		
+		//Open connection
 		conn = dbController.getConnection();
 		
+		//Create query
 		String sql = "SELECT * FROM tb_user WHERE userName = '"
 				+ userName + "'";
 		

@@ -9,12 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.sql.SQLException;
-import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -23,11 +19,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
 import user.db.UserController;
 
@@ -320,6 +314,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		} else if (actionSource == registerButton) {
 			// Create an UserContoller object
 			UserController userCtrl = new UserController();
+			
 			try {
 				// will be true if all required fields are filled in
 				if (validateRegisterRequiredField()) {
