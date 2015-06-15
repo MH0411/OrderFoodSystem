@@ -68,8 +68,9 @@ public class PDFPrinter {
 //	    }
 //	  }
 	
-	public static void printReceipt(Document printReceipt) throws
-		FileNotFoundException, DocumentException {
+	public static void printReceipt(Document printReceipt, String totalPrice2, 
+			String gst2, String cash, String change2) throws
+			FileNotFoundException, DocumentException {
 
 		Document printSales = new Document(PageSize.A4.rotate());     
 	    PdfWriter.getInstance(printSales, new FileOutputStream(

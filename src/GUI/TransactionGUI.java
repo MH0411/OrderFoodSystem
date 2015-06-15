@@ -401,7 +401,7 @@ public class TransactionGUI extends JFrame
 		receiptTotalPriceLabel.setBounds(36, 477, 202, 14);
 		receiptPanel.add(receiptTotalPriceLabel);
 		
-		totalGSTLabel = new JLabel("Total Includ 6% GST");
+		totalGSTLabel = new JLabel("Total 6% GST");
 		totalGSTLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		totalGSTLabel.setBounds(36, 516, 152, 14);
 		receiptPanel.add(totalGSTLabel);
@@ -628,11 +628,17 @@ public class TransactionGUI extends JFrame
 					"Message", JOptionPane.DEFAULT_OPTION, 
 					JOptionPane.DEFAULT_OPTION, null, options, options[0]);
 			
+			String totalPrice = totalPriceValueLabel.getText();
+			String gst = totalGSTValueLabel.getText();
+			String cash = cashValueLabel.getText();
+			String change = changeValueLabel.getText();
+			
 			if (reply == 0){
 
 				try {
 					
-					PDFPrinter.printReceipt(receipt);
+					PDFPrinter.printReceipt(receipt, totalPrice, gst,
+							cash, change);
 					
 				} catch (FileNotFoundException | DocumentException e1) {
 					
@@ -649,7 +655,8 @@ public class TransactionGUI extends JFrame
 
 				try {
 					
-					PDFPrinter.printReceipt(receipt);
+					PDFPrinter.printReceipt(receipt, totalPrice, gst,
+							cash, change);
 					
 				} catch (FileNotFoundException | DocumentException e1) {
 					
