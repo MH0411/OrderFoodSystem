@@ -43,7 +43,8 @@ public class TxtPrinter {
             w.write("No.18 MITC Mall ,Hang Tuah Jaya" + newLine); 
             w.write("75450 Ayer Keroh" + newLine);
             w.write("Tel : 06-2313007  Fax : 06-2313070" + newLine);
-            w.write("Date :" + dateTime + newLine);
+            w.write("From : " + startDate + newLine);
+            w.write("To   : " + endDate + newLine);
             w.write("--------------------------------------------------------"
             		+ "------------------" + newLine);
             w.write("ItemId\tFood\t\tQuantity\tUnit Price (RM)\t"

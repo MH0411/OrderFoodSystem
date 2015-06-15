@@ -301,7 +301,6 @@ public class SaleGUI extends JFrame implements ActionListener {
 			//Check empty jtable
 			if ((startDatePicker.getModel().getValue() != null) 
 					&& (endDatePicker.getModel().getValue() != null)) {
-				
 			
 				Object[] options = { "PDF", "txt" , "Both"};
 				int reply = 
@@ -312,9 +311,11 @@ public class SaleGUI extends JFrame implements ActionListener {
 				if (reply == 0){
 
 					try {
+						
 						PDFPrinter.printSales(sales, startDate, endDate);
+						
 					} catch (FileNotFoundException | DocumentException e1) {
-						// TODO Auto-generated catch block
+						
 						e1.printStackTrace();
 					}
 
@@ -327,13 +328,15 @@ public class SaleGUI extends JFrame implements ActionListener {
 				} else if (reply == 2){
 
 					try {
+						
 						PDFPrinter.printSales(sales, startDate, endDate);
-						TxtPrinter.printSales(sales, startDate, endDate);
+						
 					} catch (FileNotFoundException | DocumentException e1) {
-						// TODO Auto-generated catch block
+						
 						e1.printStackTrace();
 					}
 					
+					TxtPrinter.printSales(sales, startDate, endDate);
 				} 
 				
 			} else {

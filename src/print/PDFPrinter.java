@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.Vector;
@@ -29,6 +30,7 @@ import com.itextpdf.text.pdf.PdfWriter;
  */
 public class PDFPrinter {
 	
+	private static DecimalFormat decimalPattern = new DecimalFormat("#.00");
 	private static String datePattern = "yyyy-MM-dd HH-mm-ss";
 	private static SimpleDateFormat dateFormatter = 
 			new SimpleDateFormat(datePattern);
@@ -225,6 +227,8 @@ public class PDFPrinter {
 			Document printSales = new Document(PageSize.A4.rotate());     
 			PdfWriter.getInstance(printSales, new FileOutputStream(
 	    		pathOfSalesPDF));
+			printSales.open();
+			
 		try {
 			
 	        /* Add title with center alignment */
@@ -236,7 +240,7 @@ public class PDFPrinter {
 	        printSales.add(para1);
 	        
 	        /* Add from */
-	        Chunk from = new Chunk( "From\t: " + startDate, FontFactory.getFont
+	        Chunk from = new Chunk( "From : " + startDate, FontFactory.getFont
 	        		(FontFactory.TIMES_BOLD, 16, BaseColor.BLACK));
 	        Paragraph para2 = new Paragraph(from);
 	        para2.setAlignment(Paragraph.ALIGN_LEFT);
@@ -244,7 +248,7 @@ public class PDFPrinter {
 	        printSales.add(para2);
 	        
 	        /* Add to */
-	        Chunk to = new Chunk( "To\t: " + endDate, FontFactory.getFont
+	        Chunk to = new Chunk( "To     : " + endDate, FontFactory.getFont
 	        		(FontFactory.TIMES_BOLD, 16, BaseColor.BLACK));
 	        Paragraph para3 = new Paragraph(to);
 	        para3.setAlignment(Paragraph.ALIGN_LEFT);
@@ -265,9 +269,12 @@ public class PDFPrinter {
 	        	table.addCell(sales.get(index).getItemId() + "");
 		        table.addCell(sales.get(index).getName());
 		        table.addCell(sales.get(index).getQuantity() + "");
-		        table.addCell(sales.get(index).getUnitPrice() + "");
-		        table.addCell(sales.get(index).getTotalPrice() + "");
+		        table.addCell(decimalPattern.format(sales.get(index)
+		        		.getUnitPrice()) + "");
+		        table.addCell(decimalPattern.format(sales.get(index)
+		        		.getTotalPrice()) + "");
 	        }
+	        
 	        printSales.add(table);
 	        /* Open pdf file */
 	        // for Window
