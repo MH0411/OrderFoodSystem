@@ -14,8 +14,10 @@ import item.Item;
 public class Cart {
 	
 	private ArrayList<Item> cartItems = new ArrayList<Item>();
-	private double totalPrice;
-	private double chargedGST;
+	private double totalPrice = 0;
+	private double roundTotalPrice = 0;
+	private double chargedGST = 0;
+	private final double GST = 1.06;
 
 	public Cart() {}
 	
@@ -66,12 +68,34 @@ public class Cart {
 	public void setChargedGST(double chargedGST) {
 		this.chargedGST = chargedGST;
 	}
-	
+
+	public double getRoundTotalPrice() {
+		return roundTotalPrice;
+	}
+
+	public void setRoundTotalPrice(double roundTotalPrice) {
+		this.roundTotalPrice = roundTotalPrice;
+	}
 	/**
 	 * Add item into cartItems
 	 * @param item
 	 */
 	public void addItem(Item item) {		
 		cartItems.add(item);
+		calculateTotalPrice(item.getSubTotalPrice());
 	}
+	
+	public void calculateTotalPrice(double price) {
+		totalPrice += (price * GST);
+		chargedGST = totalPrice / GST * 0.06;
+		roundTotalPrice = (Math.round(totalPrice * 20.0)) / 20.0;
+	}
+	
+	public void removeItem(int index) {
+		totalPrice -= (cartItems.get(index).getSubTotalPrice() * GST);
+		chargedGST = totalPrice / GST * 0.06;
+		roundTotalPrice = (Math.round(totalPrice * 20.0)) / 20.0;
+		cartItems.remove(index);
+	}
+
 }

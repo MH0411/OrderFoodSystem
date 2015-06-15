@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 
@@ -37,13 +38,12 @@ public class ItemController {
 //	}
 //	
 	/**
-	 * Add items from database to combo box
-	 * @param itemsComboBox
-	 * @return itemComboBox
+	 * Get all item info from database
+	 * @return
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public JComboBox<Item> getItemsInfo(JComboBox<Item> itemsComboBox) 
+	public ArrayList<Item> getAllItemsInfo() 
 			throws SQLException, ClassNotFoundException {
 		
 		//Open database connection
@@ -58,21 +58,25 @@ public class ItemController {
 		//Create result set object
 		rsItem = stmt.executeQuery(sql);
 		
+		ArrayList<Item> items = new ArrayList<Item>();
+		
 		//Get all item name in database.
 		while(rsItem.next()) {
 			itemId = rsItem.getInt("itemId");
 			name = rsItem.getString("name");
 			unitPrice = rsItem.getDouble("unitPrice");
 			Item item = new Item(itemId, name, unitPrice);
-			itemsComboBox.addItem(item);
-			
+			items.add(item);
+//			itemsComboBox.addItem(item);
 		}
 		
 		//Close database connection
 		conn.close();
 		
 		//Return String to combo box.
-		return itemsComboBox;
+//		return itemsComboBox;
+		
+		return items;
 	}
 }
 

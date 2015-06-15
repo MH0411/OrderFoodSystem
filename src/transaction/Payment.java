@@ -11,10 +11,10 @@ public class Payment {
 
 	private Timestamp dateTime;
 	private Cart cart;
+	private double change = 0.0;
 
-	public Payment(Timestamp dateTime, Cart cart) {
+	public Payment(Cart cart) {
 		super();
-		this.dateTime = dateTime;
 		this.cart = cart;
 	}
 	
@@ -34,4 +34,8 @@ public class Payment {
 		this.cart = cart;
 	}
 
+	public double calculateChange(double cash) {
+		change =  cash - cart.getRoundTotalPrice();
+		return change;
+	}
 }
