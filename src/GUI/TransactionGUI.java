@@ -12,11 +12,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -48,9 +45,6 @@ import transaction.db.TransactionController;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.mysql.jdbc.Connection;
-
-import db.DatabaseController;
 
 /**
  * This class control the interface of transaction.
@@ -116,22 +110,12 @@ public class TransactionGUI extends JFrame
 	private Cart cart = new Cart();
 	DefaultListCellRenderer centerRenderer;
 	//Set 2 decimal places.
-	private DecimalFormat decimalPattern = new DecimalFormat("#.00");
+	private DecimalFormat decimalPattern = new DecimalFormat("0.00");
 	private ItemController itemCtrl = new ItemController();
 	private String fontStyle = "Times New Roman";
 	private JTable receiptTable;
 
 	private TransactionController transactionCtrl = new TransactionController();
-	
-	private DatabaseController dbController = new DatabaseController();
-	private Connection conn;
-	private String sql;
-	private Statement stmt;
-	private ResultSet rsSale;
-	private String datePattern = "yyyy-MM-dd hh:mm:ss";
-	private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-	
-	private final double GST = 1.06;
 	
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private Payment payment = new Payment(cart);
@@ -412,8 +396,7 @@ public class TransactionGUI extends JFrame
 		dataTimeLabel.setText(String.valueOf(currentTimestamp));
 		receiptPanel.add(dataTimeLabel);
 		
-		receiptTotalPriceLabel = new JLabel("Total Price (RM) : "
-				+ "(Incl GST)");
+		receiptTotalPriceLabel = new JLabel("Total Price (RM) : (Incl GST)");
 		receiptTotalPriceLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		receiptTotalPriceLabel.setBounds(36, 477, 202, 14);
 		receiptPanel.add(receiptTotalPriceLabel);
@@ -423,7 +406,7 @@ public class TransactionGUI extends JFrame
 		totalGSTLabel.setBounds(36, 516, 152, 14);
 		receiptPanel.add(totalGSTLabel);
 		
-		receiptCashLabel = new JLabel("Cash Tendered  ");
+		receiptCashLabel = new JLabel("Cash Tendered ");
 		receiptCashLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
 		receiptCashLabel.setBounds(36, 555, 117, 14);
 		receiptPanel.add(receiptCashLabel);
@@ -454,9 +437,9 @@ public class TransactionGUI extends JFrame
 		receiptPanel.add(changeValueLabel);
 		
 		receiptButton = new JButton("Receipt");
-		receiptButton.setEnabled(false);
 		receiptButton.setFont(new Font(fontStyle, Font.BOLD, 20));
 		receiptButton.setBounds(511, 657, 132, 33);
+		receiptButton.addActionListener(this);
 		receiptPanel.add(receiptButton);
 		
 		addressLabel1 = new JLabel("75450 Ayer Keroh,Melaka");
@@ -579,7 +562,8 @@ public class TransactionGUI extends JFrame
 					double cash = Double.parseDouble(cashTextField.getText());
 					
 					totalPriceValueLabel.setText(String.valueOf(totalPrice));
-					totalGSTValueLabel.setText(String.valueOf(totalGST));
+					totalGSTValueLabel.setText(String.valueOf(
+							decimalPattern.format(totalGST)));
 					cashValueLabel.setText(String.valueOf(
 							decimalPattern.format(cash)));
 					changeValueLabel.setText(changeTextField.getText());
@@ -615,8 +599,10 @@ public class TransactionGUI extends JFrame
 						item.addRow(new Object[]{
 								cart.getCartItems().get(i).getName(),
 								cart.getCartItems().get(i).getQuantity(),
-								cart.getCartItems().get(i).getUnitPrice(),
-								cart.getCartItems().get(i).getSubTotalPrice()
+								decimalPattern.format(cart.getCartItems().get(i)
+										.getUnitPrice()),
+								decimalPattern.format(cart.getCartItems().get(i)
+										.getSubTotalPrice())
 						});
 					}	
 					// create a new cart
@@ -629,7 +615,6 @@ public class TransactionGUI extends JFrame
 					totalPriceTextField.setText("");	
 					changeTextField.setText("");
 					cashTextField.setEditable(false);
-					receiptButton.setEnabled(true);
 				}
 			}
 			

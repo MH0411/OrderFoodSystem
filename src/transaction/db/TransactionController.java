@@ -142,7 +142,6 @@ public class TransactionController {
 		} else {
 			maxReceiptId = 1;
 		}
-		System.out.println(maxReceiptId);
 		
 		//Create sql query
 		sql = "INSERT INTO tb_sale (itemId, receiptId,"

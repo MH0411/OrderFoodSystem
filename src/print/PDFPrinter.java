@@ -78,7 +78,7 @@ public class PDFPrinter {
 	    
 		try
 		{
-			input = new FileInputStream("config.properties");
+			input = new FileInputStream("config/config.properties");
 			// load a properties file
 			property.load(input);
 	        /* Add title with center alignment */
