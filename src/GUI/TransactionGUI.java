@@ -11,9 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,10 +40,6 @@ import javax.swing.table.DefaultTableModel;
 import transaction.Cart;
 import transaction.Payment;
 import transaction.db.TransactionController;
-
-import com.mysql.jdbc.Connection;
-
-import db.DatabaseController;
 
 /**
  * This class control the interface of transaction.
@@ -117,12 +111,7 @@ public class TransactionGUI extends JFrame
 	private JTable receiptTable;
 
 	private TransactionController transactionCtrl = new TransactionController();
-	
-	private DatabaseController dbController = new DatabaseController();
-	private Connection conn;
-	private String sql;
-	private Statement stmt;
-	private ResultSet rsSale;
+
 	private String datePattern = "yyyy-MM-dd hh:mm:ss";
 	private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
 	

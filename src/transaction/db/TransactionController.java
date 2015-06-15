@@ -28,7 +28,6 @@ public class TransactionController {
 	private String sql;
 	private Statement stmt;
 	private ResultSet rsSale;
-	private DecimalFormat decimalPattern = new DecimalFormat("#.00");
 	
 	/**
 	 * Get data from database and display at sale table
@@ -39,7 +38,7 @@ public class TransactionController {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public Vector<Sale> displaySales(JTable table, String startDate, 
+	public Vector<Sale> displaySales(String startDate, 
 			String endDate) throws ClassNotFoundException, SQLException {
 
 		//Open database connection
@@ -74,12 +73,6 @@ public class TransactionController {
 			sale.setTotalPrice(rsSale.getDouble(5));
 			sales.add(sale);
 
-			
-			DefaultTableModel salesItem = (DefaultTableModel)table.getModel();
-			salesItem.addRow(new Object[]{sale.getItemId(), sale.getName(),
-					sale.getQuantity(),
-					decimalPattern.format(sale.getUnitPrice()),
-					decimalPattern.format(sale.getTotalPrice())});
 		}
 		
 		// Close connection

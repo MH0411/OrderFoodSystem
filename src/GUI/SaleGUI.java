@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.Vector;
@@ -85,6 +86,7 @@ public class SaleGUI extends JFrame implements ActionListener {
 	private DefaultTableCellRenderer centerRenderer;
 	private TransactionController transactionCtrl;
 	private Vector<Sale> sales = new Vector<Sale>();
+	private DecimalFormat decimalPattern = new DecimalFormat("#.00");
 	
 	/**
 	 * Launch the application.
@@ -278,9 +280,20 @@ public class SaleGUI extends JFrame implements ActionListener {
 					
 					//Display sales of items
 					transactionCtrl = new TransactionController();
-					sales = transactionCtrl.displaySales(table, startDate, 
+					sales = transactionCtrl.displaySales(startDate, 
 							endDate);
-
+					DefaultTableModel salesItem = (DefaultTableModel)table.getModel();
+					for (int index = 0; index < sales.size(); index++) {
+						Sale currentSale = sales.get(index);
+						salesItem.addRow(new Object[]{currentSale.getItemId(), 
+								currentSale.getName(),
+								currentSale.getQuantity(),
+								decimalPattern.format(currentSale.
+										getUnitPrice()),
+								decimalPattern.format(currentSale.
+										getTotalPrice())});
+					}
+					
 					
 				} catch (ClassNotFoundException | SQLException e1) {
 					
