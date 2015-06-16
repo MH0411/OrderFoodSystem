@@ -46,7 +46,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 	private JPasswordField registerPasswordField;
 	private JButton loginButton;
 	private JButton registerButton; 
-	private JTextField confirmPasswordTextField;
+	private JPasswordField confirmPasswordTextField;
 	
 	private final String FONT_STYLE = "Times New Roman";
 
@@ -243,7 +243,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		panelRegister.add(registerButton);
 		registerButton.setFont(new Font(FONT_STYLE, Font.BOLD, 18));
 		
-		confirmPasswordTextField = new JTextField();
+		confirmPasswordTextField = new JPasswordField();
 		confirmPasswordTextField.setFont(new Font(FONT_STYLE, Font.PLAIN, 24));
 		confirmPasswordTextField.setColumns(10);
 		confirmPasswordTextField.setBounds(216, 106, 229, 34);

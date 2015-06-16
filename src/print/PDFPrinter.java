@@ -70,14 +70,20 @@ public class PDFPrinter {
 //	    }
 //	  }
 	
+
 	/**
-	 * Method to print receipt into pdf file
+	 * print receipt into pdf file.
 	 * @param printReceipt
+	 * @param totalPrice2
+	 * @param gst2
+	 * @param cash
+	 * @param change2
 	 * @throws FileNotFoundException
 	 * @throws DocumentException
 	 */
-	public static void printReceipt(Document printReceipt) throws
-		FileNotFoundException, DocumentException {
+	public static void printReceipt(Document printReceipt, String totalPrice2, 
+			String gst2, String cash, String change2) throws
+			FileNotFoundException, DocumentException {
 
 		Document printSales = new Document(PageSize.A4.rotate());     
 	    PdfWriter.getInstance(printSales, new FileOutputStream(
@@ -86,7 +92,7 @@ public class PDFPrinter {
 	    
 		try
 		{
-			input = new FileInputStream("config.properties");
+			input = new FileInputStream("config/config.properties");
 			// load a properties file
 			property.load(input);
 	        /* Add title with center alignment */

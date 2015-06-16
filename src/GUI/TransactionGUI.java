@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
+
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -36,10 +38,15 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
+import print.PDFPrinter;
+import print.TxtPrinter;
 import transaction.Cart;
 import transaction.Payment;
 import transaction.db.TransactionController;
 
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 /**
  * This class control the interface of transaction.
  * Interface activity happen here.
@@ -113,6 +120,7 @@ public class TransactionGUI extends JFrame
 	
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private Payment payment = new Payment(cart);
+	private Document receipt;
 	
 	/**
 	 * Launch the application.
@@ -402,6 +410,7 @@ public class TransactionGUI extends JFrame
 		
 		receiptCashLabel = new JLabel("Cash Tendered  ");
 		receiptCashLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 14));
+
 		receiptCashLabel.setBounds(36, 555, 117, 14);
 		receiptPanel.add(receiptCashLabel);
 		
@@ -433,6 +442,7 @@ public class TransactionGUI extends JFrame
 		receiptButton = new JButton("Receipt");
 		receiptButton.setFont(new Font(FONT_STYLE, Font.BOLD, 20));
 		receiptButton.setBounds(511, 657, 132, 33);
+		receiptButton.addActionListener(this);
 		receiptPanel.add(receiptButton);
 		
 		addressLabel1 = new JLabel("75450 Ayer Keroh,Melaka");
@@ -522,10 +532,11 @@ public class TransactionGUI extends JFrame
 						subTotalPriceTextField.getText()
 				});
 				
+				//Calculate total price from all selected item
 				totalPriceTextField.setText(String.valueOf(
 						decimalPattern.format(cart.getRoundTotalPrice())));
 				cashTextField.setEditable(true);
-
+				
 			}
 			// if confirmButton is clicked
 		}else if (action.getSource() == confirmButton) {
@@ -556,7 +567,8 @@ public class TransactionGUI extends JFrame
 					double cash = Double.parseDouble(cashTextField.getText());
 					
 					totalPriceValueLabel.setText(String.valueOf(totalPrice));
-					totalGSTValueLabel.setText(String.valueOf(totalGST));
+					totalGSTValueLabel.setText(String.valueOf(
+							decimalPattern.format(totalGST)));
 					cashValueLabel.setText(String.valueOf(
 							decimalPattern.format(cash)));
 					changeValueLabel.setText(changeTextField.getText());
@@ -592,8 +604,10 @@ public class TransactionGUI extends JFrame
 						item.addRow(new Object[]{
 								cart.getCartItems().get(i).getName(),
 								cart.getCartItems().get(i).getQuantity(),
-								cart.getCartItems().get(i).getUnitPrice(),
-								cart.getCartItems().get(i).getSubTotalPrice()
+								decimalPattern.format(cart.getCartItems().get(i)
+										.getUnitPrice()),
+								decimalPattern.format(cart.getCartItems().get(i)
+										.getSubTotalPrice())
 						});
 					}	
 					// create a new cart
@@ -613,6 +627,49 @@ public class TransactionGUI extends JFrame
 		}else if (action.getSource() == receiptButton) {
 			
 			//Print receipt in PDF/TXT file
+			Object[] options = { "PDF", "txt" , "Both"};
+			int reply = 
+			JOptionPane.showOptionDialog(null, "Select a option to print.", 
+					"Message", JOptionPane.DEFAULT_OPTION, 
+					JOptionPane.DEFAULT_OPTION, null, options, options[0]);
+			
+			String totalPrice = totalPriceValueLabel.getText();
+			String gst = totalGSTValueLabel.getText();
+			String cash = cashValueLabel.getText();
+			String change = changeValueLabel.getText();
+			
+			if (reply == 0){
+
+				try {
+					
+					PDFPrinter.printReceipt(receipt, totalPrice, gst,
+							cash, change);
+					
+				} catch (FileNotFoundException | DocumentException e1) {
+					
+					e1.printStackTrace();
+				}
+
+			} else if (reply == 1){
+				
+					
+				TxtPrinter.printReceipt(receipt);
+					
+				
+			} else if (reply == 2){
+
+				try {
+					
+					PDFPrinter.printReceipt(receipt, totalPrice, gst,
+							cash, change);
+					
+				} catch (FileNotFoundException | DocumentException e1) {
+					
+					e1.printStackTrace();
+				}
+				
+				TxtPrinter.printReceipt(receipt);
+			} 
 			
 			// if itemsComboBox is clicked
 		}else if (action.getSource() == itemsComboBox) {
@@ -697,14 +754,18 @@ public class TransactionGUI extends JFrame
 		int quantity;
 		
 		if (quantityTextField.getText().equals(""))
+			
 			quantity = 0;	
+		
 		else 
+			
 		quantity = Integer.parseInt(quantityTextField.getText());
+		
 		
 		double subTotalPrice = unitPrice * quantity;
         subTotalPriceTextField.setText(String.valueOf
         		(decimalPattern.format(subTotalPrice)));
-       
+
 	}
 	
 	/**
@@ -722,6 +783,7 @@ public class TransactionGUI extends JFrame
 		double change = payment.calculateChange(cash);
 		changeTextField.setText(String.valueOf((decimalPattern.
 		  		format(change))));
+
 	}
 	
 	/**

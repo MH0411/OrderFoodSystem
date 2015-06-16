@@ -9,7 +9,10 @@ import java.io.Writer;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Properties;
 import java.util.Vector;
+
+import com.itextpdf.text.Document;
 
 import transaction.Sale;
 
@@ -34,6 +37,7 @@ public class TxtPrinter {
 			+ dateTime + ".txt";
 	private static String pathOfSalesTxt = "./bin/Txt/Sales/sales_" + 
 			dateTime + ".txt";
+	private static Properties property = new Properties();
 
 	/**
 	 * Method to print Sales report into txt file.
@@ -54,13 +58,15 @@ public class TxtPrinter {
             w.write("No.18 MITC Mall ,Hang Tuah Jaya" + newLine); 
             w.write("75450 Ayer Keroh" + newLine);
             w.write("Tel : 06-2313007  Fax : 06-2313070" + newLine);
+            w.write("Sale Report" + newLine);
             w.write("From : " + startDate + newLine);
             w.write("To   : " + endDate + newLine);
             w.write("--------------------------------------------------------"
             		+ "------------------" + newLine);
             w.write("ItemId\tFood\t\tQuantity\tUnit Price (RM)\t"
-            		+ "Total Price (RM)");
-            w.write(newLine);
+            		+ "Total Price (RM)" + newLine);
+            w.write("--------------------------------------------------------"
+            		+ "------------------" + newLine);
             for (int index = 0; index < sales.size(); index++) {
 	        	w.write(sales.get(index).getItemId() + "\t");
 	        	w.write(sales.get(index).getName() + "\t");
@@ -71,23 +77,21 @@ public class TxtPrinter {
 	        	w.write(decimalPattern.format(sales.get(index).getUnitPrice()) 
 	        			+ "\t\t");
 	        	w.write(decimalPattern.format(sales.get(index).getTotalPrice()) 
-	        			+ newLine);
-	        	
+	        			+ newLine);	        	
 	        }
             w.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
+
     /**
-     * Method to print receipt into txt file.
-     * @param startDate
-     * @param endDate
+     * print receipt into txt file.
+     * @param receipt
      */
-    public static void printReceipt(String startDate, String endDate) {
-        try {
-        	File statText = new File(pathOfSalesTxt);
+    public static void printReceipt(Document receipt) {
+		try {
+        	File statText = new File(pathOfReceiptTxt);
             FileOutputStream is = new FileOutputStream(statText);
             OutputStreamWriter osw = new OutputStreamWriter(is);    
             Writer w = new BufferedWriter(osw);
@@ -98,18 +102,24 @@ public class TxtPrinter {
             w.write("Tel : 06-2313007  Fax : 06-2313070" + newLine);
             w.write("GST ID : 001134034944" + newLine);
             w.write("RECEIPT" + newLine);
-            w.write("Date" + newLine);
-            w.write("Cashier : " + newLine);
-            w.write("----------------------------------------------" + newLine);
+            w.write("Date : " + dateTime + newLine);
+            w.write("Cashier : " + property.getProperty("fullName") + newLine);
+            w.write("--------------------------------------------------------"
+            		+ "------------------" + newLine);
+            w.write("Food\t\tQuantity\tUnit Price (RM)\t"
+            		+ "SubTotal Price (RM)" + newLine);
+            w.write("--------------------------------------------------------"
+            		+ "------------------" + newLine);
+            
             w.write("TOTAL PRICE (RM)" + newLine);
-            w.write("GST 6% (Incl) :" + newLine);
+            w.write("Total 6% GST :" + newLine);
             w.write("Cash Tendered :" + newLine);
             w.write("Change :" + newLine);
             w.close();
         } catch (IOException e) {
             System.err.println("Problem writing to the file statsTest.txt");
         }
-    }
+	}
 }
 
 
