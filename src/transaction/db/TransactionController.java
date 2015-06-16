@@ -1,6 +1,7 @@
 package transaction.db;
 
 import item.Item;
+import item.OrderedItem;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,7 +34,7 @@ public class TransactionController {
 	private String sql;
 	private Statement stmt;
 	private ResultSet rsSale;
-	private Item saleItem;
+	private OrderedItem saleItem;
 	
 	/**
 	 * Get sales data from database between startDate and endDate 
@@ -135,7 +136,7 @@ public class TransactionController {
 			maxReceiptId = 1;
 		}
 		
-		String sql = "SELECT receiptId, name, quantity, unitPrice, subTotalPrice"
+		String sql = "SELECT s.itemId, name, quantity, unitPrice, subTotalPrice"
 				+ " FROM tb_sale s LEFT JOIN tb_item i "
 				+ "ON s.itemId = i.itemId"
 				+ "WHERE receiptId = '" + maxReceiptId + "'";
@@ -149,7 +150,8 @@ public class TransactionController {
 		//display result set
 		while (rsSale.next()) {
 		
-			saleItem = new Item(rsSale.getString("name"),
+			saleItem = new OrderedItem(rsSale.getInt("s.itemId"),
+							rsSale.getString("name"),
 							rsSale.getInt("quantity"),
 							rsSale.getDouble("unitPrice"),
 							rsSale.getDouble("subTotalPrice"));
