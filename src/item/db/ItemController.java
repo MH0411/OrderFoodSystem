@@ -8,12 +8,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import javax.swing.JComboBox;
-
 import db.DatabaseController;
 
 /**
- * This class represent all process between Item class and database
+ * This class represent all process between Item class and database.
  * @author JKGan
  *
  */
@@ -29,14 +27,6 @@ public class ItemController {
 	private double unitPrice;
 	Item tempItem = null;
 
-//	public Item getItem() {
-//		return item;
-//	}
-//
-//	public void setItem(Item item) {
-//		this.item = item;
-//	}
-//	
 	/**
 	 * Get all item info from database
 	 * @return
@@ -67,15 +57,11 @@ public class ItemController {
 			unitPrice = rsItem.getDouble("unitPrice");
 			Item item = new Item(itemId, name, unitPrice);
 			items.add(item);
-//			itemsComboBox.addItem(item);
 		}
 		
 		//Close database connection
 		conn.close();
-		
-		//Return String to combo box.
-//		return itemsComboBox;
-		
+
 		return items;
 	}
 }

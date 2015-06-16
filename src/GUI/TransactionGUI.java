@@ -13,7 +13,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -105,17 +104,12 @@ public class TransactionGUI extends JFrame
 	private Cart cart = new Cart();
 	DefaultListCellRenderer centerRenderer;
 	//Set 2 decimal places.
-	private DecimalFormat decimalPattern = new DecimalFormat("#.00");
+	private DecimalFormat decimalPattern = new DecimalFormat("0.00");
 	private ItemController itemCtrl = new ItemController();
-	private String fontStyle = "Times New Roman";
+	private final String FONT_STYLE = "Times New Roman";
 	private JTable receiptTable;
 
 	private TransactionController transactionCtrl = new TransactionController();
-
-	private String datePattern = "yyyy-MM-dd hh:mm:ss";
-	private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-	
-	private final double GST = 1.06;
 	
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private Payment payment = new Payment(cart);
@@ -187,22 +181,22 @@ public class TransactionGUI extends JFrame
 		addItemPanel.setLayout(null);
 		
 		itemLabel = new JLabel("Item : ");
-		itemLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
+		itemLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 15));
 		itemLabel.setBounds(10, 9, 44, 14);
 		addItemPanel.add(itemLabel);
 		
 		quantityLabel = new JLabel("Quantity : ");
-		quantityLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
+		quantityLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 15));
 		quantityLabel.setBounds(10, 48, 69, 14);
 		addItemPanel.add(quantityLabel);
 		
 		unitPriceLabel = new JLabel("Unit Price (RM) : ");
-		unitPriceLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
+		unitPriceLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 15));
 		unitPriceLabel.setBounds(10, 93, 119, 14);
 		addItemPanel.add(unitPriceLabel);
 		
 		subTotalPriceLabel = new JLabel("Total Price (RM) :  ");
-		subTotalPriceLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
+		subTotalPriceLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 15));
 		subTotalPriceLabel.setBounds(10, 137, 129, 14);
 		addItemPanel.add(subTotalPriceLabel);
 		
@@ -211,7 +205,7 @@ public class TransactionGUI extends JFrame
 		itemsComboBox = new JComboBox<Item>();
 		itemsComboBox.setEditable(true);
 		itemsComboBox.setRenderer(centerRenderer);
-		itemsComboBox.setFont(new Font(fontStyle, Font.BOLD, 16));
+		itemsComboBox.setFont(new Font(FONT_STYLE, Font.BOLD, 16));
 		itemsComboBox.setBounds(151, 9, 105, 20);
 		itemsComboBox.setSelectedItem("");;
 		itemsComboBox.addActionListener(this);
@@ -246,27 +240,27 @@ public class TransactionGUI extends JFrame
 		unitPriceTextField = new JTextField();
 		unitPriceTextField.setEditable(false);
 		unitPriceTextField.setHorizontalAlignment(SwingConstants.CENTER);
-		unitPriceTextField.setFont(new Font(fontStyle, Font.BOLD, 16));
+		unitPriceTextField.setFont(new Font(FONT_STYLE, Font.BOLD, 16));
 		unitPriceTextField.setBounds(151, 93, 105, 20);
 		addItemPanel.add(unitPriceTextField);
 		
 		subTotalPriceTextField = new JTextField();
 		subTotalPriceTextField.setEditable(false);
 		subTotalPriceTextField.setHorizontalAlignment(SwingConstants.CENTER);
-		subTotalPriceTextField.setFont(new Font(fontStyle, Font.BOLD, 16));
+		subTotalPriceTextField.setFont(new Font(FONT_STYLE, Font.BOLD, 16));
 		subTotalPriceTextField.setBounds(151, 137, 105, 20);
 		addItemPanel.add(subTotalPriceTextField);
 		
 		addItemButton = new JButton("Add To Cart");
 		addItemButton.addActionListener(this);
-		addItemButton.setFont(new Font(fontStyle, Font.BOLD, 18));
+		addItemButton.setFont(new Font(FONT_STYLE, Font.BOLD, 18));
 		addItemButton.setBounds(63, 239, 139, 39);
 		addItemPanel.add(addItemButton);
 		
 		shoppingCartLabel = new JLabel("Shopping Cart");
 		shoppingCartLabel.setBounds(10, 57, 310, 71);
 		itemPanel.add(shoppingCartLabel);
-		shoppingCartLabel.setFont(new Font(fontStyle, Font.BOLD, 48));
+		shoppingCartLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 48));
 		
 		//MidPanel===========================================================
 		CartPanel = new JPanel();
@@ -280,23 +274,23 @@ public class TransactionGUI extends JFrame
 		confirmPanel.setLayout(null);
 		
 		cashLabel = new JLabel("Cash Tendered : ");
-		cashLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
+		cashLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 15));
 		cashLabel.setBounds(10, 7, 114, 14);
 		confirmPanel.add(cashLabel);
 		
 		totalPriceLabel = new JLabel("Total Price (RM) :");
-		totalPriceLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
+		totalPriceLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 15));
 		totalPriceLabel.setBounds(10, 47, 123, 14);
 		confirmPanel.add(totalPriceLabel);
 		
 		changeLabel = new JLabel("Change : ");
-		changeLabel.setFont(new Font(fontStyle, Font.BOLD, 15));
+		changeLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 15));
 		changeLabel.setBounds(10, 87, 63, 14);
 		confirmPanel.add(changeLabel);
 		
 		cashTextField = new JTextField();
 		cashTextField.setEditable(false);
-		cashTextField.setFont(new Font(fontStyle, Font.BOLD, 16));
+		cashTextField.setFont(new Font(FONT_STYLE, Font.BOLD, 16));
 		cashTextField.setColumns(10);
 		cashTextField.setBounds(144, 7, 105, 20);
 		cashTextField.addKeyListener(this);
@@ -306,7 +300,7 @@ public class TransactionGUI extends JFrame
 		confirmPanel.add(cashTextField);
 		
 		totalPriceTextField = new JTextField();
-		totalPriceTextField.setFont(new Font(fontStyle, Font.BOLD, 16));
+		totalPriceTextField.setFont(new Font(FONT_STYLE, Font.BOLD, 16));
 		totalPriceTextField.setEditable(false);
 		totalPriceTextField.setColumns(10);
 		totalPriceTextField.setBounds(144, 47, 105, 20);
@@ -315,7 +309,7 @@ public class TransactionGUI extends JFrame
 		confirmPanel.add(totalPriceTextField);
 		
 		changeTextField = new JTextField();
-		changeTextField.setFont(new Font(fontStyle, Font.BOLD, 16));
+		changeTextField.setFont(new Font(FONT_STYLE, Font.BOLD, 16));
 		changeTextField.setEditable(false);
 		changeTextField.setColumns(10);
 		changeTextField.setBounds(144, 87, 105, 20);
@@ -323,7 +317,7 @@ public class TransactionGUI extends JFrame
 		confirmPanel.add(changeTextField);
 		
 		confirmButton = new JButton("Confirm");
-		confirmButton.setFont(new Font(fontStyle, Font.BOLD, 20));
+		confirmButton.setFont(new Font(FONT_STYLE, Font.BOLD, 20));
 		confirmButton.setBounds(134, 160, 114, 33);
 		confirmButton.addActionListener(this);
 		confirmPanel.add(confirmButton);
@@ -361,7 +355,7 @@ public class TransactionGUI extends JFrame
 		
 		removeButton = new JButton("Remove");
 		removeButton.addActionListener(this);
-		removeButton.setFont(new Font(fontStyle, Font.BOLD, 20));
+		removeButton.setFont(new Font(FONT_STYLE, Font.BOLD, 20));
 		removeButton.setBounds(10, 160, 114, 33);
 		confirmPanel.add(removeButton);
 		
@@ -382,12 +376,12 @@ public class TransactionGUI extends JFrame
 		receiptPanel.add(companyLabel);
 		
 		addressLabel = new JLabel("No.18 MITC Mall ,Hang Tuah Jaya");
-		addressLabel.setFont(new Font(fontStyle, Font.PLAIN, 14));
+		addressLabel.setFont(new Font(FONT_STYLE, Font.PLAIN, 14));
 		addressLabel.setBounds(230, 79, 217, 14);
 		receiptPanel.add(addressLabel);
 		
 		dataTimeLabel = new JLabel("date time");
-		dataTimeLabel.setFont(new Font(fontStyle, Font.PLAIN, 14));
+		dataTimeLabel.setFont(new Font(FONT_STYLE, Font.PLAIN, 14));
 		dataTimeLabel.setBounds(491, 171, 152, 14);
 		calendar = Calendar.getInstance();
 		now = calendar.getTime();
@@ -397,47 +391,47 @@ public class TransactionGUI extends JFrame
 		
 		receiptTotalPriceLabel = new JLabel("Total Price (RM) : "
 				+ "(Incl GST)");
-		receiptTotalPriceLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
+		receiptTotalPriceLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 14));
 		receiptTotalPriceLabel.setBounds(36, 477, 202, 14);
 		receiptPanel.add(receiptTotalPriceLabel);
 		
 		totalGSTLabel = new JLabel("Total Includ 6% GST");
-		totalGSTLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
+		totalGSTLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 14));
 		totalGSTLabel.setBounds(36, 516, 152, 14);
 		receiptPanel.add(totalGSTLabel);
 		
 		receiptCashLabel = new JLabel("Cash Tendered  ");
-		receiptCashLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
+		receiptCashLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 14));
 		receiptCashLabel.setBounds(36, 555, 117, 14);
 		receiptPanel.add(receiptCashLabel);
 		
 		receiptChangeLabel = new JLabel("Change");
-		receiptChangeLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
+		receiptChangeLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 14));
 		receiptChangeLabel.setBounds(36, 597, 202, 14);
 		receiptPanel.add(receiptChangeLabel);
 		
 		totalPriceValueLabel = new JLabel("PRICE");
-		totalPriceValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
+		totalPriceValueLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 14));
 		totalPriceValueLabel.setBounds(574, 477, 69, 16);
 		receiptPanel.add(totalPriceValueLabel);
 		
 		totalGSTValueLabel = new JLabel("GST");
-		totalGSTValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
+		totalGSTValueLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 14));
 		totalGSTValueLabel.setBounds(574, 518, 69, 16);
 		receiptPanel.add(totalGSTValueLabel);
 		
 		cashValueLabel = new JLabel("CASH");
-		cashValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
+		cashValueLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 14));
 		cashValueLabel.setBounds(574, 557, 69, 16);
 		receiptPanel.add(cashValueLabel);
 		
 		changeValueLabel = new JLabel("CHANGE");
-		changeValueLabel.setFont(new Font(fontStyle, Font.BOLD, 14));
+		changeValueLabel.setFont(new Font(FONT_STYLE, Font.BOLD, 14));
 		changeValueLabel.setBounds(574, 599, 69, 16);
 		receiptPanel.add(changeValueLabel);
 		
 		receiptButton = new JButton("Receipt");
-		receiptButton.setFont(new Font(fontStyle, Font.BOLD, 20));
+		receiptButton.setFont(new Font(FONT_STYLE, Font.BOLD, 20));
 		receiptButton.setBounds(511, 657, 132, 33);
 		receiptPanel.add(receiptButton);
 		
@@ -516,12 +510,7 @@ public class TransactionGUI extends JFrame
 				selectedItem.setSubTotalPrice(Double.parseDouble(
 							subTotalPriceTextField.getText()));
 				cart.addItem(selectedItem);
-				
-//				cart.getCartItems().get(cart.getCartItems().size()-1).
-//					setQuantity(Integer.parseInt(quantityTextField.getText()));
-//				cart.getCartItems().get(cart.getCartItems().size()-1).
-//					setSubTotalPrice(Double.parseDouble(
-//							subTotalPriceTextField.getText()));
+
 				
 				DefaultTableModel item = (DefaultTableModel)itemsTable.
 											getModel();
@@ -533,34 +522,10 @@ public class TransactionGUI extends JFrame
 						subTotalPriceTextField.getText()
 				});
 				
-				//Calculate total price from all selected item
-//				double subtotalPrice = 
-//						Double.parseDouble(subTotalPriceTextField.getText());
-//				double totalPrice;
-//				
-//				if (totalPriceTextField.getText().equals("")){
-//					totalPrice = 0.0;
-//				} else {
-//					totalPrice = Double.parseDouble(totalPriceTextField.getText());
-//				}
-//				
-//				totalPrice += subtotalPrice * GST;
-//				totalPrice = (Math.round(totalPrice - 0.05)) + 0.05;
 				totalPriceTextField.setText(String.valueOf(
 						decimalPattern.format(cart.getRoundTotalPrice())));
 				cashTextField.setEditable(true);
-				
-				
-//				quantityTextField.setText("");
-//				subTotalPriceTextField.setText("");
-				
-				//Refresh all text fields
-				
-//				totalPriceTextField.setText("");
-//				unitPriceTextField.setText("");
-//				quantityTextField.setText("");
-//				quantityTextField.setEditable(false);
-//				itemsComboBox.setSelectedItem(1);
+
 			}
 			// if confirmButton is clicked
 		}else if (action.getSource() == confirmButton) {
@@ -569,12 +534,13 @@ public class TransactionGUI extends JFrame
 			((DefaultTableModel) receiptTable.getModel()).
 				getDataVector().removeAllElements();
 			
+			// if the cart is empty
 			if (cart.getCartItems().isEmpty()){
 				
 				JOptionPane.showMessageDialog(null, "The cart is empty.");
 				
 			} else {
-				
+				// check if cash is not enough
 				if ((cashTextField.getText().equals("")) 
 						|| (Double.parseDouble(cashTextField.getText()) 
 						< (Double.parseDouble(totalPriceTextField.getText())))){
@@ -598,7 +564,7 @@ public class TransactionGUI extends JFrame
 					//Insert to receipt database
 					try {
 						
-						transactionCtrl.insertReceiptTable(totalPrice);
+						transactionCtrl.insertReceiptData(totalPrice);
 						
 					} catch (ClassNotFoundException | SQLException e) {
 						
@@ -612,7 +578,7 @@ public class TransactionGUI extends JFrame
 						
 						try{ 
 							
-							transactionCtrl.insertSaleTable(
+							transactionCtrl.insertSaleData(
 									cart.getCartItems().get(i));
 							
 						} catch (ClassNotFoundException | SQLException e){
@@ -676,15 +642,6 @@ public class TransactionGUI extends JFrame
 					
 					totalPriceTextField.setText(String.valueOf(
 							decimalPattern.format(cart.getRoundTotalPrice())));
-//					int totalPrice = 0;
-//					for (int i = 0 ; i < cart.getCartItems().size() ; i++) {
-//						
-//						totalPrice += cart.getCartItems().get(i).
-//								getSubTotalPrice() * GST;
-//					
-//						totalPriceTextField.setText(String.valueOf(
-//								decimalPattern.format(totalPrice)));
-//					}
 				}
 			}
 		}
@@ -747,33 +704,24 @@ public class TransactionGUI extends JFrame
 		double subTotalPrice = unitPrice * quantity;
         subTotalPriceTextField.setText(String.valueOf
         		(decimalPattern.format(subTotalPrice)));
-        
-        //To calculate the change
-//        double cash;
-//        double totalItemsPrice;
-//        if (cashTextField.getText().equals("")) {
-//        	cash = 0.0;
-//        	totalItemsPrice = 0.0;
-//        }else{
-//        	cash = Double.parseDouble(cashTextField.getText());
-//        	totalItemsPrice = Double.parseDouble
-//				(totalPriceTextField.getText());
-//        }
-//        double change =  cash - totalItemsPrice;
-//        changeTextField.setText(String.valueOf((decimalPattern.
-//        		format(change))));
+       
 	}
 	
+	/**
+	 * Calculate the change
+	 * @param e
+	 */
 	public void calculateChange(DocumentEvent e) {
+		
 		double cash;
-      if (cashTextField.getText().equals("")) {
-      	cash = 0.0;
-      }else{
-      	cash = Double.parseDouble(cashTextField.getText());
-      }
-      double change = payment.calculateChange(cash);
-      changeTextField.setText(String.valueOf((decimalPattern.
-      		format(change))));
+		if (cashTextField.getText().equals("")) {
+			cash = 0.0;
+		}else{
+			cash = Double.parseDouble(cashTextField.getText());
+		}
+		double change = payment.calculateChange(cash);
+		changeTextField.setText(String.valueOf((decimalPattern.
+		  		format(change))));
 	}
 	
 	/**

@@ -1,67 +1,133 @@
 package user;
 
+/**
+ * This class represent the user in this application.
+ * It contains userId, userName, password, telNo, email and fullName.
+ * @author JKGan
+ *
+ */
 public class User {
 	private int userId;
 	private String userName;
 	private String password;
-	private String address;
 	private String telNo;
 	private String email;
 	private String fullName;
 	
-	public User(int userId, String userName, String fullName, String password, String address,
+	/**
+	 * Constructor of User.
+	 * Used to initialize userId, userName, fullName, password, telNo and email
+	 * @param userId
+	 * @param userName
+	 * @param fullName
+	 * @param password
+	 * @param address
+	 * @param telNo
+	 * @param email
+	 */
+	public User(int userId, String userName, String fullName, String password,
 			String telNo, String email) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
 		this.fullName = fullName;
 		this.password = password;
-		this.address = address;
 		this.telNo = telNo;
 		this.email = email;
 	}
 
+	/**
+	 * getter of userId
+	 * @return userId
+	 */
 	public int getUserId() {
 		return userId;
 	}
+	
+	/**
+	 * setter of userId
+	 * @param userId
+	 */
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
+	
+	/**
+	 * getter of userName
+	 * @return userName
+	 */
 	public String getUserName() {
 		return userName;
 	}
+	
+	/**
+	 * setter userName
+	 * @param userName
+	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+	
+	/**
+	 * getter password
+	 * @return password
+	 */
 	public String getPassword() {
 		return password;
 	}
+	
+	/**
+	 * setter password
+	 * @param password
+	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
+
+	/**
+	 * getter telNo
+	 * @return telNo
+	 */
 	public String getTelNo() {
 		return telNo;
 	}
+	
+	/**
+	 * setter telNo
+	 * @param telNo
+	 */
 	public void setTelNo(String telNo) {
 		this.telNo = telNo;
 	}
+	
+	/**
+	 * getter of email
+	 * @return email
+	 */
 	public String getEmail() {
 		return email;
 	}
+	
+	/**
+	 * setter of email
+	 * @param email
+	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
+	/**
+	 * getter of fullName
+	 * @return fullName
+	 */
 	public String getFullName() {
 		return fullName;
 	}
 
+	/**
+	 * setter of fullName
+	 * @param fullName
+	 */
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}

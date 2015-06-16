@@ -1,8 +1,8 @@
 package item;
 
 /**
- * This class represent the food and set in this application
- * Each item have itemId, name, quantity, unitPrice and subTotalPrice
+ * This class represent the food and set in this application.
+ * Each item have itemId, name, quantity, unitPrice and subTotalPrice.
  * @author JKGan
  *
  */

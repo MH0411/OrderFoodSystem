@@ -24,7 +24,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 /**
- * 
+ * This class enable user to print either receipt or sales into pdf file.
  * @author JKGan
  *
  */
@@ -52,13 +52,15 @@ public class PDFPrinter {
 //	    try {
 //	    
 //		  Document printReceipt = new Document(PageSize.A4.rotate());     
-//	      PdfWriter.getInstance(printReceipt, new FileOutputStream(pathOfReceiptPDF));
+//	      PdfWriter.getInstance(printReceipt, new FileOutputStream(
+//						pathOfReceiptPDF));
 //	      printReceipt.open();
 //	      printReceipt(printReceipt);
 //	      printReceipt.close();
 //	      
 //	      Document printSales = new Document(PageSize.A4.rotate());     
-//	      PdfWriter.getInstance(printSales, new FileOutputStream(pathOfSalesPDF));
+//	      PdfWriter.getInstance(printSales, new FileOutputStream(
+//						pathOfSalesPDF));
 //	      printSales.open();
 //	      printSales(printSales);
 //	      printSales.close();
@@ -68,6 +70,12 @@ public class PDFPrinter {
 //	    }
 //	  }
 	
+	/**
+	 * Method to print receipt into pdf file
+	 * @param printReceipt
+	 * @throws FileNotFoundException
+	 * @throws DocumentException
+	 */
 	public static void printReceipt(Document printReceipt) throws
 		FileNotFoundException, DocumentException {
 
@@ -221,6 +229,14 @@ public class PDFPrinter {
 		}
 	}
 	
+	/**
+	 * Method to print Sales report into pdf file.
+	 * @param sales
+	 * @param startDate
+	 * @param endDate
+	 * @throws FileNotFoundException
+	 * @throws DocumentException
+	 */
 	public static void printSales(Vector<Sale> sales, String startDate, 
 			String endDate) throws FileNotFoundException, DocumentException {
 

@@ -1,8 +1,5 @@
 package transaction.db;
 
-/**
- * 
- */
 import item.Item;
 
 import java.sql.PreparedStatement;
@@ -21,6 +18,12 @@ import com.mysql.jdbc.Connection;
 
 import db.DatabaseController;
 
+/**
+ * This class represent controller to control the connection and process
+ * between Item and database.
+ * @author JKGan
+ *
+ */
 public class TransactionController {
 	
 	private DatabaseController dbController = new DatabaseController();
@@ -30,7 +33,7 @@ public class TransactionController {
 	private ResultSet rsSale;
 	
 	/**
-	 * Get data from database and display at sale table
+	 * Get sales data from database between startDate and endDate 
 	 * @param table
 	 * @param startDate
 	 * @param endDate
@@ -38,7 +41,7 @@ public class TransactionController {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public Vector<Sale> displaySales(String startDate, 
+	public Vector<Sale> getSales(String startDate, 
 			String endDate) throws ClassNotFoundException, SQLException {
 
 		//Open database connection
@@ -62,7 +65,7 @@ public class TransactionController {
 		// Wrap result in Vector
 		Vector<Sale> sales = new Vector<Sale>();
 		
-		//Get all item name in database.
+		//Get all item name in database and store in sales
 		while(rsSale.next()){
 	
 			Sale sale = new Sale();
@@ -78,7 +81,7 @@ public class TransactionController {
 		// Close connection
 		conn.close();
 		
-		// Return vector of ahtletes
+		// Return vector of sale
 		return sales;		
 	}
 	
@@ -88,7 +91,7 @@ public class TransactionController {
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public void insertReceiptTable(double totalPrice )
+	public void insertReceiptData(double totalPrice )
 			throws SQLException, ClassNotFoundException {
 		
 		//Open connection
@@ -114,7 +117,7 @@ public class TransactionController {
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public void insertSaleTable(Item cartItem) 
+	public void insertSaleData(Item cartItem) 
 			throws SQLException, ClassNotFoundException {
 		
 		//Open connection

@@ -1,6 +1,5 @@
 package user.db;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -9,11 +8,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
-import java.util.Vector;
 
-import db.DatabaseController;
 import user.User;
+import db.DatabaseController;
 
+/**
+ * This class represent the controller to control the connection and process
+ * between User and database.
+ * @author JKGan
+ *
+ */
 public class UserController {
 	
 	private User user;
@@ -29,9 +33,9 @@ public class UserController {
 	}
 
 	/**
-	 * validate username and password which user input to login
-	 * @param userName
-	 * @param password
+	 * validate userName and password which user input to login
+	 * @param userName username
+	 * @param password user's password
 	 * @return true if userName and password is correct
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
@@ -57,7 +61,6 @@ public class UserController {
 							rsUser.getString("userName"),
 							rsUser.getString("fullName"),
 							rsUser.getString("password"),
-							rsUser.getString("address"),
 							rsUser.getString("telNo"),
 							rsUser.getString("email"));
 			
@@ -82,6 +85,18 @@ public class UserController {
 		
 	}
 	
+	/**
+	 * validate whether if userName is used or not.
+	 * @param userName username
+	 * @param password user's password
+	 * @param fullName user's full name
+	 * @param ic user's ic no
+	 * @param telNo user's telephone no
+	 * @param email user's email address
+	 * @return 
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
 	public boolean validateRegister(String userName, String password, 
 			String fullName, String ic, String telNo, String email) 
 					throws SQLException, ClassNotFoundException {
@@ -120,34 +135,5 @@ public class UserController {
 		}
 		
 	}
-	
-//	public Vector<User> selectAllUsers() throws SQLException, 
-//			ClassNotFoundException {
-//		
-//			conn = dbController.getConnection();
-//			
-//			String sql = "SELECT * FROM tb_user";
-//			
-//			//Create statement object
-//			Statement stmt = conn.createStatement();
-//
-//			//Create result set object
-//			ResultSet rsUser = stmt.executeQuery(sql);
-//	
-//			
-//			//display result set
-//			Vector<User> users = new Vector<User>();
-//			while(rsUser.next()) {
-//				
-//				User tempUser = new User();
-//				tempUser.setUserID(rsUser.getString("userID"));
-//				tempUser.setUserName(rsUser.getString("userName"));
-//				
-//				users.add(tempUser);
-//			}
-//		
-//		conn.close();
-//		
-//		return users;
-//	}
+
 }

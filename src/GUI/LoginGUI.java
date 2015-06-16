@@ -26,8 +26,8 @@ import javax.swing.border.EmptyBorder;
 import user.db.UserController;
 
 /**
- * This class represent GUI of Login and Register page
- * User can either login or register in this GUI
+ * This class represent GUI of Login and Register page.
+ * User can either login or register in this GUI.
  * @author JKGan
  *
  */

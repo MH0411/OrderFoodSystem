@@ -13,6 +13,11 @@ import java.util.Vector;
 
 import transaction.Sale;
 
+/**
+ * This class enable user to print either receipt or sales into txt file.
+ * @author JKGan
+ *
+ */
 public class TxtPrinter {
 	
 	private static DecimalFormat decimalPattern = new DecimalFormat("#.00");
@@ -30,6 +35,12 @@ public class TxtPrinter {
 	private static String pathOfSalesTxt = "./bin/Txt/Sales/sales_" + 
 			dateTime + ".txt";
 
+	/**
+	 * Method to print Sales report into txt file.
+	 * @param sales
+	 * @param startDate
+	 * @param endDate
+	 */
     public static void printSales(Vector<Sale> sales, String startDate, 
     		String endDate) {
     	
@@ -69,6 +80,11 @@ public class TxtPrinter {
         }
     }
     
+    /**
+     * Method to print receipt into txt file.
+     * @param startDate
+     * @param endDate
+     */
     public static void printReceipt(String startDate, String endDate) {
         try {
         	File statText = new File(pathOfSalesTxt);

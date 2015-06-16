@@ -40,14 +40,13 @@ import print.TxtPrinter;
 import transaction.Sale;
 import transaction.db.TransactionController;
 
-import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 /**
- * This class represent GUI of Sales page
+ * This class represent GUI of Sales page.
  * User can check sales report between 2 dates and print to PDF or txt file
- * in this GUI
+ * in this GUI.
  * @author JKGan
  *
  */
@@ -280,9 +279,10 @@ public class SaleGUI extends JFrame implements ActionListener {
 					
 					//Display sales of items
 					transactionCtrl = new TransactionController();
-					sales = transactionCtrl.displaySales(startDate, 
+					sales = transactionCtrl.getSales(startDate, 
 							endDate);
-					DefaultTableModel salesItem = (DefaultTableModel)table.getModel();
+					DefaultTableModel salesItem = (DefaultTableModel)table.
+							getModel();
 					for (int index = 0; index < sales.size(); index++) {
 						Sale currentSale = sales.get(index);
 						salesItem.addRow(new Object[]{currentSale.getItemId(), 
@@ -311,16 +311,18 @@ public class SaleGUI extends JFrame implements ActionListener {
 			// if printButton is clicked
 		} else if (e.getSource() == printButton) {
 			
-			//Check empty jtable
+			//Check if empty table
 			if ((startDatePicker.getModel().getValue() != null) 
 					&& (endDatePicker.getModel().getValue() != null)) {
 			
-				Object[] options = { "PDF", "txt" , "Both"};
+				// prompt option dialog
+				Object[] options = { "PDF", "Txt" , "Both"};
 				int reply = 
 				JOptionPane.showOptionDialog(null, "Select a option to print.", 
 						"Message", JOptionPane.DEFAULT_OPTION, 
 						JOptionPane.DEFAULT_OPTION, null, options, options[0]);
 				
+				// if user chooose pDF
 				if (reply == 0){
 
 					try {
@@ -332,12 +334,13 @@ public class SaleGUI extends JFrame implements ActionListener {
 						e1.printStackTrace();
 					}
 
+					// if user choose txt
 				} else if (reply == 1){
 					
 						
 					TxtPrinter.printSales(sales, startDate, endDate);
 						
-					
+					// if user choose Both
 				} else if (reply == 2){
 
 					try {

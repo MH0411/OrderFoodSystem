@@ -31,7 +31,7 @@ public class Cart {
 	
 	/**
 	 * setter of cartItems
-	 * @param cartItems
+	 * @param cartItems cart items
 	 */
 	public void setCartItems(ArrayList<Item> cartItems) {
 		this.cartItems = cartItems;
@@ -47,7 +47,7 @@ public class Cart {
 	
 	/**
 	 * setter of totalPrice
-	 * @param totalPrice
+	 * @param totalPrice total price of this cart
 	 */
 	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
@@ -55,7 +55,7 @@ public class Cart {
 	
 	/**
 	 * getter of chargeGST
-	 * @return
+	 * @return chargedGST
 	 */
 	public double getChargedGST() {
 		return chargedGST;
@@ -63,34 +63,51 @@ public class Cart {
 	
 	/**
 	 * setter of chargeGST
-	 * @param chargedGST
+	 * @param chargedGST total GST charged
 	 */
 	public void setChargedGST(double chargedGST) {
 		this.chargedGST = chargedGST;
 	}
 
+	/**
+	 * getter of roundTotalPrice
+	 * @return roundTotalPrice
+	 */
 	public double getRoundTotalPrice() {
 		return roundTotalPrice;
 	}
 
+	/**
+	 * setter of roundTotalPrice
+	 * @param roundTotalPrice rounded total price
+	 */
 	public void setRoundTotalPrice(double roundTotalPrice) {
 		this.roundTotalPrice = roundTotalPrice;
 	}
+	
 	/**
 	 * Add item into cartItems
-	 * @param item
+	 * @param item item to buy
 	 */
 	public void addItem(Item item) {		
 		cartItems.add(item);
 		calculateTotalPrice(item.getSubTotalPrice());
 	}
 	
+	/**
+	 * calculate totalPrice
+	 * @param price price of the item
+	 */
 	public void calculateTotalPrice(double price) {
 		totalPrice += (price * GST);
 		chargedGST = totalPrice / GST * 0.06;
 		roundTotalPrice = (Math.round(totalPrice * 20.0)) / 20.0;
 	}
 	
+	/**
+	 * remove item from cartItems
+	 * @param index the index of the item
+	 */
 	public void removeItem(int index) {
 		totalPrice -= (cartItems.get(index).getSubTotalPrice() * GST);
 		chargedGST = totalPrice / GST * 0.06;
