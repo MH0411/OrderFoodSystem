@@ -12,7 +12,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
-
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -43,6 +42,8 @@ import print.TxtPrinter;
 import transaction.Cart;
 import transaction.Payment;
 import transaction.db.TransactionController;
+
+
 
 
 import com.itextpdf.text.Document;
@@ -120,7 +121,7 @@ public class TransactionGUI extends JFrame
 	
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private Payment payment = new Payment(cart);
-	private Document receipt;
+	private Document receipt = new Document();
 	
 	/**
 	 * Launch the application.
@@ -628,8 +629,8 @@ public class TransactionGUI extends JFrame
 			
 			//Print receipt in PDF/TXT file
 			Object[] options = { "PDF", "txt" , "Both"};
-			int reply = 
-			JOptionPane.showOptionDialog(null, "Select a option to print.", 
+			int reply = JOptionPane.showOptionDialog(
+					null, "Select a option to print.", 
 					"Message", JOptionPane.DEFAULT_OPTION, 
 					JOptionPane.DEFAULT_OPTION, null, options, options[0]);
 			
@@ -638,14 +639,17 @@ public class TransactionGUI extends JFrame
 			String cash = cashValueLabel.getText();
 			String change = changeValueLabel.getText();
 			
+			
 			if (reply == 0){
 
 				try {
 					
-					PDFPrinter.printReceipt(receipt, totalPrice, gst,
+					items = transactionCtrl.getReceiptData();
+					PDFPrinter.printReceipt(items, totalPrice, gst,
 							cash, change);
 					
-				} catch (FileNotFoundException | DocumentException e1) {
+				} catch (FileNotFoundException | DocumentException | 
+						ClassNotFoundException | SQLException e1) {
 					
 					e1.printStackTrace();
 				}
@@ -660,7 +664,7 @@ public class TransactionGUI extends JFrame
 
 				try {
 					
-					PDFPrinter.printReceipt(receipt, totalPrice, gst,
+					PDFPrinter.printReceipt(items, totalPrice, gst,
 							cash, change);
 					
 				} catch (FileNotFoundException | DocumentException e1) {

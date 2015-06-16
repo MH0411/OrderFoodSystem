@@ -7,12 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import transaction.Sale;
+import user.User;
 
 import com.mysql.jdbc.Connection;
 
@@ -31,6 +33,7 @@ public class TransactionController {
 	private String sql;
 	private Statement stmt;
 	private ResultSet rsSale;
+	private Item saleItem;
 	
 	/**
 	 * Get sales data from database between startDate and endDate 
@@ -49,7 +52,7 @@ public class TransactionController {
 		
 		//Create sql statement;
 		sql = "SELECT i.itemId, name, sum(quantity), unitPrice, "
-				+ "sum(subTotalPrice) FROM tb_Sale s "
+				+ "sum(subTotalPrice) FROM tb_sale s "
 				+ "LEFT JOIN tb_item i ON s.itemId = i.itemId "
 				+ "LEFT JOIN tb_receipt r ON s.receiptId = r.receiptId "
 				+ "WHERE dateTime BETWEEN '" + startDate + "' "
@@ -109,6 +112,50 @@ public class TransactionController {
 		
 		//Close
 		conn.close();
+	}
+	
+	public ArrayList<Item> getReceiptData() throws SQLException,
+		ClassNotFoundException {
+		ArrayList<Item> items = new ArrayList<Item>();
+		
+		conn = (Connection) dbController.getConnection();
+		//Create sql query
+		sql = "SELECT MAX(receiptId) FROM tb_receipt";
+		
+		stmt = conn.createStatement();	
+		
+		//Create result set object
+		ResultSet rsReceipt = stmt.executeQuery(sql);
+		
+		//Get current receipt id
+		int maxReceiptId = 0;
+		if (rsReceipt.next()) {
+			maxReceiptId = rsReceipt.getInt(1);
+		} else {
+			maxReceiptId = 1;
+		}
+		
+		String sql = "SELECT receiptId, name, quantity, unitPrice, subTotalPrice"
+				+ " FROM tb_sale s LEFT JOIN tb_item i "
+				+ "ON s.itemId = i.itemId"
+				+ "WHERE receiptId = '" + maxReceiptId + "'";
+		
+		//Create statement object
+		Statement stmt = conn.createStatement();
+
+		//Create result set object
+		ResultSet rsSale = stmt.executeQuery(sql);
+
+		//display result set
+		while (rsSale.next()) {
+		
+			saleItem = new Item(rsSale.getString("name"),
+							rsSale.getInt("quantity"),
+							rsSale.getDouble("unitPrice"),
+							rsSale.getDouble("subTotalPrice"));
+		}
+			
+		return items;
 	}
 	
 	/**

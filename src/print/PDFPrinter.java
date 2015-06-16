@@ -1,4 +1,6 @@
 package print;
+import item.Item;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -7,6 +9,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -48,31 +51,10 @@ public class PDFPrinter {
 	private static Properties property = new Properties();
 	private static FileInputStream input;
 	
-//	public static void main(String[] args) {
-//	    try {
-//	    
-//		  Document printReceipt = new Document(PageSize.A4.rotate());     
-//	      PdfWriter.getInstance(printReceipt, new FileOutputStream(
-//						pathOfReceiptPDF));
-//	      printReceipt.open();
-//	      printReceipt(printReceipt);
-//	      printReceipt.close();
-//	      
-//	      Document printSales = new Document(PageSize.A4.rotate());     
-//	      PdfWriter.getInstance(printSales, new FileOutputStream(
-//						pathOfSalesPDF));
-//	      printSales.open();
-//	      printSales(printSales);
-//	      printSales.close();
-//	      
-//	    } catch (Exception e) {
-//	      e.printStackTrace();
-//	    }
-//	  }
-	
 
 	/**
 	 * print receipt into pdf file.
+	 * @param items 
 	 * @param printReceipt
 	 * @param totalPrice2
 	 * @param gst2
@@ -81,18 +63,18 @@ public class PDFPrinter {
 	 * @throws FileNotFoundException
 	 * @throws DocumentException
 	 */
-	public static void printReceipt(Document printReceipt, String totalPrice2, 
+	public static void printReceipt(ArrayList<Item> items, String totalPrice2, 
 			String gst2, String cash, String change2) throws
 			FileNotFoundException, DocumentException {
 
-		Document printSales = new Document(PageSize.A4.rotate());     
-	    PdfWriter.getInstance(printSales, new FileOutputStream(
-	    											pathOfSalesPDF));
-	    printSales.open();
+		Document printReceipt = new Document(PageSize.A4.rotate());     
+	    PdfWriter.getInstance(printReceipt, new FileOutputStream(
+	    											pathOfReceiptPDF));
+	    printReceipt.open();
 	    
 		try
 		{
-			input = new FileInputStream("config/config.properties");
+			input = new FileInputStream("bin/config/config.properties");
 			// load a properties file
 			property.load(input);
 	        /* Add title with center alignment */
@@ -170,6 +152,14 @@ public class PDFPrinter {
 	        para9.setSpacingAfter(5);
 	        printReceipt.add(para9);
 	        
+	        for(int i = 0 ; i < items.size() ; i++) {
+	        
+	        	Chunk itemLine = new Chunk(items.get(i).getName() + "  " +
+	        							items.get(i).getQuantity() + "  " +
+	        							items.get(i).getUnitPrice() + "  " +
+	        							items.get(i).getSubTotalPrice());
+	        }
+	        
 	        /* Add Total Price */
 	        Chunk totalPrice = new Chunk( "TOTAL PRICE (RM) :",FontFactory.
 	        		getFont(FontFactory.TIMES_BOLD, 16, Font.BOLD, 
@@ -213,6 +203,8 @@ public class PDFPrinter {
 	        printReceipt.add(para14);
 	    
 	        
+	        
+	        printReceipt.close();
 	        /* Open pdf file */
 	        // for Window
 	        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 

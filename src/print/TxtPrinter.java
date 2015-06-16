@@ -79,6 +79,10 @@ public class TxtPrinter {
 	        	w.write(decimalPattern.format(sales.get(index).getTotalPrice()) 
 	        			+ newLine);	        	
 	        }
+            
+            Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
+                    pathOfSalesTxt);
+            
             w.close();
         } catch (IOException e) {
             e.printStackTrace();
