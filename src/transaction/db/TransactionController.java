@@ -34,7 +34,6 @@ public class TransactionController {
 	private String sql;
 	private Statement stmt;
 	private ResultSet rsSale;
-	private OrderedItem saleItem;
 	
 	/**
 	 * Get sales data from database between startDate and endDate 
@@ -115,9 +114,16 @@ public class TransactionController {
 		conn.close();
 	}
 	
-	public ArrayList<Item> getReceiptData() throws SQLException,
+	/**
+	 * Method to get previous receipt data
+	 * @return
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
+	public ArrayList<OrderedItem> getReceiptData() throws SQLException,
 		ClassNotFoundException {
-		ArrayList<Item> items = new ArrayList<Item>();
+		
+		ArrayList<OrderedItem> items = new ArrayList<OrderedItem>();
 		
 		conn = (Connection) dbController.getConnection();
 		//Create sql query
@@ -136,11 +142,10 @@ public class TransactionController {
 			maxReceiptId = 1;
 		}
 		
-		String sql = "SELECT s.itemId, name, quantity, unitPrice, subTotalPrice"
-				+ " FROM tb_sale s LEFT JOIN tb_item i "
-				+ "ON s.itemId = i.itemId"
-				+ "WHERE receiptId = '" + maxReceiptId + "'";
-		
+		String sql = "SELECT i.itemId, name, quantity, unitPrice, subTotalPrice"
+				+ " FROM tb_sale s LEFT JOIN tb_item i ON s.itemId = i.itemId "
+				+ "WHERE s.receiptId = '" + maxReceiptId + "'";
+				
 		//Create statement object
 		Statement stmt = conn.createStatement();
 
@@ -150,13 +155,13 @@ public class TransactionController {
 		//display result set
 		while (rsSale.next()) {
 		
-			saleItem = new OrderedItem(rsSale.getInt("s.itemId"),
-							rsSale.getString("name"),
-							rsSale.getInt("quantity"),
-							rsSale.getDouble("unitPrice"),
-							rsSale.getDouble("subTotalPrice"));
+			OrderedItem orderedItem = new OrderedItem(rsSale.getInt("i.itemId"),
+											rsSale.getString("name"),
+											rsSale.getInt("quantity"),
+											rsSale.getDouble("unitPrice"),
+											rsSale.getDouble("subTotalPrice"));
+			items.add(orderedItem);
 		}
-			
 		return items;
 	}
 	

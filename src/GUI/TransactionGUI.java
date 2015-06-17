@@ -1,6 +1,7 @@
 package GUI;
 
 import item.Item;
+import item.OrderedItem;
 import item.db.ItemController;
 
 import java.awt.EventQueue;
@@ -42,6 +43,8 @@ import print.TxtPrinter;
 import transaction.Cart;
 import transaction.Payment;
 import transaction.db.TransactionController;
+
+
 
 
 
@@ -111,17 +114,18 @@ public class TransactionGUI extends JFrame
 	private java.sql.Timestamp currentTimestamp;
 	private Cart cart = new Cart();
 	DefaultListCellRenderer centerRenderer;
-	//Set 2 decimal places.
 	private DecimalFormat decimalPattern = new DecimalFormat("0.00");
 	private ItemController itemCtrl = new ItemController();
 	private final String FONT_STYLE = "Times New Roman";
 	private JTable receiptTable;
-
 	private TransactionController transactionCtrl = new TransactionController();
-	
+	private ArrayList<OrderedItem> orderedItems = new ArrayList<OrderedItem>();
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private Payment payment = new Payment(cart);
 	private Document receipt = new Document();
+	private final int optionPDF = 0;
+	private final int optionTxt = 1;
+	private final int optionBoth = 2;
 	
 	/**
 	 * Launch the application.
@@ -567,12 +571,14 @@ public class TransactionGUI extends JFrame
 					double totalGST = cart.getChargedGST();
 					double cash = Double.parseDouble(cashTextField.getText());
 					
-					totalPriceValueLabel.setText(String.valueOf(totalPrice));
+					totalPriceValueLabel.setText(String.valueOf(
+							decimalPattern.format(totalPrice)));
 					totalGSTValueLabel.setText(String.valueOf(
 							decimalPattern.format(totalGST)));
 					cashValueLabel.setText(String.valueOf(
 							decimalPattern.format(cash)));
 					changeValueLabel.setText(changeTextField.getText());
+					gstIdLabel.setText("001134034944");
 					
 					//Insert to receipt database
 					try {
@@ -627,54 +633,58 @@ public class TransactionGUI extends JFrame
 			// if receiptButton is clicked
 		}else if (action.getSource() == receiptButton) {
 			
-			//Print receipt in PDF/TXT file
-			Object[] options = { "PDF", "txt" , "Both"};
-			int reply = JOptionPane.showOptionDialog(
-					null, "Select a option to print.", 
-					"Message", JOptionPane.DEFAULT_OPTION, 
-					JOptionPane.DEFAULT_OPTION, null, options, options[0]);
-			
-			String totalPrice = totalPriceValueLabel.getText();
-			String gst = totalGSTValueLabel.getText();
-			String cash = cashValueLabel.getText();
-			String change = changeValueLabel.getText();
-			
-			
-			if (reply == 0){
-
-				try {
-					
-					items = transactionCtrl.getReceiptData();
-					PDFPrinter.printReceipt(items, totalPrice, gst,
-							cash, change);
-					
-				} catch (FileNotFoundException | DocumentException | 
-						ClassNotFoundException | SQLException e1) {
-					
-					e1.printStackTrace();
-				}
-
-			} else if (reply == 1){
+			if (totalPriceValueLabel.getText().equals("PRICE")) {
+				JOptionPane.showMessageDialog(null, "Please create a receipt"
+						+ " first.");
+			} else {
+				//Print receipt in PDF/TXT file
+				Object[] options = { "PDF", "txt" , "Both"};
+				int reply = JOptionPane.showOptionDialog(
+						null, "Select a option to print.", 
+						"Message", JOptionPane.DEFAULT_OPTION, 
+						JOptionPane.DEFAULT_OPTION, null, options, options[0]);
 				
+				String totalPriceValue = totalPriceValueLabel.getText();
+				String gstValue = totalGSTValueLabel.getText();
+				String cashValue = cashValueLabel.getText();
+				String changeValue = changeValueLabel.getText();
+							
+				if (reply == optionPDF){
+	
+					try {
+						
+						orderedItems = transactionCtrl.getReceiptData();
+						PDFPrinter.printReceipt(orderedItems, totalPriceValue,
+								gstValue, cashValue, changeValue);
+						
+					} catch (FileNotFoundException | DocumentException | 
+							ClassNotFoundException | SQLException e1) {
+						
+						e1.printStackTrace();
+					}
+	
+				} else if (reply == optionTxt){
 					
-				TxtPrinter.printReceipt(receipt);
+						
+					TxtPrinter.printReceipt(receipt);
+						
 					
-				
-			} else if (reply == 2){
-
-				try {
+				} else if (reply == optionBoth){
+	
+					try {
+						orderedItems = transactionCtrl.getReceiptData();
+						PDFPrinter.printReceipt(orderedItems, totalPriceValue,
+								gstValue, cashValue, changeValue);
+						
+					} catch (FileNotFoundException | DocumentException | 
+							ClassNotFoundException | SQLException e1) {
+						
+						e1.printStackTrace();
+					}
 					
-					PDFPrinter.printReceipt(items, totalPrice, gst,
-							cash, change);
-					
-				} catch (FileNotFoundException | DocumentException e1) {
-					
-					e1.printStackTrace();
-				}
-				
-				TxtPrinter.printReceipt(receipt);
-			} 
-			
+					TxtPrinter.printReceipt(receipt);
+				} 
+			}
 			// if itemsComboBox is clicked
 		}else if (action.getSource() == itemsComboBox) {
 			

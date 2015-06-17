@@ -1,11 +1,10 @@
 package print;
-import item.Item;
+import item.OrderedItem;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -35,13 +34,16 @@ public class PDFPrinter {
 	
 	private static DecimalFormat decimalPattern = new DecimalFormat("#.00");
 	private static String datePattern = "yyyy-MM-dd HH-mm-ss";
+	private static String datepattern1 = "yyyy-MM-dd HH:mm:ss";
 	private static SimpleDateFormat dateFormatter = 
 			new SimpleDateFormat(datePattern);
+	private static SimpleDateFormat dateFormatter1 = 
+			new SimpleDateFormat(datepattern1);
 	
 	private static java.util.Date date= new java.util.Date();
-	private static String dateTime = 
-			dateFormatter.format(new Timestamp(date.getTime()));
-	
+	private static Timestamp currentTime = new Timestamp(date.getTime());
+	private static String dateTime = dateFormatter.format(currentTime);
+	private static String dateTime1 = dateFormatter1.format(currentTime);
 	
 	private static String pathOfReceiptPDF = "./bin/PDF/Receipt/receipt_" 
 			+ dateTime + ".pdf";
@@ -54,18 +56,18 @@ public class PDFPrinter {
 
 	/**
 	 * print receipt into pdf file.
-	 * @param items 
+	 * @param orderedItems 
 	 * @param printReceipt
-	 * @param totalPrice2
-	 * @param gst2
-	 * @param cash
-	 * @param change2
+	 * @param totalPriceValue
+	 * @param gstvalue
+	 * @param cashValue
+	 * @param changeValue
 	 * @throws FileNotFoundException
 	 * @throws DocumentException
 	 */
-	public static void printReceipt(ArrayList<Item> items, String totalPrice2, 
-			String gst2, String cash, String change2) throws
-			FileNotFoundException, DocumentException {
+	public static void printReceipt(ArrayList<OrderedItem> orderedItems,
+			String totalPriceValue, String gstValue, String cashValue,
+			String changeValue) throws FileNotFoundException, DocumentException{
 
 		Document printReceipt = new Document(PageSize.A4.rotate());     
 	    PdfWriter.getInstance(printReceipt, new FileOutputStream(
@@ -123,7 +125,7 @@ public class PDFPrinter {
 	        printReceipt.add(para5);
 	
 	        /* Add date */
-	        Chunk date = new Chunk( "Date : "+ new Date(0).toString());
+	        Chunk date = new Chunk( "Date : " +  dateTime1);
 	        Paragraph para6 = new Paragraph(date);
 	        para6.setAlignment(Paragraph.ALIGN_LEFT);
 	        para6.setSpacingAfter(5);
@@ -138,31 +140,43 @@ public class PDFPrinter {
 	        para7.setSpacingAfter(5);
 	        printReceipt.add(para7);
 	        
-	        Chunk line = new Chunk( "---------------------------------"
-	        		+ "-----------------------------------------------"
-	        		+ "-----------------------------");
-	        Paragraph para8 = new Paragraph(line);
-	        para8.setSpacingAfter(5);
-	        printReceipt.add(para8);
+	        // a table with 5 columns
+	        PdfPTable tableTitle = new PdfPTable(5);
+	        tableTitle.getDefaultCell().setBorderWidth(0f);
 	        
-	        Chunk line2 = new Chunk( "---------------------------------"
-	        		+ "------------------------------------------------"
-	        		+ "----------------------------");
-	        Paragraph para9 = new Paragraph(line2);
-	        para9.setSpacingAfter(5);
-	        printReceipt.add(para9);
+	        // add the title of table
+	        tableTitle.addCell("ID");
+	        tableTitle.addCell("Food");
+	        tableTitle.addCell("Quantity");
+	        tableTitle.addCell("Unit Price (RM)");
+	        tableTitle.addCell("SubTotal Price (RM)");
+	        printReceipt.add(tableTitle);
 	        
-	        for(int i = 0 ; i < items.size() ; i++) {
+	        Chunk line = new Chunk("                --------------------------"
+	        		+ "-------------------------------------------------------"
+	        		+ "-------------------------------------------------------"
+	        		+ "---------------------");
+	        Paragraph titleBorder = new Paragraph(line);
+	        titleBorder.setSpacingAfter(5);
+	        printReceipt.add(titleBorder);
 	        
-	        	Chunk itemLine = new Chunk(items.get(i).getName() + "  " +
-	        							items.get(i).getQuantity() + "  " +
-	        							items.get(i).getUnitPrice() + "  " +
-	        							items.get(i).getSubTotalPrice());
+	        PdfPTable table = new PdfPTable(5);
+	        table.getDefaultCell().setBorderWidth(0f);
+	        for (int index = 0; index < orderedItems.size(); index++) {
+	        	table.addCell(orderedItems.get(index).getItemId() + "");
+		        table.addCell(orderedItems.get(index).getName());
+		        table.addCell(orderedItems.get(index).getQuantity() + "");
+		        table.addCell(decimalPattern.format(orderedItems.get(index)
+		        		.getUnitPrice()));
+		        table.addCell(decimalPattern.format(orderedItems.get(index)
+		        		.getSubTotalPrice()));
 	        }
 	        
+	        printReceipt.add(table);
+	        
 	        /* Add Total Price */
-	        Chunk totalPrice = new Chunk( "TOTAL PRICE (RM) :",FontFactory.
-	        		getFont(FontFactory.TIMES_BOLD, 16, Font.BOLD, 
+	        Chunk totalPrice = new Chunk("TOTAL PRICE (RM) : " + totalPriceValue
+	        		,FontFactory.getFont(FontFactory.TIMES_BOLD, 16, Font.BOLD, 
 	        				BaseColor.BLACK));
 	        Paragraph para10 = new Paragraph(totalPrice);
 	        para10.setAlignment(Paragraph.ALIGN_LEFT);
@@ -170,40 +184,41 @@ public class PDFPrinter {
 	        printReceipt.add(para10);
 	        
 	        /* Add gst percent */
-	        Chunk gstPercent = new Chunk( "GST 6% (Incl) :",FontFactory.getFont
-	        		(FontFactory.TIMES_BOLD, 16, BaseColor.BLACK));
+	        Chunk gstPercent = new Chunk("GST 6% (Incl)         : " + gstValue, 
+	        		FontFactory.getFont(FontFactory.TIMES_BOLD, 16,
+	        				BaseColor.BLACK));
 	        Paragraph para11 = new Paragraph(gstPercent);
 	        para11.setAlignment(Paragraph.ALIGN_LEFT);
 	        para11.setSpacingAfter(5);
 	        printReceipt.add(para11);
 	        
 	        /* Add cash tendered */
-	        Chunk cashTendered = new Chunk( "Cash Tendered :",FontFactory.
-	        		getFont(FontFactory.TIMES_BOLD, 16, BaseColor.BLACK));
+	        Chunk cashTendered = new Chunk("Cash Tendered       : " + cashValue,
+	        		FontFactory.getFont(FontFactory.TIMES_BOLD, 16,
+	        				BaseColor.BLACK));
 	        Paragraph para12 = new Paragraph(cashTendered);
 	        para12.setAlignment(Paragraph.ALIGN_LEFT);
 	        para12.setSpacingAfter(5);
 	        printReceipt.add(para12);
 	        
 	        /* Add change */
-	        Chunk change = new Chunk( "Change :",FontFactory.getFont
-	        		(FontFactory.TIMES_BOLD, 16, BaseColor.BLACK));
+	        Chunk change = new Chunk("Change              : " + changeValue, 
+	        		FontFactory.getFont(FontFactory.TIMES_BOLD, 16,
+	        				BaseColor.BLACK));
 	        Paragraph para13 = new Paragraph(change);
 	        para13.setAlignment(Paragraph.ALIGN_LEFT);
 	        para13.setSpacingAfter(25);
 	        printReceipt.add(para13);
 	        
 	        /* Add phrase */
-	        Chunk phrase = new Chunk( "Thank you. Please Come Again !",
+	        Chunk phrase = new Chunk("Thank you. Please Come Again !",
 	        		FontFactory.getFont(FontFactory.TIMES_BOLD, 20, 
 	        				BaseColor.BLACK));
 	        Paragraph para14 = new Paragraph(phrase);
 	        para14.setAlignment(Paragraph.ALIGN_CENTER);
 	        para14.setSpacingAfter(5);
 	        printReceipt.add(para14);
-	    
-	        
-	        
+	    	        
 	        printReceipt.close();
 	        /* Open pdf file */
 	        // for Window
@@ -269,7 +284,7 @@ public class PDFPrinter {
 	        para3.setSpacingAfter(25);
 	        printSales.add(para3);
 		
-	        // a table with three columns
+	        // a table with 5 columns
 	        PdfPTable table = new PdfPTable(5);
 	        
 	        // add the title of table
