@@ -40,7 +40,6 @@ public class TxtPrinter {
 	private static String dateTime = dateFormatter.format(currentTime);
 	private static String dateTime1 = dateFormatter1.format(currentTime);
 	
-	
 	private static String pathOfReceiptTxt = "./bin/Txt/Receipt/receipt_" 
 			+ dateTime + ".txt";
 	private static String pathOfSalesTxt = "./bin/Txt/Sales/sales_" + 
@@ -48,6 +47,7 @@ public class TxtPrinter {
 	
 	private static Properties property = new Properties();
 	private static FileInputStream input;
+	private static double totalSalePrice = 0;
 	
 	/**
 	 * Method to print Sales report into txt file.
@@ -87,8 +87,14 @@ public class TxtPrinter {
 	        	w.write(decimalPattern.format(sales.get(index).getUnitPrice()) 
 	        			+ "\t\t");
 	        	w.write(decimalPattern.format(sales.get(index).getTotalPrice()) 
-	        			+ newLine);	        	
+	        			+ newLine);
+	        	totalSalePrice += sales.get(index).getTotalPrice();
 	        }
+            
+            w.write("--------------------------------------------------------"
+            		+ "------------------" + newLine);
+            w.write("Total Sales (RM) : " 
+            		+ decimalPattern.format(totalSalePrice) + newLine);
             
             Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
                     pathOfSalesTxt);

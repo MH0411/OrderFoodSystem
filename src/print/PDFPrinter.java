@@ -52,6 +52,7 @@ public class PDFPrinter {
 	
 	private static Properties property = new Properties();
 	private static FileInputStream input;
+	private static double totalSalePrice = 0;
 	
 
 	/**
@@ -284,15 +285,32 @@ public class PDFPrinter {
 	        para3.setSpacingAfter(25);
 	        printSales.add(para3);
 		
+	        Chunk line = new Chunk("                --------------------------"
+	        		+ "-------------------------------------------------------"
+	        		+ "-------------------------------------------------------"
+	        		+ "---------------------");
+	        Paragraph borderLine = new Paragraph(line);
+	        borderLine.setSpacingAfter(5);
+	        printSales.add(borderLine);
+	        
 	        // a table with 5 columns
-	        PdfPTable table = new PdfPTable(5);
+	        PdfPTable tableTitle = new PdfPTable(5);
+	        tableTitle.getDefaultCell().setBorderWidth(0f);
 	        
 	        // add the title of table
-	        table.addCell("ID");
-	        table.addCell("Food");
-	        table.addCell("Quantity");
-	        table.addCell("Unit Price (RM)");
-	        table.addCell("Total Price (RM)");
+	        tableTitle.addCell("ID");
+	        tableTitle.addCell("Food");
+	        tableTitle.addCell("Quantity");
+	        tableTitle.addCell("Unit Price (RM)");
+	        tableTitle.addCell("SubTotal Price (RM)");
+	        printSales.add(tableTitle);
+	        
+	        borderLine.setSpacingAfter(5);
+	        printSales.add(borderLine);
+	        
+	        // a table with 5 columns
+	        PdfPTable table = new PdfPTable(5);
+	        table.getDefaultCell().setBorderWidth(0f);
 	        
 	        for (int index = 0; index < sales.size(); index++) {
 	        	table.addCell(sales.get(index).getItemId() + "");
@@ -302,9 +320,19 @@ public class PDFPrinter {
 		        		.getUnitPrice()) + "");
 		        table.addCell(decimalPattern.format(sales.get(index)
 		        		.getTotalPrice()) + "");
+		        
+		        totalSalePrice += sales.get(index).getTotalPrice();
 	        }
-	        
 	        printSales.add(table);
+	        borderLine.setSpacingAfter(5);
+	        printSales.add(borderLine);
+	        
+	        Chunk totalSale = new Chunk("Total Sales (RM) : " 
+	        		+ decimalPattern.format(totalSalePrice));
+	        Paragraph paraSale = new Paragraph(totalSale);
+	        paraSale.setSpacingAfter(5);
+	        printSales.add(paraSale);
+	        
 	        /* Open pdf file */
 	        // for Window
 	        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
