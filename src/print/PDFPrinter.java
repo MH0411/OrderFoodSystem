@@ -32,7 +32,7 @@ import com.itextpdf.text.pdf.PdfWriter;
  */
 public class PDFPrinter {
 	
-	private static DecimalFormat decimalPattern = new DecimalFormat("#.00");
+	private static DecimalFormat decimalPattern = new DecimalFormat("0.00");
 	private static String datePattern = "yyyy-MM-dd HH-mm-ss";
 	private static String datepattern1 = "yyyy-MM-dd HH:mm:ss";
 	private static SimpleDateFormat dateFormatter = 
@@ -68,7 +68,7 @@ public class PDFPrinter {
 	public static void printReceipt(ArrayList<OrderedItem> orderedItems,
 			String totalPriceValue, String gstValue, String cashValue,
 			String changeValue) throws FileNotFoundException, DocumentException{
-
+		
 		Document printReceipt = new Document(PageSize.A4.rotate());     
 	    PdfWriter.getInstance(printReceipt, new FileOutputStream(
 	    											pathOfReceiptPDF));

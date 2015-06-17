@@ -49,6 +49,7 @@ import transaction.db.TransactionController;
 
 
 
+
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 /**
@@ -633,10 +634,10 @@ public class TransactionGUI extends JFrame
 			// if receiptButton is clicked
 		}else if (action.getSource() == receiptButton) {
 			
-			if (totalPriceValueLabel.getText().equals("PRICE")) {
-				JOptionPane.showMessageDialog(null, "Please create a receipt"
-						+ " first.");
-			} else {
+//			if (totalPriceValueLabel.getText().equals("PRICE")) {
+//				JOptionPane.showMessageDialog(null, "Please create a receipt"
+//						+ " first.");
+//			} else {
 				//Print receipt in PDF/TXT file
 				Object[] options = { "PDF", "txt" , "Both"};
 				int reply = JOptionPane.showOptionDialog(
@@ -662,29 +663,40 @@ public class TransactionGUI extends JFrame
 						
 						e1.printStackTrace();
 					}
-	
+					
 				} else if (reply == optionTxt){
 					
+					try {
 						
-					TxtPrinter.printReceipt(receipt);
+						orderedItems = transactionCtrl.getReceiptData();
+						TxtPrinter.printReceipt(receipt, orderedItems,
+								totalPriceValue, gstValue, cashValue,
+								changeValue);
 						
+					} catch (ClassNotFoundException | SQLException e) {
+						
+						e.printStackTrace();
+						
+					}	
 					
 				} else if (reply == optionBoth){
 	
 					try {
+						
 						orderedItems = transactionCtrl.getReceiptData();
 						PDFPrinter.printReceipt(orderedItems, totalPriceValue,
 								gstValue, cashValue, changeValue);
+						TxtPrinter.printReceipt(receipt, orderedItems,
+								totalPriceValue, gstValue, cashValue,
+								changeValue);
 						
 					} catch (FileNotFoundException | DocumentException | 
 							ClassNotFoundException | SQLException e1) {
 						
 						e1.printStackTrace();
-					}
-					
-					TxtPrinter.printReceipt(receipt);
+					}		
 				} 
-			}
+//			}
 			// if itemsComboBox is clicked
 		}else if (action.getSource() == itemsComboBox) {
 			
