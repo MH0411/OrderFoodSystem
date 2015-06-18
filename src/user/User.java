@@ -13,6 +13,7 @@ public class User {
 	private String telNo;
 	private String email;
 	private String fullName;
+	private String ic;
 	
 	/**
 	 * Constructor of User.
@@ -26,16 +27,45 @@ public class User {
 	 * @param email
 	 */
 	public User(int userId, String userName, String fullName, String password,
-			String telNo, String email) {
-		super();
+			String ic, String telNo, String email) {
 		this.userId = userId;
 		this.userName = userName;
 		this.fullName = fullName;
 		this.password = password;
 		this.telNo = telNo;
 		this.email = email;
+		this.ic = ic;
+	}
+	
+	public User(String userName, String fullName, String password, String ic,
+			String telNo, String email) {
+		this.userName = userName;
+		this.fullName = fullName;
+		this.password = password;
+		this.telNo = telNo;
+		this.email = email;
+		this.ic = ic;
 	}
 
+	public String getIc() {
+		return ic;
+	}
+
+	public void setIc(String ic) {
+		this.ic = ic;
+	}
+
+	/**
+	 * Constructor of User.
+	 * Used to initialize userName and password
+	 * @param userName
+	 * @param password
+	 */
+	public User(String userName, String password) {
+		this.userName = userName;
+		this.password = password;
+	}
+	
 	/**
 	 * getter of userId
 	 * @return userId

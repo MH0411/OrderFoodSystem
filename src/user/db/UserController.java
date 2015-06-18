@@ -41,13 +41,14 @@ public class UserController {
 	 * @throws ClassNotFoundException 
 	 * @throws IOException 
 	 */
-	public boolean validateLogin(String userName, String password) 
+	public boolean validateLogin(User currentUser) 
 			throws SQLException, ClassNotFoundException, IOException {
 		int count = 0;
 		conn = dbController.getConnection();
 		
 		String sql = "SELECT * FROM tb_user WHERE userName = '"
-				 + userName + "' AND password = '" + password + "'";
+				 + currentUser.getUserName() + "' AND password = '" 
+				 + currentUser.getPassword() + "'";
 		
 		//Create statement object
 		Statement stmt = conn.createStatement();
@@ -61,6 +62,7 @@ public class UserController {
 							rsUser.getString("userName"),
 							rsUser.getString("fullName"),
 							rsUser.getString("password"),
+							rsUser.getString("ic"),
 							rsUser.getString("telNo"),
 							rsUser.getString("email"));
 			
@@ -71,7 +73,8 @@ public class UserController {
 		if (count == 1) {
 			// store login information to config.login
 			Properties loginData = new Properties();
-			FileOutputStream output = new FileOutputStream("./bin/config/config.properties");
+			FileOutputStream output = new FileOutputStream(
+					"./bin/config/config.properties");
 			loginData.setProperty("userId", user.getUserId() + "");
 			loginData.setProperty("userName", user.getUserName());
 			loginData.setProperty("fullName", user.getFullName());
@@ -97,8 +100,7 @@ public class UserController {
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public boolean validateRegister(String userName, String password, 
-			String fullName, String ic, String telNo, String email) 
+	public boolean validateRegister(User currentUser) 
 					throws SQLException, ClassNotFoundException {
 		
 		//Open connection
@@ -106,7 +108,7 @@ public class UserController {
 		
 		//Create query
 		String sql = "SELECT * FROM tb_user WHERE userName = '"
-				+ userName + "'";
+				+ currentUser.getUserName() + "'";
 		
 		//Create statement object
 		Statement stmt = conn.createStatement();
@@ -119,12 +121,12 @@ public class UserController {
 			sql = "INSERT INTO tb_user (userName, password, fullName, ic,"
 					+ " telNo, email) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement psUser = conn.prepareStatement(sql);
-			psUser.setString(1, userName);
-			psUser.setString(2, password);
-			psUser.setString(3, fullName);
-			psUser.setString(4, ic);
-			psUser.setString(5, telNo);
-			psUser.setString(6, email);
+			psUser.setString(1, currentUser.getUserName());
+			psUser.setString(2, currentUser.getPassword());
+			psUser.setString(3, currentUser.getFullName());
+			psUser.setString(4, currentUser.getIc());
+			psUser.setString(5, currentUser.getTelNo());
+			psUser.setString(6, currentUser.getEmail());
 			
 			psUser.executeUpdate();
 			conn.close();

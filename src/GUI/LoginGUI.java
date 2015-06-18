@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import user.User;
 import user.db.UserController;
 
 /**
@@ -279,6 +280,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 			final String userName = userNameField.getText().trim();
 			final String password = String.valueOf(
 					passwordField.getPassword()).trim();
+			User user = new User(userName, password);
 			
 			// Create an UserController object
 			UserController userCtrl = new UserController();
@@ -286,7 +288,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 				// will be true if all required fields is filled in
 				if (validateLoginRequiredField()) {
 					// will be true if userName and password is valid
-					if (userCtrl.validateLogin(userName, password)) {
+					if (userCtrl.validateLogin(user)) {
 						// close current frame and redirect to TransactionGUI
 						close();
 						TransactionGUI transactionFrame = new TransactionGUI();
@@ -335,8 +337,9 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 					if (password.equals(comfirmPassword)) {
 						// will be true if userName in valid and haven't been 
 						// used and stored user info into database
-						if (userCtrl.validateRegister(userName, password, 
-								fullName, ic, telNo, email)) {
+						User user = new User(userName, fullName, password,
+										ic, telNo, email);
+						if (userCtrl.validateRegister(user)) {
 							// Prompt success message
 							JOptionPane.showMessageDialog(null, 
 									"Register successfully!");
