@@ -1,6 +1,6 @@
 package item;
 
-public class OrderedItem extends Item{
+public class OrderedItem extends Item {
 
 	private int quantity;
 	private double subTotalPrice;
@@ -15,12 +15,15 @@ public class OrderedItem extends Item{
 	public int getQuantity() {
 		return quantity;
 	}
+	
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+	
 	public double getSubTotalPrice() {
 		return subTotalPrice;
 	}
+	
 	public void setSubTotalPrice(double subTotalPrice) {
 		this.subTotalPrice = subTotalPrice;
 	}

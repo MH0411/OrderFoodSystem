@@ -171,7 +171,7 @@ public class TransactionController {
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public void insertSaleData(Item cartItem) 
+	public void insertSaleData(OrderedItem cartItem) 
 			throws SQLException, ClassNotFoundException {
 		
 		//Open connection

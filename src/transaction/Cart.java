@@ -1,8 +1,8 @@
 package transaction;
 
-import java.util.ArrayList;
+import item.OrderedItem;
 
-import item.Item;
+import java.util.ArrayList;
 
 /**
  * This class represent Cart of this application which store cartItems, 
@@ -13,7 +13,7 @@ import item.Item;
  */
 public class Cart {
 	
-	private ArrayList<Item> cartItems = new ArrayList<Item>();
+	private ArrayList<OrderedItem> cartItems = new ArrayList<OrderedItem>();
 	private double totalPrice = 0;
 	private double roundTotalPrice = 0;
 	private double chargedGST = 0;
@@ -25,7 +25,7 @@ public class Cart {
 	 * getter of cartItems
 	 * @return cartItems
 	 */
-	public ArrayList<Item> getCartItems() {
+	public ArrayList<OrderedItem> getCartItems() {
 		return cartItems;
 	}
 	
@@ -33,7 +33,7 @@ public class Cart {
 	 * setter of cartItems
 	 * @param cartItems cart items
 	 */
-	public void setCartItems(ArrayList<Item> cartItems) {
+	public void setCartItems(ArrayList<OrderedItem> cartItems) {
 		this.cartItems = cartItems;
 	}
 	
@@ -89,7 +89,7 @@ public class Cart {
 	 * Add item into cartItems
 	 * @param item item to buy
 	 */
-	public void addItem(Item item) {		
+	public void addItem(OrderedItem item) {		
 		cartItems.add(item);
 		calculateTotalPrice(item.getSubTotalPrice());
 	}

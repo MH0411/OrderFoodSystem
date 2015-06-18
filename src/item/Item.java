@@ -2,7 +2,7 @@ package item;
 
 /**
  * This class represent the food and set in this application.
- * Each item have itemId, name, quantity, unitPrice and subTotalPrice.
+ * Each item have itemId, name and unitPrice.
  * @author JKGan
  *
  */
@@ -10,9 +10,9 @@ public class Item {
 	
 	private int itemId;
 	private String name;
-	private int quantity = 0;
+//	private int quantity = 0;
 	private double unitPrice;
-	private double subTotalPrice = 0.0;
+//	private double subTotalPrice = 0.0;
 	
 	/**
 	 * Constructor of Item to initialize itemId, name and unitPrice
@@ -26,13 +26,12 @@ public class Item {
 		this.unitPrice = unitPrice;
 	}
 	
-	public Item(String name, int quantity, double unitPrice,
-			double subTotalPrice) {
+	public Item(String name, double unitPrice) {
 
 		this.name = name;
-		this.quantity = quantity;
+//		this.quantity = quantity;
 		this.unitPrice = unitPrice;
-		this.subTotalPrice = subTotalPrice;
+//		this.subTotalPrice = subTotalPrice;
 	}
 
 	/**
@@ -49,22 +48,6 @@ public class Item {
 	 */
 	public void setItemId(int itemId) {
 		this.itemId = itemId;
-	}
-	
-	/**
-	 * getter of quantity which is quantity of purchase
-	 * @return quantity
-	 */
-	public int getQuantity() {
-		return quantity;
-	}
-
-	/**
-	 * setter of quantity
-	 * @param quantity
-	 */
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
 	}
 
 	/**
@@ -99,22 +82,6 @@ public class Item {
 		this.unitPrice = unitPrice;
 	}
 
-	/**
-	 * getter of subTotalPrice
-	 * @return subTotalPrice
-	 */
-	public double getSubTotalPrice() {
-		return subTotalPrice;
-	}
-
-	/**
-	 * setter of subTotalPrice
-	 * @param subTotalPrice
-	 */
-	public void setSubTotalPrice(double subTotalPrice) {
-		this.subTotalPrice = subTotalPrice;
-	}
-	
 	/**
 	 * Returns a string representation of the object. In general, the toString 
 	 * method returns a string that "textually represents" this object.

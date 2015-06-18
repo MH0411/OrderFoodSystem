@@ -520,7 +520,8 @@ public class TransactionGUI extends JFrame
 			} else {
 				
 				//Add selected item to cart
-				Item selectedItem = (Item) itemsComboBox.getSelectedItem();
+				OrderedItem selectedItem = (OrderedItem) itemsComboBox.
+						getSelectedItem();
 				selectedItem.setQuantity(Integer.parseInt(quantityTextField.
 						getText()));
 				selectedItem.setSubTotalPrice(Double.parseDouble(
@@ -560,7 +561,8 @@ public class TransactionGUI extends JFrame
 				// check if cash is not enough
 				if ((cashTextField.getText().equals("")) 
 						|| (Double.parseDouble(cashTextField.getText()) 
-						< (Double.parseDouble(totalPriceTextField.getText())))){
+						< (Double.parseDouble(totalPriceTextField.
+								getText())))){
 					
 					JOptionPane.showMessageDialog(
 							null, "Insufficient cash tendered");

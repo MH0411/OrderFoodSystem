@@ -325,8 +325,8 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 							trim();
 					final String password = String.valueOf(
 							registerPasswordField.getPassword()).trim();
-					final String comfirmPassword = confirmPasswordTextField.
-							getText().trim();
+					final String comfirmPassword = String.valueOf(
+							confirmPasswordTextField.getPassword()).trim();
 					final String fullName = registerFullNameField.getText().
 							trim();
 					final String ic = icNoTextField.getText().trim();
