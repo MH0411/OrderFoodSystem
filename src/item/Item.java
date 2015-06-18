@@ -26,6 +26,15 @@ public class Item {
 		this.unitPrice = unitPrice;
 	}
 	
+	public Item(String name, int quantity, double unitPrice,
+			double subTotalPrice) {
+
+		this.name = name;
+		this.quantity = quantity;
+		this.unitPrice = unitPrice;
+		this.subTotalPrice = subTotalPrice;
+	}
+
 	/**
 	 * getter of itemId
 	 * @return itemId

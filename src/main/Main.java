@@ -10,7 +10,7 @@ import GUI.LoginGUI;
  * @author JKGan
  *
  */
-public class Application {
+public class Main {
 
 	/**
 	 * Launch the application.
