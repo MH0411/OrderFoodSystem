@@ -520,8 +520,14 @@ public class TransactionGUI extends JFrame
 			} else {
 				
 				//Add selected item to cart
-				OrderedItem selectedItem = (OrderedItem) itemsComboBox.
+				Item item = (Item) itemsComboBox.
 						getSelectedItem();
+				OrderedItem selectedItem = new OrderedItem(
+						item.getItemId(), 
+						item.getName(), 
+						Integer.parseInt(quantityTextField.getText()), 
+						Double.parseDouble(subTotalPriceTextField.getText()),
+						 item.getUnitPrice());
 				selectedItem.setQuantity(Integer.parseInt(quantityTextField.
 						getText()));
 				selectedItem.setSubTotalPrice(Double.parseDouble(
@@ -529,9 +535,9 @@ public class TransactionGUI extends JFrame
 				cart.addItem(selectedItem);
 
 				
-				DefaultTableModel item = (DefaultTableModel)itemsTable.
+				DefaultTableModel itemModel = (DefaultTableModel)itemsTable.
 											getModel();
-				item.addRow(new Object[] {
+				itemModel.addRow(new Object[] {
 						false,
 						itemsComboBox.getSelectedItem(),
 						quantityTextField.getText(), 
