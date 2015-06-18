@@ -526,8 +526,8 @@ public class TransactionGUI extends JFrame
 						item.getItemId(), 
 						item.getName(), 
 						Integer.parseInt(quantityTextField.getText()), 
-						Double.parseDouble(subTotalPriceTextField.getText()),
-						 item.getUnitPrice());
+						item.getUnitPrice(),
+						Double.parseDouble(subTotalPriceTextField.getText()));
 				selectedItem.setQuantity(Integer.parseInt(quantityTextField.
 						getText()));
 				selectedItem.setSubTotalPrice(Double.parseDouble(

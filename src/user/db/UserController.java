@@ -65,8 +65,7 @@ public class UserController {
 							rsUser.getString("ic"),
 							rsUser.getString("telNo"),
 							rsUser.getString("email"));
-			
-			System.out.println("Login Sucessfully");
+
 			count++;
 		}
 		

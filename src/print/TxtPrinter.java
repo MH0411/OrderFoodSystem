@@ -2,6 +2,7 @@ package print;
 
 import item.OrderedItem;
 
+import java.awt.Desktop;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -96,10 +97,14 @@ public class TxtPrinter {
             w.write("Total Sales (RM) : " 
             		+ decimalPattern.format(totalSalePrice) + newLine);
             
-            Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
-                    pathOfSalesTxt);
+//            Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
+//                    pathOfSalesTxt);
             
             w.close();
+            
+            File file = new File(pathOfSalesTxt);
+	        Desktop desktop = Desktop.getDesktop();
+	        desktop.open(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -162,6 +167,11 @@ public class TxtPrinter {
             w.write("Cash Tendered    : " + cashValue + newLine);
             w.write("Change           : " + changeValue + newLine);
             w.close();
+            
+            File file = new File(pathOfReceiptTxt);
+	        Desktop desktop = Desktop.getDesktop();
+	        desktop.open(file);
+	        
         } catch (IOException e) {
             System.err.println("Problem writing to the file statsTest.txt");
         }

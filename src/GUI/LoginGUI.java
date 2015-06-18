@@ -245,7 +245,7 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 		registerButton.setFont(new Font(FONT_STYLE, Font.BOLD, 18));
 		
 		confirmPasswordTextField = new JPasswordField();
-		confirmPasswordTextField.setFont(new Font(FONT_STYLE, Font.PLAIN, 24));
+		confirmPasswordTextField.setFont(new Font(FONT_STYLE, Font.BOLD, 24));
 		confirmPasswordTextField.setColumns(10);
 		confirmPasswordTextField.setBounds(216, 106, 229, 34);
 		panelRegister.add(confirmPasswordTextField);
@@ -343,6 +343,13 @@ public class LoginGUI extends JFrame implements ActionListener, KeyListener {
 							// Prompt success message
 							JOptionPane.showMessageDialog(null, 
 									"Register successfully!");
+							registerUserNameField.setText("");
+							registerPasswordField.setText("");
+							confirmPasswordTextField.setText("");
+							registerFullNameField.setText("");
+							icNoTextField.setText("");
+							telNoTextField.setText("");
+							emailTextField.setText("");
 						} else {
 							JOptionPane.showMessageDialog(null, 
 									"The username is used.");

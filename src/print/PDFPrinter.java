@@ -1,6 +1,8 @@
 package print;
 import item.OrderedItem;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -223,9 +225,12 @@ public class PDFPrinter {
 	        printReceipt.close();
 	        /* Open pdf file */
 	        // for Window
-	        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
-	        		pathOfReceiptPDF);
-	        
+	        File file = new File(pathOfReceiptPDF);
+	        Desktop desktop = Desktop.getDesktop();
+	        desktop.open(file);
+//            Runtime.getRuntime().exec("rundll32 url.dll, "
+//                		+ "FileProtocolHandler " + pathOfReceiptPDF);
+//	        
 	        // for Mac
 //	        Runtime.getRuntime().exec("open " + pathOfReceiptPDF);
 	        
@@ -334,9 +339,12 @@ public class PDFPrinter {
 	        printSales.add(paraSale);
 	        
 	        /* Open pdf file */
+	        File file = new File(pathOfSalesPDF);
+	        Desktop desktop = Desktop.getDesktop();
+	        desktop.open(file);
 	        // for Window
-	        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
-	                    pathOfSalesPDF);
+//	        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " + 
+//	                    pathOfSalesPDF);
 	        
 	        // for Mac
 //	        Runtime.getRuntime().exec("open " + pathOfSalesPDF);
