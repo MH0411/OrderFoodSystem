@@ -10,9 +10,7 @@ public class Item {
 	
 	private int itemId;
 	private String name;
-//	private int quantity = 0;
 	private double unitPrice;
-//	private double subTotalPrice = 0.0;
 	
 	/**
 	 * Constructor of Item to initialize itemId, name and unitPrice
