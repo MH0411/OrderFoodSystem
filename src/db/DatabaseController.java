@@ -22,7 +22,7 @@ public class DatabaseController {
 		// Initialize URL, USERNAME and PASSWORD
 		final String URL = "jdbc:mysql://localhost:3306/order_food_system_db";
 	    final String USERNAME = "root";
-	    final String PASSWORD = "";
+	    final String PASSWORD = "gameover";
 		
 	    // Establish connection
 		return DriverManager.

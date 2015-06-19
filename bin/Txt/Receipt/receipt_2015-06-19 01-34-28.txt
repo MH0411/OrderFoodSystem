@@ -1,0 +1,21 @@
+BKB FOOD ENTERPRISE
+No.18 MITC Mall ,Hang Tuah Jaya
+75450 Ayer Keroh
+Tel : 06-2313007  Fax : 06-2313070
+GST ID : 001134034944
+RECEIPT
+
+Date : 2015-06-19 01:34:28
+Cashier : Ho Zhen Hong
+--------------------------------------------------------------------------
+ID	Food		Quantity	Unit Price (RM)	SubTotal Price (RM)
+--------------------------------------------------------------------------
+2	Set B		1		13.90		13.90
+5	Burger		2		6.90		13.80
+5	Burger		1		6.90		6.90
+8	Ice Cream	1		2.90		2.90
+--------------------------------------------------------------------------
+TOTAL PRICE (RM) : 39.75
+Total 6% GST     : 2.25
+Cash Tendered    : 40.00
+Change           : 26.35

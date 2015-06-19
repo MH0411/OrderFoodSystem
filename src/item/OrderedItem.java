@@ -6,7 +6,7 @@ public class OrderedItem extends Item {
 	private double subTotalPrice;
 	
 	public OrderedItem(int itemId, String name, int quantity, 
-			double subTotalPrice, double unitPrice) {
+			double unitPrice, double subTotalPrice) {
 		super(itemId, name, unitPrice);
 		this.quantity = quantity;
 		this.subTotalPrice = subTotalPrice;
