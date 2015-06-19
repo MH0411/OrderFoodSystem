@@ -86,6 +86,9 @@ public class SaleGUI extends JFrame implements ActionListener {
 	private TransactionController transactionCtrl;
 	private Vector<Sale> sales = new Vector<Sale>();
 	private DecimalFormat decimalPattern = new DecimalFormat("#.00");
+	private int optionPDF = 0;
+	private int optionTxt = 1;
+	private int optionBoth = 2;
 	
 	/**
 	 * Launch the application.
@@ -323,7 +326,7 @@ public class SaleGUI extends JFrame implements ActionListener {
 						JOptionPane.DEFAULT_OPTION, null, options, options[0]);
 				
 				// if user chooose pDF
-				if (reply == 0){
+				if (reply == optionPDF){
 
 					try {
 						
@@ -335,13 +338,13 @@ public class SaleGUI extends JFrame implements ActionListener {
 					}
 
 					// if user choose txt
-				} else if (reply == 1){
+				} else if (reply == optionTxt){
 					
 						
 					TxtPrinter.printSales(sales, startDate, endDate);
 						
 					// if user choose Both
-				} else if (reply == 2){
+				} else if (reply == optionBoth){
 
 					try {
 						

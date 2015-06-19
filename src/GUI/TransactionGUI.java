@@ -124,9 +124,9 @@ public class TransactionGUI extends JFrame
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private Payment payment = new Payment(cart);
 	private Document receipt = new Document();
-	private final int optionPDF = 0;
-	private final int optionTxt = 1;
-	private final int optionBoth = 2;
+	private int optionPDF = 0;
+	private int optionTxt = 1;
+	private int optionBoth = 2;
 	
 	/**
 	 * Launch the application.
