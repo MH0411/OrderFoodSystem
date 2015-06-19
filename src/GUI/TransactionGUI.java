@@ -464,7 +464,7 @@ public class TransactionGUI extends JFrame
 		receiptPanel.add(gstLabel);
 		
 		gstIdLabel = new JLabel("GST ID");
-		gstIdLabel.setBounds(107, 171, 46, 14);
+		gstIdLabel.setBounds(107, 171, 117, 14);
 		receiptPanel.add(gstIdLabel);
 		
 		scrollPane = new JScrollPane();

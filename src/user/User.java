@@ -37,6 +37,16 @@ public class User {
 		this.ic = ic;
 	}
 	
+	/**
+	 * Constructor of user
+	 * Used to initialize userName, fullName, password, ic, telNo, email.
+	 * @param userName
+	 * @param fullName
+	 * @param password
+	 * @param ic
+	 * @param telNo
+	 * @param email
+	 */
 	public User(String userName, String fullName, String password, String ic,
 			String telNo, String email) {
 		this.userName = userName;
@@ -47,10 +57,18 @@ public class User {
 		this.ic = ic;
 	}
 
+	/**
+	 * Getter to get user Ic
+	 * @return ic
+	 */
 	public String getIc() {
 		return ic;
 	}
 
+	/**
+	 * Setter to set user Ic
+	 * @param ic
+	 */
 	public void setIc(String ic) {
 		this.ic = ic;
 	}
