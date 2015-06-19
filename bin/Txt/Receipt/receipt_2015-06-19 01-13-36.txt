@@ -1,0 +1,18 @@
+BKB FOOD ENTERPRISE
+No.18 MITC Mall ,Hang Tuah Jaya
+75450 Ayer Keroh
+Tel : 06-2313007  Fax : 06-2313070
+GST ID : 001134034944
+RECEIPT
+
+Date : 2015-06-19 01:13:36
+Cashier : Gan Jun Kai
+--------------------------------------------------------------------------
+ID	Food		Quantity	Unit Price (RM)	SubTotal Price (RM)
+--------------------------------------------------------------------------
+3	Set C		1		20.90		20.90
+--------------------------------------------------------------------------
+TOTAL PRICE (RM) : 22.15
+Total 6% GST     : 1.25
+Cash Tendered    : 100.00
+Change           : 77.85
