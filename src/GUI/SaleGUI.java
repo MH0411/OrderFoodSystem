@@ -107,7 +107,7 @@ public class SaleGUI extends JFrame implements ActionListener {
 	/**
 	 * Method to close current frame
 	 */
-	public void close(){
+	public void close() {
 		 WindowEvent winClosingEvent = 
 				 new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
 		 Toolkit.getDefaultToolkit().

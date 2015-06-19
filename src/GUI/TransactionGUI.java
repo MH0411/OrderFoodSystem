@@ -44,12 +44,6 @@ import transaction.Cart;
 import transaction.Payment;
 import transaction.db.TransactionController;
 
-
-
-
-
-
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 /**
