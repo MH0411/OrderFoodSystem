@@ -114,7 +114,7 @@ public class TransactionGUI extends JFrame
 	private JButton removeButton;
 	private java.sql.Timestamp currentTimestamp;
 	private Cart cart = new Cart();
-	DefaultListCellRenderer centerRenderer;
+	private DefaultListCellRenderer centerRenderer;
 	private DecimalFormat decimalPattern = new DecimalFormat("0.00");
 	private ItemController itemCtrl = new ItemController();
 	private final String FONT_STYLE = "Times New Roman";
